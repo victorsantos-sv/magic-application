@@ -15,17 +15,17 @@ public abstract class Card {
     @Id
     @Column(name = "card_id", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Long id;
+    private Long id;
 
     @Column(name = "title", nullable = false)
-    protected String title;
+    private String title;
 
     @Column(name = "description", nullable = false)
-    protected String description;
+    private String description;
 
     @Column(name = "cost")
-    protected Integer cost;
+    private Integer cost;
 
     @Column(name = "life_damage")
-    protected Integer lifeDamage;
+    private Integer lifeDamage;
 }
