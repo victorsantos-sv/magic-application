@@ -1,16 +1,24 @@
+CREATE TABLE if not exists player
+(
+    id        bigint       not null primary key auto_increment,
+    nick_name varchar(100) not null
+);
+
 CREATE TABLE if not exists junior_card
 (
-    card_id     bigint       not null primary key auto_increment,
+    id          bigint       not null primary key auto_increment,
     title       varchar(100) not null,
     description varchar(255) not null,
     cost        int,
     life_damage int,
-    passive     int
+    passive     int,
+    player_id   bigint,
+    foreign key (player_id) references player (id)
 );
 
 CREATE TABLE if not exists bug_card
 (
-    card_id     bigint       not null primary key auto_increment,
+    id          bigint       not null primary key auto_increment,
     title       varchar(100) not null,
     description varchar(293) not null,
     cost        int,
@@ -56,7 +64,8 @@ VALUES ('Golpe do Não Consigo',
         ' custar muito esforço. O bug te tira 2 pontos de vida  e 2 pontos de mana. Isso custou 6 pontos de mana para o Bug', 6, 2, 2),
        ('Perdeu a Daily',
         'Sim, algo estranho aconteceu, só pode ser sobrenatural. Você perdeu a Daily, não sabe para onde seu time está levando o sistema, não' ||
-        ' conseguiu aproveitar para mostrar alguns dos impedimentos. Perca 5 pontos de vida, isso irá custar para o bug 3 pontos de mana', 3, 5, null),
+        ' conseguiu aproveitar para mostrar alguns dos impedimentos. Perca 5 pontos de vida, isso irá custar para o bug 3 pontos de mana', 3, 5,
+        null),
        ('EndPoint Batendo errado',
         'Puxa, que distração. Você está recebendo um erro 500, NullPointerException, tanto tempo perdido, e só agora entendeu que esse não era o' ||
         ' seu erro, era apenas o endpoint que estava batendo errado, perdeu tempo e tempo é vida. Perca 4 pontos de vida, e isso irá custar 4 pontos' ||
