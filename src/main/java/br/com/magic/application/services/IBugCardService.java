@@ -1,4 +1,4 @@
 package br.com.magic.application.services;
 
-public class PlayerService {
+public interface IBugCardService {
 }
