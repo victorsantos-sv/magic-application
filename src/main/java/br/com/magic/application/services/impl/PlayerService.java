@@ -20,13 +20,19 @@ public class PlayerService implements IPlayerService {
         this.mapper = mapper;
     }
 
-
     @Override
     public PlayerDTO create(PlayerDTO playerDTO) {
         Player player = mapper.toEntity(playerDTO);
         player.setNickName(playerDTO.getNickName());
 
         player = playerRepositorie.save(player);
+
+        return mapper.toDto(player);
+    }
+
+    @Override
+    public PlayerDTO findById(Long id) {
+        Player player = playerRepositorie.findById(id).orElseThrow(RuntimeException::new);
 
         return mapper.toDto(player);
     }
