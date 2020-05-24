@@ -8,4 +8,6 @@ public class MagicErrorCode {
         this.code = code;
         this.key = key;
     }
+
+    public static final MagicErrorCode MEC001 = new MagicErrorCode("MEC001", "player.not.found");
 }
