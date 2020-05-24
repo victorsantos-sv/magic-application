@@ -9,5 +9,13 @@ public class MagicErrorCode {
         this.key = key;
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
     public static final MagicErrorCode MEC001 = new MagicErrorCode("MEC001", "player.not.found");
 }
