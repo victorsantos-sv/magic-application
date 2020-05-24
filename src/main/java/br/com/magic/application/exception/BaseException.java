@@ -1,30 +1,22 @@
 package br.com.magic.application.exception;
 
-public class BaseException extends RuntimeException {
-    private String code;
-    private String message;
+import br.com.magic.application.commons.MagicErrorCode;
+
+public class BaseException  extends RuntimeException {
+    private MagicErrorCode code;
 
     public BaseException() {
     }
 
-    public BaseException(String code, String message) {
+    public BaseException(MagicErrorCode code) {
         this.code = code;
-        this.message = message;
     }
 
-    public String getCode() {
+    public MagicErrorCode getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(MagicErrorCode code) {
         this.code = code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 }
