@@ -1,7 +1,7 @@
 package br.com.magic.application.exception;
 
 import br.com.magic.application.commons.ResourceBundle;
-import br.com.magic.application.exception.response.ErroResponse;
+import br.com.magic.application.exception.response.ErrorResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,11 +18,11 @@ public class MagicExceptionHandler {
         this.resourceBundle = resourceBundle;
     }
 
-    @ExceptionHandler(PlayerNotFound.class)
-    ResponseEntity<ErroResponse> handlePlayerNotFound(PlayerNotFound exception) {
+    @ExceptionHandler(BaseException.class)
+    ResponseEntity<ErrorResponse> handlePlayerNotFound(BaseException exception) {
         String message = resourceBundle.getMessage(exception.getCode().getKey());
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErroResponse(exception.getCode().getCode(), message));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(exception.getCode().getCode(), message));
     }
 
 }

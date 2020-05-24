@@ -1,13 +1,13 @@
 package br.com.magic.application.exception.response;
 
-public class ErroResponse {
+public class ErrorResponse {
     private String code;
     private String message;
 
-    public ErroResponse() {
+    public ErrorResponse() {
     }
 
-    public ErroResponse(String code, String message) {
+    public ErrorResponse(String code, String message) {
         this.code = code;
         this.message = message;
     }

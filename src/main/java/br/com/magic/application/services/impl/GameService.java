@@ -32,12 +32,7 @@ public class GameService implements IGameService {
         PlayerDTO playerDTO = playerService.findById(id);
         List<JuniorCardDTO> cards = juniorCardService.getCards();
         List<JuniorCardDTO> sortedCards = sortCards(cards);
-
-        try {
-            juniorCardService.saveCardsIntoPlayer(sortedCards, id);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        juniorCardService.saveCardsIntoPlayer(sortedCards, id);
 
         return mapper.toDto(playerDTO, sortedCards);
     }

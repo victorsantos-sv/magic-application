@@ -7,5 +7,5 @@ public interface IJuniorCardService {
 
     List<JuniorCardDTO> getCards();
 
-    void saveCardsIntoPlayer(List<JuniorCardDTO> cardsDto, Long id) throws Exception;
+    void saveCardsIntoPlayer(List<JuniorCardDTO> cardsDto, Long id);
 }
