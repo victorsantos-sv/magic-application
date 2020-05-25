@@ -7,7 +7,6 @@ import br.com.magic.application.entity.model.Player;
 import br.com.magic.application.exception.PlayerNotFound;
 import br.com.magic.application.repositories.PlayerRepositorie;
 import br.com.magic.application.services.IPlayerService;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,12 +34,8 @@ public class PlayerService implements IPlayerService {
 
     @Override
     public PlayerDTO findById(Long id) {
-        Optional<Player> player = playerRepositorie.findById(id);
+        Player player = playerRepositorie.findById(id).orElseThrow(() -> new PlayerNotFound(MagicErrorCode.MEC001));
 
-        if (!player.isPresent()) {
-            throw new PlayerNotFound(MagicErrorCode.MEC001);
-        }
-
-        return mapper.toDto(player.get());
+        return mapper.toDto(player);
     }
 }
