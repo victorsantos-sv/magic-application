@@ -18,12 +18,20 @@ public class Player {
     @Column(name = "nick_name", nullable = false)
     private String nickName;
 
+    @Column(name = "mana")
+    private Integer mana = 20;
+
+    @Column(name = "life")
+    private Integer life = 20;
+
     public Player() {
     }
 
-    public Player(Long id, String nickName) {
+    public Player(Long id, String nickName, Integer mana, Integer life) {
         this.id = id;
         this.nickName = nickName;
+        this.mana = mana;
+        this.life = life;
     }
 
     public Long getId() {
@@ -40,5 +48,21 @@ public class Player {
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
+    }
+
+    public Integer getMana() {
+        return mana;
+    }
+
+    public void setMana(Integer mana) {
+        this.mana = mana;
+    }
+
+    public Integer getLife() {
+        return life;
+    }
+
+    public void setLife(Integer life) {
+        this.life = life;
     }
 }

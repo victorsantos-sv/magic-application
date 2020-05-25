@@ -8,4 +8,15 @@ public class MagicErrorCode {
         this.code = code;
         this.key = key;
     }
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public static final MagicErrorCode MEC001 = new MagicErrorCode("MEC001", "player.not.found");
+    public static final MagicErrorCode MEC002 = new MagicErrorCode("MEC002", "player.full.cards");
 }

@@ -1,19 +1,23 @@
 package br.com.magic.application.api.response;
 
-public class PlayerResponse {
+import java.util.List;
+
+public class GameResponse {
     private Long id;
     private String nickName;
     private Integer life;
     private Integer mana;
+    private List<JuniorCardResponse> cards;
 
-    public PlayerResponse() {
+    public GameResponse() {
     }
 
-    public PlayerResponse(Long id, String nickName, Integer life, Integer mana) {
+    public GameResponse(Long id, String nickName, Integer life, Integer mana, List<JuniorCardResponse> cards) {
         this.id = id;
         this.nickName = nickName;
         this.life = life;
         this.mana = mana;
+        this.cards = cards;
     }
 
     public Long getId() {
@@ -46,5 +50,13 @@ public class PlayerResponse {
 
     public void setMana(Integer mana) {
         this.mana = mana;
+    }
+
+    public List<JuniorCardResponse> getCards() {
+        return cards;
+    }
+
+    public void setCards(List<JuniorCardResponse> cards) {
+        this.cards = cards;
     }
 }

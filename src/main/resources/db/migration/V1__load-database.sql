@@ -1,7 +1,9 @@
 CREATE TABLE if not exists player
 (
     id        bigint       not null primary key auto_increment,
-    nick_name varchar(100) not null
+    nick_name varchar(100) not null,
+    mana      int,
+    life      int
 );
 
 CREATE TABLE if not exists junior_card

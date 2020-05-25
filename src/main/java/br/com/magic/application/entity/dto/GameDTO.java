@@ -1,19 +1,23 @@
 package br.com.magic.application.entity.dto;
 
-public class PlayerDTO {
+import java.util.List;
+
+public class GameDTO {
     private Long id;
     private String nickName;
-    private Integer mana = 20;
-    private Integer life = 20;
+    private Integer life;
+    private Integer mana;
+    private List<JuniorCardDTO> cards;
 
-    public PlayerDTO() {
+    public GameDTO() {
     }
 
-    public PlayerDTO(Long id, String nickName, Integer mana, Integer life) {
+    public GameDTO(Long id, String nickName, Integer life, Integer mana, List<JuniorCardDTO> cards) {
         this.id = id;
         this.nickName = nickName;
-        this.mana = mana;
         this.life = life;
+        this.mana = mana;
+        this.cards = cards;
     }
 
     public Long getId() {
@@ -32,6 +36,14 @@ public class PlayerDTO {
         this.nickName = nickName;
     }
 
+    public Integer getLife() {
+        return life;
+    }
+
+    public void setLife(Integer life) {
+        this.life = life;
+    }
+
     public Integer getMana() {
         return mana;
     }
@@ -40,11 +52,11 @@ public class PlayerDTO {
         this.mana = mana;
     }
 
-    public Integer getLife() {
-        return life;
+    public List<JuniorCardDTO> getCards() {
+        return cards;
     }
 
-    public void setLife(Integer life) {
-        this.life = life;
+    public void setCards(List<JuniorCardDTO> cards) {
+        this.cards = cards;
     }
 }
