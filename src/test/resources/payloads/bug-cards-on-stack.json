@@ -1,0 +1,39 @@
+[
+  {
+    "id": 1,
+    "title": "Golpe do Não Consigo",
+    "description": "Sim, parece que o Bug está te sabotando, você acaba de perder 3 pontos de mana, e 2 pontos de energia, isso custou 4 pontos de mana para o BUG",
+    "cost": 4,
+    "lifeDamage": 2,
+    "manaDamage": 3
+  },
+  {
+    "id": 2,
+    "title": "Código Mal Escrito",
+    "description": "Variáveis mal nomeadas, código confuso, não consigo achar nada aqui dentro, o bug parece que vai se esconder melhor que nunca, isso vai te custar muito esforço. O bug te tira 2 pontos de vida  e 2 pontos de mana. Isso custou 6 pontos de mana para o Bug",
+    "cost": 6,
+    "lifeDamage": 2,
+    "manaDamage": 2
+  },
+  {
+    "id": 3,
+    "title": "Perdeu a Daily",
+    "description": "Sim, algo estranho aconteceu, só pode ser sobrenatural. Você perdeu a Daily, não sabe para onde seu time está levando o sistema, não conseguiu aproveitar para mostrar alguns dos impedimentos. Perca 5 pontos de vida, isso irá custar para o bug 3 pontos de mana",
+    "cost": 3,
+    "lifeDamage": 5
+  },
+  {
+    "id": 6,
+    "title": "Má administração do Tempo ",
+    "description": "Sim, parece que acumularam algumas atividades extras, você sabe que deveria ter feito, e agora as atividades que estavam previstas certamente irão atrasar. Perca 3 pontos de vida para o bug, irá custar 1 ponto de mana.",
+    "cost": 1,
+    "lifeDamage": 3
+  },
+  {
+    "id": 8,
+    "title": "Pandemia",
+    "description": "Você se arriscou, não respeitou a pandemia, tentou sair para trabalhar e adoeceu, virus e bug ? um belo estrago, você perdeu 6 pontos de vida e isso custou 8 pontos de mana para o Bug.",
+    "cost": 8,
+    "lifeDamage": 6
+  }
+]
