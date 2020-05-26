@@ -6,7 +6,10 @@ import br.com.magic.application.api.response.PlayerResponse;
 import br.com.magic.application.api.response.ResponseWrapper;
 import br.com.magic.application.entity.dto.PlayerDTO;
 import br.com.magic.application.entity.mapper.PlayerMapper;
+import br.com.magic.application.exception.response.ErrorResponseWithFields;
 import br.com.magic.application.services.IPlayerService;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +35,9 @@ public class PlayerController implements IPlayerController {
     }
 
     @Override
+    @ApiResponses({
+        @ApiResponse(code = 400, message = "Alguns campos são inválidos", response = ErrorResponseWithFields.class)
+    })
     public ResponseWrapper<PlayerResponse> create(@RequestBody @Valid PlayerRequest playerRequest) {
         LOG.info("Player registering: { \"nickName\": \"" + playerRequest.getNickName() + "\" }");
 
