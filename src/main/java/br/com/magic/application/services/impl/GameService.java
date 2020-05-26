@@ -1,9 +1,12 @@
 package br.com.magic.application.services.impl;
 
 import br.com.magic.application.entity.dto.BugCardDTO;
+import br.com.magic.application.entity.dto.BugDTO;
+import br.com.magic.application.entity.dto.BugWithCardsDTO;
 import br.com.magic.application.entity.dto.GameDTO;
 import br.com.magic.application.entity.dto.JuniorCardDTO;
 import br.com.magic.application.entity.dto.PlayerDTO;
+import br.com.magic.application.entity.dto.PlayerWithCardsDTO;
 import br.com.magic.application.entity.dto.StackCardsDTO;
 import br.com.magic.application.entity.mapper.GameMapper;
 import br.com.magic.application.services.IBugCardService;
@@ -22,13 +25,21 @@ public class GameService implements IGameService {
     private IPlayerService playerService;
     private IJuniorCardService juniorCardService;
     private IBugCardService bugCardService;
+    private IBugService bugService;
     private GameMapper mapper;
 
     @Autowired
-    public GameService(IPlayerService playerService, IJuniorCardService juniorCardService, IBugCardService bugCardService, GameMapper mapper) {
+    public GameService(
+        IPlayerService playerService,
+        IJuniorCardService juniorCardService,
+        IBugCardService bugCardService,
+        IBugService bugService,
+        GameMapper mapper
+    ) {
         this.playerService = playerService;
         this.juniorCardService = juniorCardService;
         this.bugCardService = bugCardService;
+        this.bugService = bugService;
         this.mapper = mapper;
     }
 
@@ -38,8 +49,12 @@ public class GameService implements IGameService {
         List<JuniorCardDTO> cards = juniorCardService.getCards();
         List<JuniorCardDTO> sortedCards = sortCards(cards);
         juniorCardService.saveCardsIntoPlayer(sortedCards, id);
+        BugDTO bugDTO = bugService.getInitialCards();
+        BugWithCardsDTO bugWithCardsDTO = new BugWithCardsDTO(bugDTO.getId(), bugDTO.getLife(), bugDTO.getMana(), bugDTO.getCards());
+        PlayerWithCardsDTO playerWithCardsDTO = new PlayerWithCardsDTO(
+            playerDTO.getId(), playerDTO.getNickName(), playerDTO.getLife(), playerDTO.getMana(), sortedCards);
 
-        return mapper.toDto(playerDTO, sortedCards);
+        return mapper.toDto(playerWithCardsDTO, bugWithCardsDTO);
     }
 
     @Override

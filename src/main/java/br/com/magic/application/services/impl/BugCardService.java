@@ -1,11 +1,16 @@
 package br.com.magic.application.services.impl;
 
 import br.com.magic.application.entity.dto.BugCardDTO;
+import br.com.magic.application.entity.dto.BugDTO;
 import br.com.magic.application.entity.mapper.BugCardMapper;
+import br.com.magic.application.entity.mapper.BugMapper;
+import br.com.magic.application.entity.model.Bug;
 import br.com.magic.application.entity.model.BugCard;
 import br.com.magic.application.repositories.BugCardRepositorie;
 import br.com.magic.application.services.IBugCardService;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,5 +31,37 @@ public class BugCardService implements IBugCardService {
         List<BugCard> bugCards = bugCardRepositorie.findAllByIsInUseFalse();
 
         return bugCardMapper.toDto(bugCards);
+    }
+
+    @Override
+    public List<BugCardDTO> setCartsOnBug() {
+        List<BugCardDTO> bugCards = getCardsWithoutBug();
+        List<BugCardDTO> sortedCarts = sortCards(bugCards);
+
+        List<BugCard> cardsToSave = bugCardMapper.toEntity(sortedCarts);
+
+        cardsToSave.forEach(bugCard -> {
+            bugCard.setInUse(true);
+        });
+
+        bugCardRepositorie.saveAll(cardsToSave);
+
+        return bugCardMapper.toDto(cardsToSave);
+    }
+
+    private List<BugCardDTO> sortCards(List<BugCardDTO> cards) {
+        Random random = new Random();
+        List<BugCardDTO> randomCards = new ArrayList<>();
+
+        for (int i = 0; i < 4;) {
+            int randomNumber = random.nextInt(9);
+
+            if (!randomCards.contains(cards.get(randomNumber))) {
+                randomCards.add(cards.get(randomNumber));
+                i++;
+            }
+        }
+
+        return randomCards;
     }
 }
