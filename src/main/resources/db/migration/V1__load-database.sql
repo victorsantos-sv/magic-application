@@ -6,6 +6,13 @@ CREATE TABLE if not exists player
     life      int
 );
 
+CREATE TABLE if not exists bug
+(
+    id   bigint not null primary key auto_increment,
+    mana int,
+    life int
+);
+
 CREATE TABLE if not exists junior_card
 (
     id          bigint       not null primary key auto_increment,
