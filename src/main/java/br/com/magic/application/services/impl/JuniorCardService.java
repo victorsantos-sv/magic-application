@@ -18,10 +18,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class JuniorCardService implements IJuniorCardService {
 
-    private JuniorCardRepositorie juniorCardRepositorie;
-    private IPlayerService playerService;
-    private JuniorCardMapper juniorCardMapper;
-    private PlayerMapper playerMapper;
+    private final JuniorCardRepositorie juniorCardRepositorie;
+    private final IPlayerService playerService;
+    private final JuniorCardMapper juniorCardMapper;
+    private final PlayerMapper playerMapper;
 
     @Autowired
     public JuniorCardService(JuniorCardRepositorie juniorCardRepositorie, IPlayerService playerService, JuniorCardMapper juniorCardMapper,
@@ -35,6 +35,13 @@ public class JuniorCardService implements IJuniorCardService {
     @Override
     public List<JuniorCardDTO> getCards() {
         List<JuniorCard> juniorCards = juniorCardRepositorie.findAll();
+
+        return juniorCardMapper.toDto(juniorCards);
+    }
+
+    @Override
+    public List<JuniorCardDTO> getCardsWithoutPlayer() {
+        List<JuniorCard> juniorCards = juniorCardRepositorie.findAllByPlayerIsNullOrderById();
 
         return juniorCardMapper.toDto(juniorCards);
     }

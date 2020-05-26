@@ -10,4 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface JuniorCardRepositorie extends JpaRepository<JuniorCard, Long> {
 
     List<JuniorCard> findAllByPlayer(Player player);
+
+    List<JuniorCard> findAllByPlayerIsNullOrderById();
 }

@@ -7,5 +7,7 @@ public interface IJuniorCardService {
 
     List<JuniorCardDTO> getCards();
 
+    List<JuniorCardDTO> getCardsWithoutPlayer();
+
     void saveCardsIntoPlayer(List<JuniorCardDTO> cardsDto, Long id);
 }

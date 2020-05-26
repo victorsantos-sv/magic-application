@@ -1,9 +1,12 @@
 package br.com.magic.application.services.impl;
 
+import br.com.magic.application.entity.dto.BugCardDTO;
 import br.com.magic.application.entity.dto.GameDTO;
 import br.com.magic.application.entity.dto.JuniorCardDTO;
 import br.com.magic.application.entity.dto.PlayerDTO;
+import br.com.magic.application.entity.dto.StackCardsDTO;
 import br.com.magic.application.entity.mapper.GameMapper;
+import br.com.magic.application.services.IBugCardService;
 import br.com.magic.application.services.IGameService;
 import br.com.magic.application.services.IJuniorCardService;
 import br.com.magic.application.services.IPlayerService;
@@ -18,12 +21,14 @@ public class GameService implements IGameService {
 
     private IPlayerService playerService;
     private IJuniorCardService juniorCardService;
+    private IBugCardService bugCardService;
     private GameMapper mapper;
 
     @Autowired
-    public GameService(IPlayerService playerService, IJuniorCardService juniorCardService, GameMapper mapper) {
+    public GameService(IPlayerService playerService, IJuniorCardService juniorCardService, IBugCardService bugCardService, GameMapper mapper) {
         this.playerService = playerService;
         this.juniorCardService = juniorCardService;
+        this.bugCardService = bugCardService;
         this.mapper = mapper;
     }
 
@@ -35,6 +40,14 @@ public class GameService implements IGameService {
         juniorCardService.saveCardsIntoPlayer(sortedCards, id);
 
         return mapper.toDto(playerDTO, sortedCards);
+    }
+
+    @Override
+    public StackCardsDTO getStackCards() {
+        List<JuniorCardDTO> juniorCards = juniorCardService.getCardsWithoutPlayer();
+        List<BugCardDTO> bugCards = bugCardService.getCardsWithoutBug();
+
+        return new StackCardsDTO(juniorCards, bugCards);
     }
 
     private List<JuniorCardDTO> sortCards(List<JuniorCardDTO> cards) {
