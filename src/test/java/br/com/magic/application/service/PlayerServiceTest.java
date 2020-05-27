@@ -74,4 +74,22 @@ public class PlayerServiceTest {
 
         Mockito.verify(playerRepositorie, Mockito.times(1)).findById(id);
     }
+
+    @Test
+    void shouldUpdatePlayerWithSuccess() {
+        PlayerDTO playerDTO = new PlayerDTO(1L, "player", 15, 20);
+        Player player = new Player(1L, "player", 15, 20);
+
+        Mockito.when(playerMapper.toEntity(playerDTO)).thenReturn(player);
+        Mockito.when(playerMapper.toDto(player)).thenReturn(playerDTO);
+        Mockito.when(playerRepositorie.save(player)).thenReturn(player);
+
+        PlayerDTO playerDTOUpdated = playerService.update(playerDTO);
+
+        Assert.assertSame(playerDTO, playerDTOUpdated);
+
+        Mockito.verify(playerMapper, Mockito.times(1)).toDto(player);
+        Mockito.verify(playerMapper, Mockito.times(1)).toEntity(playerDTO);
+        Mockito.verify(playerRepositorie, Mockito.times(1)).save(player);
+    }
 }
