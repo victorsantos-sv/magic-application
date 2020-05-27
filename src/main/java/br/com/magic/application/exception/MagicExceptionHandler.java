@@ -35,11 +35,11 @@ public class MagicExceptionHandler {
         return new ErrorResponse(exception.getCode().getCode(), message);
     }
 
-    @ExceptionHandler(PlayerFullCards.class)
+    @ExceptionHandler(FullCards.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     @ResponseBody
-    ErrorResponse handlePlayerFullCards(PlayerFullCards exception) {
-        String message = resourceBundle.getMessage(exception.getCode().getKey());
+    ErrorResponse handleFullCards(FullCards exception) {
+        String message = resourceBundle.getMessage(exception.getCode().getKey(), exception.getPlayer());
 
         return new ErrorResponse(exception.getCode().getCode(), message);
     }
