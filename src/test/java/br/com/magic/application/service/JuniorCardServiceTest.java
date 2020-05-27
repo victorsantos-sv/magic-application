@@ -16,6 +16,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -28,11 +29,11 @@ import org.mockito.Mockito;
 
 public class JuniorCardServiceTest {
 
-    private JuniorCardRepositorie juniorCardRepositorie = Mockito.mock(JuniorCardRepositorie.class);
-    private IPlayerService playerService = Mockito.mock(IPlayerService.class);
-    private JuniorCardMapper juniorCardMapper = Mockito.mock(JuniorCardMapper.class);
-    private PlayerMapper playerMapper = Mockito.mock(PlayerMapper.class);
-    private JuniorCardService juniorCardService = new JuniorCardService(juniorCardRepositorie, playerService, juniorCardMapper, playerMapper);
+    private final JuniorCardRepositorie juniorCardRepositorie = Mockito.mock(JuniorCardRepositorie.class);
+    private final IPlayerService playerService = Mockito.mock(IPlayerService.class);
+    private final JuniorCardMapper juniorCardMapper = Mockito.mock(JuniorCardMapper.class);
+    private final PlayerMapper playerMapper = Mockito.mock(PlayerMapper.class);
+    private final JuniorCardService juniorCardService = new JuniorCardService(juniorCardRepositorie, playerService, juniorCardMapper, playerMapper);
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -269,15 +270,17 @@ public class JuniorCardServiceTest {
 
     private List<JuniorCardDTO> buildJuniorCardDtoList() throws IOException {
         String bugCardJson = IOUtils.toString(getClass().getClassLoader()
-            .getResourceAsStream("payloads/junior-cards-dto-payload.json"), Charset.forName("UTF-8"));
+            .getResourceAsStream("payloads/junior-cards-dto-payload.json"), StandardCharsets.UTF_8);
 
-        return objectMapper.readValue(bugCardJson, new TypeReference<List<JuniorCardDTO>>() {});
+        return objectMapper.readValue(bugCardJson, new TypeReference<List<JuniorCardDTO>>() {
+        });
     }
 
     private List<JuniorCard> buildJuniorCardList() throws IOException {
         String bugCardJson = IOUtils.toString(getClass().getClassLoader()
-            .getResourceAsStream("payloads/junior-cards-entity.json"), Charset.forName("UTF-8"));
+            .getResourceAsStream("payloads/junior-cards-entity.json"), StandardCharsets.UTF_8);
 
-        return objectMapper.readValue(bugCardJson, new TypeReference<List<JuniorCard>>() {});
+        return objectMapper.readValue(bugCardJson, new TypeReference<List<JuniorCard>>() {
+        });
     }
 }

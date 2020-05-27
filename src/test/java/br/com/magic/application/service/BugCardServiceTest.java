@@ -11,6 +11,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.io.IOUtils;
@@ -20,12 +21,12 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 public class BugCardServiceTest {
-    private BugCardRepositorie bugCardRepositorie = Mockito.mock(BugCardRepositorie.class);
-    private BugCardMapper bugCardMapper = Mockito.mock(BugCardMapper.class);
-    private BugCardService bugCardService = new BugCardService(bugCardRepositorie, bugCardMapper);
-    private IBugService bugService = Mockito.mock(IBugService.class);
-    private BugMapper bugMapper = Mockito.mock(BugMapper.class);
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final BugCardRepositorie bugCardRepositorie = Mockito.mock(BugCardRepositorie.class);
+    private final BugCardMapper bugCardMapper = Mockito.mock(BugCardMapper.class);
+    private final BugCardService bugCardService = new BugCardService(bugCardRepositorie, bugCardMapper);
+    private final IBugService bugService = Mockito.mock(IBugService.class);
+    private final BugMapper bugMapper = Mockito.mock(BugMapper.class);
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     public void shouldFindAllCardsWithoutUse() throws IOException {
@@ -89,15 +90,17 @@ public class BugCardServiceTest {
 
     private List<BugCardDTO> buildBugCardDtoList() throws IOException {
         String bugCardJson = IOUtils.toString(getClass().getClassLoader()
-            .getResourceAsStream("payloads/bug-cards-on-stack.json"), Charset.forName("UTF-8"));
+            .getResourceAsStream("payloads/bug-cards-on-stack.json"), StandardCharsets.UTF_8);
 
-        return objectMapper.readValue(bugCardJson, new TypeReference<List<BugCardDTO>>() {});
+        return objectMapper.readValue(bugCardJson, new TypeReference<List<BugCardDTO>>() {
+        });
     }
 
     private List<BugCard> buildBugCardList() throws IOException {
         String bugCardJson = IOUtils.toString(getClass().getClassLoader()
-            .getResourceAsStream("payloads/bug-cards-entity.json"), Charset.forName("UTF-8"));
+            .getResourceAsStream("payloads/bug-cards-entity.json"), StandardCharsets.UTF_8);
 
-        return objectMapper.readValue(bugCardJson, new TypeReference<List<BugCard>>() {});
+        return objectMapper.readValue(bugCardJson, new TypeReference<List<BugCard>>() {
+        });
     }
 }

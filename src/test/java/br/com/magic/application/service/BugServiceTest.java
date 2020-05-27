@@ -14,6 +14,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 import org.apache.commons.io.IOUtils;
@@ -24,10 +25,10 @@ import org.mockito.Mockito;
 
 public class BugServiceTest {
 
-    private BugRepositorie bugRepositorie = Mockito.mock(BugRepositorie.class);
-    private IBugCardService bugCardService = Mockito.mock(IBugCardService.class);
-    private BugMapper bugMapper = Mockito.mock(BugMapper.class);
-    private BugService bugService = new BugService(bugRepositorie, bugCardService, bugMapper);
+    private final BugRepositorie bugRepositorie = Mockito.mock(BugRepositorie.class);
+    private final IBugCardService bugCardService = Mockito.mock(IBugCardService.class);
+    private final BugMapper bugMapper = Mockito.mock(BugMapper.class);
+    private final BugService bugService = new BugService(bugRepositorie, bugCardService, bugMapper);
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -110,8 +111,9 @@ public class BugServiceTest {
 
     private List<BugCardDTO> buildBugCardsInUse() throws IOException {
         String bugCardDTOListJson = IOUtils.toString(getClass().getClassLoader().
-            getResourceAsStream("payloads/bug-cards-dto-in-use.json"), Charset.forName("UTF-8"));
+            getResourceAsStream("payloads/bug-cards-dto-in-use.json"), StandardCharsets.UTF_8);
 
-        return objectMapper.readValue(bugCardDTOListJson, new TypeReference<List<BugCardDTO>>() {});
+        return objectMapper.readValue(bugCardDTOListJson, new TypeReference<List<BugCardDTO>>() {
+        });
     }
 }

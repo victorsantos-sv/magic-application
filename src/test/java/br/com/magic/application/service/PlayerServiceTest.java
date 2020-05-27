@@ -15,9 +15,9 @@ import org.mockito.Mockito;
 
 public class PlayerServiceTest {
 
-    private PlayerRepositorie playerRepositorie = Mockito.mock(PlayerRepositorie.class);
-    private PlayerMapper playerMapper = Mockito.mock(PlayerMapper.class);
-    private PlayerService playerService = new PlayerService(playerRepositorie, playerMapper);
+    private final PlayerRepositorie playerRepositorie = Mockito.mock(PlayerRepositorie.class);
+    private final PlayerMapper playerMapper = Mockito.mock(PlayerMapper.class);
+    private final PlayerService playerService = new PlayerService(playerRepositorie, playerMapper);
 
     @Test
     public void shouldSavePlayerWithSuccess() {

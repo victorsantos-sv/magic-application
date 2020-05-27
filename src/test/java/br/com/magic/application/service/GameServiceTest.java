@@ -22,6 +22,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 import org.apache.commons.io.IOUtils;
@@ -246,7 +247,7 @@ public class GameServiceTest {
 
     private List<JuniorCardDTO> buildStackJuniorCards() throws IOException {
         String juniorCardsJson = IOUtils.toString(getClass().getClassLoader()
-            .getResourceAsStream("payloads/junior-cards-on-stack.json"), Charset.forName("UTF-8"));
+            .getResourceAsStream("payloads/junior-cards-on-stack.json"), StandardCharsets.UTF_8);
 
         return objectMapper.readValue(juniorCardsJson, new TypeReference<List<JuniorCardDTO>>() {
         });
@@ -254,7 +255,7 @@ public class GameServiceTest {
 
     private List<BugCardDTO> buildStackBugCards() throws IOException {
         String juniorCardsJson = IOUtils.toString(getClass().getClassLoader()
-            .getResourceAsStream("payloads/bug-cards-on-stack.json"), Charset.forName("UTF-8"));
+            .getResourceAsStream("payloads/bug-cards-on-stack.json"), StandardCharsets.UTF_8);
 
         return objectMapper.readValue(juniorCardsJson, new TypeReference<List<BugCardDTO>>() {
         });
@@ -262,7 +263,7 @@ public class GameServiceTest {
 
     private List<JuniorCardDTO> buildJuniorCardsList() throws IOException {
         String juniorCardsJson = IOUtils.toString(getClass().getClassLoader().
-            getResourceAsStream("payloads/junior-cards-dto-payload.json"), Charset.forName("UTF-8"));
+            getResourceAsStream("payloads/junior-cards-dto-payload.json"), StandardCharsets.UTF_8);
 
         return objectMapper.readValue(juniorCardsJson, new TypeReference<List<JuniorCardDTO>>() {
         });
