@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/game")
-@CrossOrigin("*")
+@CrossOrigin(origins = "*")
 public class GameController implements IGameController {
 
     private final IGameService gameService;
@@ -34,8 +34,8 @@ public class GameController implements IGameController {
         @ApiResponse(code = 404, message = "Player não encontrado", response = ErrorResponse.class),
         @ApiResponse(code = 422, message = "Player já possui o máximo de cartas em mãos", response = ErrorResponse.class)
     })
-    public ResponseWrapper<GameResponse> loadBoardGame(@PathVariable Long id) {
-        return new ResponseWrapper<>(gameMapper.toResponse(gameService.loadBoard(id)));
+    public ResponseWrapper<GameResponse> loadBoardGame(@PathVariable Long playerId) {
+        return new ResponseWrapper<>(gameMapper.toResponse(gameService.loadBoard(playerId)));
     }
 
     @Override

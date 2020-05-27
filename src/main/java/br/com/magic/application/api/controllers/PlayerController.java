@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/player")
-@CrossOrigin("*")
+@CrossOrigin(origins = "*")
 public class PlayerController implements IPlayerController {
 
     private final IPlayerService playerService;
