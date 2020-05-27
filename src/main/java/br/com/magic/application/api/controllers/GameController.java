@@ -1,12 +1,12 @@
 package br.com.magic.application.api.controllers;
 
 import br.com.magic.application.api.IGameController;
+import br.com.magic.application.api.response.EndTurnResponse;
 import br.com.magic.application.api.response.GameResponse;
 import br.com.magic.application.api.response.ResponseWrapper;
 import br.com.magic.application.api.response.RoundResponse;
 import br.com.magic.application.api.response.StackCardsResponse;
 import br.com.magic.application.entity.mapper.GameMapper;
-import br.com.magic.application.entity.mapper.RoundMapper;
 import br.com.magic.application.exception.response.ErrorResponse;
 import br.com.magic.application.services.IGameService;
 import io.swagger.annotations.ApiResponse;
@@ -23,12 +23,10 @@ public class GameController implements IGameController {
 
     private final IGameService gameService;
     private final GameMapper gameMapper;
-    private final RoundMapper roundMapper;
 
-    public GameController(IGameService gameService, GameMapper gameMapper, RoundMapper roundMapper) {
+    public GameController(IGameService gameService, GameMapper gameMapper) {
         this.gameService = gameService;
         this.gameMapper = gameMapper;
-        this.roundMapper = roundMapper;
     }
 
     @Override
@@ -51,7 +49,7 @@ public class GameController implements IGameController {
         @ApiResponse(code = 422, message = "O Bug não possui mana suficiente", response = ErrorResponse.class)
     })
     public ResponseWrapper<RoundResponse> bugRound(@PathVariable Long bugId, @PathVariable Long playerId) {
-        return new ResponseWrapper<>(roundMapper.toResponse(gameService.bugTurn(bugId, playerId)));
+        return new ResponseWrapper<>(gameMapper.toResponse(gameService.bugTurn(bugId, playerId)));
     }
 
     @Override
@@ -60,7 +58,12 @@ public class GameController implements IGameController {
         @ApiResponse(code = 422, message = "O Player não possui mana suficiente", response = ErrorResponse.class)
     })
     public ResponseWrapper<RoundResponse> scoreboardPlayer(@PathVariable Long playerId, @PathVariable Long cardId) {
-        return new ResponseWrapper<>(roundMapper.toResponse(gameService.scoreboardPlayer(playerId, cardId)));
+        return new ResponseWrapper<>(gameMapper.toResponse(gameService.scoreboardPlayer(playerId, cardId)));
+    }
+
+    @Override
+    public ResponseWrapper<EndTurnResponse> endTurn(Long playerId, Long bugId) {
+        return new ResponseWrapper<>(gameMapper.toResponse(gameService.endTurn(playerId, bugId)));
     }
 
 }

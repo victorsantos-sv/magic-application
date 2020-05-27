@@ -1,5 +1,6 @@
 package br.com.magic.application.api;
 
+import br.com.magic.application.api.response.EndTurnResponse;
 import br.com.magic.application.api.response.GameResponse;
 import br.com.magic.application.api.response.ResponseWrapper;
 import br.com.magic.application.api.response.RoundResponse;
@@ -28,10 +29,13 @@ public interface IGameController {
     @ResponseStatus(HttpStatus.OK)
     ResponseWrapper<RoundResponse> bugRound(@PathVariable Long bugId, @PathVariable Long playerId);
 
-    @PutMapping("/scoreboard-player/{playerId}/{cardId}")
+    @PutMapping("/{playerId}/scoreboard-player/{cardId}")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     ResponseWrapper<RoundResponse> scoreboardPlayer(@PathVariable Long playerId, @PathVariable Long cardId);
 
-
+    @PutMapping("/{playerId}/end-turn/{bugId}")
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    ResponseWrapper<EndTurnResponse> endTurn(@PathVariable Long playerId, @PathVariable Long bugId);
 }
