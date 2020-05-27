@@ -5,7 +5,7 @@ public class PlayerResponse {
     private String nickName;
     private Integer life;
     private Integer mana;
-    private JuniorCardResponse juniorCard;
+    private JuniorCardResponse card;
 
     public PlayerResponse() {
     }
@@ -17,12 +17,12 @@ public class PlayerResponse {
         this.mana = mana;
     }
 
-    public PlayerResponse(Long id, String nickName, Integer life, Integer mana, JuniorCardResponse juniorCard) {
+    public PlayerResponse(Long id, String nickName, Integer life, Integer mana, JuniorCardResponse card) {
         this.id = id;
         this.nickName = nickName;
         this.life = life;
         this.mana = mana;
-        this.juniorCard = juniorCard;
+        this.card = card;
     }
 
     public Long getId() {
@@ -57,11 +57,11 @@ public class PlayerResponse {
         this.mana = mana;
     }
 
-    public JuniorCardResponse getJuniorCard() {
-        return juniorCard;
+    public JuniorCardResponse getCard() {
+        return card;
     }
 
-    public void setJuniorCard(JuniorCardResponse juniorCard) {
-        this.juniorCard = juniorCard;
+    public void setCard(JuniorCardResponse card) {
+        this.card = card;
     }
 }
