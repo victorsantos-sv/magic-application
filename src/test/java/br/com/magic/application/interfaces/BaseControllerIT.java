@@ -13,7 +13,7 @@ import org.springframework.web.context.WebApplicationContext;
 @WebAppConfiguration
 @SpringBootTest
 @RunWith(SpringRunner.class)
-public class BaseControllerIT {
+public abstract class BaseControllerIT {
     @Autowired
     protected WebApplicationContext context;
     protected MockMvc mvc;
