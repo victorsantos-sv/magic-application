@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 public interface IGameController {
 
-    @GetMapping("/load-board/{id}")
+    @GetMapping("/load-board/{playerId}")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    ResponseWrapper<GameResponse> loadBoardGame(@PathVariable Long id);
+    ResponseWrapper<GameResponse> loadBoardGame(@PathVariable Long playerId);
 
     @GetMapping("/stack-cards")
     @ResponseBody
