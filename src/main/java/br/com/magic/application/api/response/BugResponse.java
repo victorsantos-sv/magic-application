@@ -1,16 +1,14 @@
-package br.com.magic.application.entity.dto;
+package br.com.magic.application.api.response;
 
-import java.util.List;
-
-public class BugDTO {
+public class BugResponse {
     private Long id;
-    private Integer life = 20;
-    private Integer mana = 20;
+    private Integer life;
+    private Integer mana;
 
-    public BugDTO() {
+    public BugResponse() {
     }
 
-    public BugDTO(Long id, Integer life, Integer mana) {
+    public BugResponse(Long id, Integer life, Integer mana) {
         this.id = id;
         this.life = life;
         this.mana = mana;

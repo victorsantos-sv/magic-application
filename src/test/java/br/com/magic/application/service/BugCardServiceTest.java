@@ -27,14 +27,14 @@ public class BugCardServiceTest {
         List<BugCardDTO> bugCardDTOList = buildBugCardDtoList();
 
         Mockito.when(bugCardRepositorie.findAllByIsInUseFalse()).thenReturn(bugCards);
-        Mockito.when(bugCardMapper.toDto(bugCards)).thenReturn(bugCardDTOList);
+        Mockito.when(bugCardMapper.toDtoList(bugCards)).thenReturn(bugCardDTOList);
 
         List<BugCardDTO> bugCardDTOS = bugCardService.getCardsWithoutBug();
 
         Assert.assertSame(bugCardDTOList, bugCardDTOS);
 
         Mockito.verify(bugCardRepositorie, Mockito.times(1)).findAllByIsInUseFalse();
-        Mockito.verify(bugCardMapper, Mockito.times(1)).toDto(bugCards);
+        Mockito.verify(bugCardMapper, Mockito.times(1)).toDtoList(bugCards);
     }
 
     private List<BugCardDTO> buildBugCardDtoList() throws IOException {

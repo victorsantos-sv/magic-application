@@ -26,10 +26,10 @@ public class MagicExceptionHandler {
         this.resourceBundle = resourceBundle;
     }
 
-    @ExceptionHandler(PlayerNotFound.class)
+    @ExceptionHandler(BaseNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
-    ErrorResponse handlePlayerNotFound(PlayerNotFound exception) {
+    ErrorResponse handleBaseNotFoundException(BaseNotFoundException exception) {
         String message = resourceBundle.getMessage(exception.getCode().getKey());
 
         return new ErrorResponse(exception.getCode().getCode(), message);
@@ -40,6 +40,15 @@ public class MagicExceptionHandler {
     @ResponseBody
     ErrorResponse handlePlayerFullCards(PlayerFullCards exception) {
         String message = resourceBundle.getMessage(exception.getCode().getKey());
+
+        return new ErrorResponse(exception.getCode().getCode(), message);
+    }
+
+    @ExceptionHandler(InsufficientMana.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    @ResponseBody
+    ErrorResponse handleInsufficientMana(InsufficientMana exception) {
+        String message = resourceBundle.getMessage(exception.getCode().getKey(), exception.getPlayer());
 
         return new ErrorResponse(exception.getCode().getCode(), message);
     }
