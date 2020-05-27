@@ -6,16 +6,14 @@ public class BugDTO {
     private Long id;
     private Integer life = 20;
     private Integer mana = 20;
-    private List<BugCardDTO> cards;
 
     public BugDTO() {
     }
 
-    public BugDTO(Long id, Integer life, Integer mana, List<BugCardDTO> cards) {
+    public BugDTO(Long id, Integer life, Integer mana) {
         this.id = id;
         this.life = life;
         this.mana = mana;
-        this.cards = cards;
     }
 
     public Long getId() {
@@ -40,13 +38,5 @@ public class BugDTO {
 
     public void setMana(Integer mana) {
         this.mana = mana;
-    }
-
-    public List<BugCardDTO> getCards() {
-        return cards;
-    }
-
-    public void setCards(List<BugCardDTO> cards) {
-        this.cards = cards;
     }
 }

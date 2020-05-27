@@ -8,7 +8,11 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface BugCardMapper {
 
-    List<BugCardDTO> toDto(List<BugCard> bugCards);
+    List<BugCardDTO> toDtoList(List<BugCard> bugCards);
 
-    List<BugCard> toEntity(List<BugCardDTO> bugCardDTOS);
+    List<BugCard> toEntityList(List<BugCardDTO> bugCardDTOS);
+
+    BugCardDTO toDto(BugCard bugCard);
+
+    BugCard toEntity(BugCardDTO bugCardDTO);
 }
