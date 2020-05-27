@@ -9,4 +9,5 @@ import org.mapstruct.Mapper;
 public interface JuniorCardMapper {
     List<JuniorCardDTO> toDto(List<JuniorCard> cards);
     List<JuniorCard> toEntity(List<JuniorCardDTO> cards);
+    JuniorCardDTO dto (JuniorCard card);
 }

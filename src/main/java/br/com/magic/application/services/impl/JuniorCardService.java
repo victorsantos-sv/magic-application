@@ -7,7 +7,9 @@ import br.com.magic.application.entity.mapper.JuniorCardMapper;
 import br.com.magic.application.entity.mapper.PlayerMapper;
 import br.com.magic.application.entity.model.JuniorCard;
 import br.com.magic.application.entity.model.Player;
+import br.com.magic.application.exception.CardNotFound;
 import br.com.magic.application.exception.PlayerFullCards;
+import br.com.magic.application.exception.PlayerNotFound;
 import br.com.magic.application.repositories.JuniorCardRepositorie;
 import br.com.magic.application.services.IJuniorCardService;
 import br.com.magic.application.services.IPlayerService;
@@ -37,6 +39,13 @@ public class JuniorCardService implements IJuniorCardService {
         List<JuniorCard> juniorCards = juniorCardRepositorie.findAll();
 
         return juniorCardMapper.toDto(juniorCards);
+    }
+
+    @Override
+    public JuniorCardDTO findById(Long id) {
+        JuniorCard juniorCard = juniorCardRepositorie.findById(id).orElseThrow(() -> new CardNotFound(MagicErrorCode.MEC001));
+
+        return juniorCardMapper.dto(juniorCard);
     }
 
     @Override
