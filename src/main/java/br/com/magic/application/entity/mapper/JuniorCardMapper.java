@@ -1,6 +1,8 @@
 package br.com.magic.application.entity.mapper;
 
+import br.com.magic.application.entity.dto.BugCardDTO;
 import br.com.magic.application.entity.dto.JuniorCardDTO;
+import br.com.magic.application.entity.model.BugCard;
 import br.com.magic.application.entity.model.JuniorCard;
 import java.util.List;
 import org.mapstruct.Mapper;
@@ -9,5 +11,6 @@ import org.mapstruct.Mapper;
 public interface JuniorCardMapper {
     List<JuniorCardDTO> toDto(List<JuniorCard> cards);
     List<JuniorCard> toEntity(List<JuniorCardDTO> cards);
-    JuniorCardDTO dto (JuniorCard card);
+    JuniorCardDTO toDto (JuniorCard card);
+    JuniorCard toEntity(JuniorCardDTO juniorCardDTO);
 }

@@ -1,9 +1,10 @@
 package br.com.magic.application.services.impl;
 
-import br.com.magic.application.entity.dto.GameDTO;
-import br.com.magic.application.entity.dto.JuniorCardDTO;
-import br.com.magic.application.entity.dto.PlayerDTO;
+import br.com.magic.application.entity.dto.*;
 import br.com.magic.application.entity.mapper.GameMapper;
+import br.com.magic.application.entity.mapper.JuniorCardMapper;
+import br.com.magic.application.entity.mapper.PlayerMapper;
+import br.com.magic.application.services.IBugCardService;
 import br.com.magic.application.services.IGameService;
 import br.com.magic.application.services.IJuniorCardService;
 import br.com.magic.application.services.IPlayerService;
@@ -19,12 +20,14 @@ public class GameService implements IGameService {
     private IPlayerService playerService;
     private IJuniorCardService juniorCardService;
     private GameMapper mapper;
+    private PlayerMapper playerMapper;
 
     @Autowired
-    public GameService(IPlayerService playerService, IJuniorCardService juniorCardService, GameMapper mapper) {
+    public GameService(IPlayerService playerService, IJuniorCardService juniorCardService, GameMapper mapper, PlayerMapper playerMapper) {
         this.playerService = playerService;
         this.juniorCardService = juniorCardService;
         this.mapper = mapper;
+        this.playerMapper = playerMapper;
     }
 
     @Override
@@ -35,6 +38,21 @@ public class GameService implements IGameService {
         juniorCardService.saveCardsIntoPlayer(sortedCards, id);
 
         return mapper.toDto(playerDTO, sortedCards);
+    }
+
+    @Override
+    public PlayerDTO scoreboardPlayer(Long id) {
+        JuniorCardDTO juniorCard= juniorCardService.selectRandomCard();
+        PlayerDTO playerDTO = playerService.findById(id);
+
+        Integer manaAmount = juniorCard.getPassive() == null ?
+                playerDTO.getMana() - juniorCard.getCost(): playerDTO.getMana() +juniorCard.getPassive();
+
+        playerDTO.setMana(manaAmount);
+        juniorCardService.removeCardJunior(juniorCard);
+        PlayerDTO playerDTOUpdated = playerService.update(playerDTO);
+
+        return playerMapper.toDto(playerDTOUpdated);
     }
 
     private List<JuniorCardDTO> sortCards(List<JuniorCardDTO> cards) {
@@ -52,4 +70,9 @@ public class GameService implements IGameService {
 
         return randomCards;
     }
+
+
+
+
+
 }

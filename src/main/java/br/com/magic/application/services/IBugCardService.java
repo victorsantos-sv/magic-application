@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface IBugCardService {
 
-    List<BugCardDTO> getCards();
+
 }

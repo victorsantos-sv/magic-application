@@ -38,4 +38,11 @@ public class PlayerService implements IPlayerService {
 
         return mapper.toDto(player);
     }
+
+    @Override
+    public PlayerDTO update(PlayerDTO playerDTO) {
+        Player player = mapper.toEntity(playerDTO);
+
+        return mapper.toDto(playerRepositorie.save(player));
+    }
 }

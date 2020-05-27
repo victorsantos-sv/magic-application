@@ -12,4 +12,8 @@ public interface PlayerMapper {
     PlayerDTO toDto(Player player);
     Player toEntity(PlayerDTO playerDTO);
     PlayerResponse toResponse(PlayerDTO playerDTO);
+    PlayerDTO toDto(PlayerDTO playerDTO);
+
+
+
 }
