@@ -139,7 +139,7 @@ public class GameService implements IGameService {
         Integer playerManaAmount = playerDTO.getMana() + 2 > 20 ? playerDTO.getMana() : playerDTO.getMana() + 2;
         Integer bugManaAmount = bugDTO.getMana() + 2 > 20 ? bugDTO.getMana() : bugDTO.getMana() + 2;
 
-        playerDTO.setMana(playerManaAmount);;
+        playerDTO.setMana(playerManaAmount);
         bugDTO.setMana(bugManaAmount);
 
         juniorCardService.saveCardsIntoPlayer(Collections.singletonList(juniorCardDTO), playerId);

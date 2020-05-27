@@ -9,18 +9,18 @@ import br.com.magic.application.repositories.PlayerRepositorie;
 import br.com.magic.application.services.impl.PlayerService;
 import java.util.Optional;
 import org.junit.Assert;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 public class PlayerServiceTest {
 
-    private PlayerRepositorie playerRepositorie = Mockito.mock(PlayerRepositorie.class);
-    private PlayerMapper playerMapper = Mockito.mock(PlayerMapper.class);
-    private PlayerService playerService = new PlayerService(playerRepositorie, playerMapper);
+    private final PlayerRepositorie playerRepositorie = Mockito.mock(PlayerRepositorie.class);
+    private final PlayerMapper playerMapper = Mockito.mock(PlayerMapper.class);
+    private final PlayerService playerService = new PlayerService(playerRepositorie, playerMapper);
 
     @Test
-    void shouldSavePlayerWithSuccess() {
+    public void shouldSavePlayerWithSuccess() {
         PlayerDTO playerDTO = new PlayerDTO();
         playerDTO.setNickName("Player");
         Player player = new Player();
@@ -43,7 +43,7 @@ public class PlayerServiceTest {
     }
 
     @Test
-    void shouldThrowAnExceptionWhenNotFindPlayer() {
+    public void shouldThrowAnExceptionWhenNotFindPlayer() {
         Long id = 1L;
 
         Mockito.when(playerRepositorie.findById(id)).thenReturn(Optional.empty());
@@ -58,7 +58,7 @@ public class PlayerServiceTest {
     }
 
     @Test
-    void shouldFindPlayerById() {
+    public void shouldFindPlayerById() {
         Long id = 1L;
         Player player = new Player(id, "player", 20, 20);
 
@@ -73,5 +73,23 @@ public class PlayerServiceTest {
         Assert.assertSame(player.getLife(), playerDTO.getLife());
 
         Mockito.verify(playerRepositorie, Mockito.times(1)).findById(id);
+    }
+
+    @Test
+    public void shouldUpdatePlayerWithSuccess() {
+        PlayerDTO playerDTO = new PlayerDTO(1L, "player", 15, 20);
+        Player player = new Player(1L, "player", 15, 20);
+
+        Mockito.when(playerMapper.toEntity(playerDTO)).thenReturn(player);
+        Mockito.when(playerMapper.toDto(player)).thenReturn(playerDTO);
+        Mockito.when(playerRepositorie.save(player)).thenReturn(player);
+
+        PlayerDTO playerDTOUpdated = playerService.update(playerDTO);
+
+        Assert.assertSame(playerDTO, playerDTOUpdated);
+
+        Mockito.verify(playerMapper, Mockito.times(1)).toDto(player);
+        Mockito.verify(playerMapper, Mockito.times(1)).toEntity(playerDTO);
+        Mockito.verify(playerRepositorie, Mockito.times(1)).save(player);
     }
 }

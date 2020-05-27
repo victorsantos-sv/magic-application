@@ -1,7 +1,6 @@
 package br.com.magic.application.services;
 
 import br.com.magic.application.entity.dto.JuniorCardDTO;
-import br.com.magic.application.entity.dto.PlayerDTO;
 import java.util.List;
 
 public interface IJuniorCardService {

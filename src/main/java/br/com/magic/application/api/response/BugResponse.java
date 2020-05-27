@@ -4,7 +4,7 @@ public class BugResponse {
     private Long id;
     private Integer life;
     private Integer mana;
-    private BugCardResponse bugCard;
+    private BugCardResponse card;
 
     public BugResponse() {
     }
@@ -15,11 +15,11 @@ public class BugResponse {
         this.mana = mana;
     }
 
-    public BugResponse(Long id, Integer life, Integer mana, BugCardResponse bugCard) {
+    public BugResponse(Long id, Integer life, Integer mana, BugCardResponse card) {
         this.id = id;
         this.life = life;
         this.mana = mana;
-        this.bugCard = bugCard;
+        this.card = card;
     }
 
     public Long getId() {
@@ -46,11 +46,11 @@ public class BugResponse {
         this.mana = mana;
     }
 
-    public BugCardResponse getBugCard() {
-        return bugCard;
+    public BugCardResponse getCard() {
+        return card;
     }
 
-    public void setBugCard(BugCardResponse bugCard) {
-        this.bugCard = bugCard;
+    public void setCard(BugCardResponse card) {
+        this.card = card;
     }
 }

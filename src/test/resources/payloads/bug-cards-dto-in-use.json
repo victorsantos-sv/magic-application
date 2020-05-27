@@ -5,8 +5,7 @@
     "description": "Sim, parece que o Bug está te sabotando, você acaba de perder 3 pontos de mana, e 2 pontos de energia, isso custou 4 pontos de mana para o BUG",
     "cost": 4,
     "lifeDamage": 2,
-    "manaDamage": 3,
-    "inUse": false
+    "manaDamage": 3
   },
   {
     "id": 4,
@@ -14,8 +13,7 @@
     "description": "Puxa, que distração. Você está recebendo um erro 500, NullPointerException, tanto tempo perdido, e só agora entendeu que esse não era o seu erro, era apenas o endpoint que estava batendo errado, perdeu tempo e tempo é vida. Perca 4 pontos de vida, e isso irá custar 4 pontos de mana para o Bug",
     "cost": 4,
     "lifeDamage": 4,
-    "manaDamage": null,
-    "inUse": false
+    "manaDamage": null
   },
   {
     "id": 5,
@@ -23,8 +21,7 @@
     "description": "Você ficou dedicado algum tempo ao bug, não conversou com o time, não entrou no Change Experience Jr, e nem pediu ajuda para a equipe. Acho que essa timidez irá lhe custar caro. Perca 4 pontos de vida e o bug irá perder 6 pontos de mana",
     "cost": 6,
     "lifeDamage": 4,
-    "manaDamage": null,
-    "inUse": false
+    "manaDamage": null
   },
   {
     "id": 7,
@@ -32,16 +29,6 @@
     "description": "Parece que você não deu Git Pull recentemente não é mesmo ? Vejo muito conflito entre os códigos da master e da sua Branch… isso vai te custar algum tempo também, você perdeu 2 pontos de vida,  e isso custou ao bug apenas 1 ponto de mana.",
     "cost": 1,
     "lifeDamage": 2,
-    "manaDamage": null,
-    "inUse": false
-  },
-  {
-    "id": 8,
-    "title": "Pandemia",
-    "description": "Você se arriscou, não respeitou a pandemia, tentou sair para trabalhar e adoeceu, virus e bug ? um belo estrago, você perdeu 6 pontos de vida e isso custou 8 pontos de mana para o Bug.",
-    "cost": 8,
-    "lifeDamage": 6,
-    "manaDamage": null,
-    "inUse": false
+    "manaDamage": null
   }
 ]
