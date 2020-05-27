@@ -47,9 +47,9 @@ public interface GameMapper {
 
     @Mappings({
         @Mapping(target = "player", source = "endTurnDTO.playerDTO"),
-        @Mapping(target = "player.juniorCard", source = "endTurnDTO.juniorCardDTO"),
+        @Mapping(target = "player.card", source = "endTurnDTO.juniorCardDTO"),
         @Mapping(target = "bug", source = "endTurnDTO.bugDTO"),
-        @Mapping(target = "bug.bugCard", source = "endTurnDTO.bugCardDTO"),
+        @Mapping(target = "bug.card", source = "endTurnDTO.bugCardDTO"),
     })
     EndTurnResponse toResponse(EndTurnDTO endTurnDTO);
 

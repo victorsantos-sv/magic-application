@@ -9,6 +9,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @Transactional
 public class PlayerControllerIT extends BaseControllerIT {
@@ -22,6 +23,7 @@ public class PlayerControllerIT extends BaseControllerIT {
             .content(toJson(new PlayerRequest("Player")))
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON))
+            .andDo(print())
             .andExpect(status().isCreated())
             .andExpect(jsonPath("$.content.id").value(1))
             .andExpect(jsonPath("$.content.nickName").value("Player"))
