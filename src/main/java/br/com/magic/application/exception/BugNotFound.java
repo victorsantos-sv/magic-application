@@ -2,13 +2,13 @@ package br.com.magic.application.exception;
 
 import br.com.magic.application.commons.MagicErrorCode;
 
-public class PlayerNotFound extends BaseNotFoundException {
+public class BugNotFound extends BaseNotFoundException {
     private MagicErrorCode code;
 
-    public PlayerNotFound() {
+    public BugNotFound() {
     }
 
-    public PlayerNotFound(MagicErrorCode code) {
+    public BugNotFound(MagicErrorCode code) {
         super(code);
         this.code = code;
     }
