@@ -98,6 +98,6 @@ public class GameService implements IGameService {
         BugDTO bugDTOUpdated = bugService.updateBug(bugDTO);
         PlayerDTO playerDTOUpdated = playerService.update(playerDTO);
 
-        return roundMapper.toDto(playerDTOUpdated, bugDTOUpdated);
+        return roundMapper.toDto(playerDTOUpdated, bugDTOUpdated, bugCardDTO.getId());
     }
 }
