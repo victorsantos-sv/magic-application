@@ -10,7 +10,7 @@ public class RandomUtils {
         Random random = new Random();
         List<T> randomCards = new ArrayList<>();
 
-        for (int i = 0; i < 4;) {
+        for (int i = 0; i < 4; ) {
             int randomNumber = random.nextInt(9);
 
             if (!randomCards.contains(cards.get(randomNumber))) {

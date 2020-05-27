@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ControllerAdvice
 public class MagicExceptionHandler {
 
-    private ResourceBundle resourceBundle;
+    private final ResourceBundle resourceBundle;
 
     @Autowired
     public MagicExceptionHandler(ResourceBundle resourceBundle) {

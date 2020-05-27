@@ -9,5 +9,6 @@ import org.springframework.stereotype.Repository;
 public interface BugCardRepositorie extends JpaRepository<BugCard, Long> {
 
     List<BugCard> findAllByIsInUseFalse();
+
     List<BugCard> findAllByIsInUseTrue();
 }

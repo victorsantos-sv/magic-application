@@ -17,9 +17,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class BugService implements IBugService {
 
-    private BugRepositorie bugRepositorie;
-    private IBugCardService bugCardService;
-    private BugMapper bugMapper;
+    private final BugRepositorie bugRepositorie;
+    private final IBugCardService bugCardService;
+    private final BugMapper bugMapper;
 
     @Autowired
     public BugService(BugRepositorie bugRepositorie, IBugCardService bugCardService, BugMapper bugMapper) {
@@ -30,7 +30,7 @@ public class BugService implements IBugService {
 
     @Override
     public BugWithCardsDTO getInitialCards() {
-        List<BugCardDTO> bugCardDTOList =  bugCardService.setCartsOnBug();
+        List<BugCardDTO> bugCardDTOList = bugCardService.setCartsOnBug();
         Bug bug = bugRepositorie.save(new Bug());
 
         return bugMapper.toDto(bug, bugCardDTOList);

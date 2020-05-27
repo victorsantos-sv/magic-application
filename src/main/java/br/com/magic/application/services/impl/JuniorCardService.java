@@ -13,7 +13,6 @@ import br.com.magic.application.repositories.JuniorCardRepositorie;
 import br.com.magic.application.services.IJuniorCardService;
 import br.com.magic.application.services.IPlayerService;
 import java.util.List;
-import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,7 +49,14 @@ public class JuniorCardService implements IJuniorCardService {
 
     @Override
     public JuniorCardDTO findById(Long id) {
-        JuniorCard juniorCard = juniorCardRepositorie.findById(id).orElseThrow(() -> new CardNotFound(MagicErrorCode.MEC001));
+        JuniorCard juniorCard = juniorCardRepositorie.findById(id).orElseThrow(() -> new CardNotFound(MagicErrorCode.MEC004));
+
+        return juniorCardMapper.toDto(juniorCard);
+    }
+
+    @Override
+    public JuniorCardDTO findByPlayerId(Long playerId) {
+        JuniorCard juniorCard = juniorCardRepositorie.findByPlayerId(playerId).orElseThrow(() -> new CardNotFound(MagicErrorCode.MEC004));
 
         return juniorCardMapper.toDto(juniorCard);
     }
@@ -81,7 +87,6 @@ public class JuniorCardService implements IJuniorCardService {
 
         juniorCardRepositorie.save(juniorCard);
     }
-
 
 
 }

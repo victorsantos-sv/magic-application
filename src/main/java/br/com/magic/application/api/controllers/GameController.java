@@ -2,12 +2,10 @@ package br.com.magic.application.api.controllers;
 
 import br.com.magic.application.api.IGameController;
 import br.com.magic.application.api.response.GameResponse;
-import br.com.magic.application.api.response.PlayerResponse;
 import br.com.magic.application.api.response.ResponseWrapper;
 import br.com.magic.application.api.response.RoundResponse;
 import br.com.magic.application.api.response.StackCardsResponse;
 import br.com.magic.application.entity.mapper.GameMapper;
-import br.com.magic.application.entity.mapper.PlayerMapper;
 import br.com.magic.application.entity.mapper.RoundMapper;
 import br.com.magic.application.exception.response.ErrorResponse;
 import br.com.magic.application.services.IGameService;
@@ -26,13 +24,11 @@ public class GameController implements IGameController {
     private final IGameService gameService;
     private final GameMapper gameMapper;
     private final RoundMapper roundMapper;
-    private final PlayerMapper playerMapper;
 
-    public GameController(IGameService gameService, GameMapper gameMapper, RoundMapper roundMapper, PlayerMapper playerMapper) {
+    public GameController(IGameService gameService, GameMapper gameMapper, RoundMapper roundMapper) {
         this.gameService = gameService;
         this.gameMapper = gameMapper;
         this.roundMapper = roundMapper;
-        this.playerMapper = playerMapper;
     }
 
     @Override
@@ -59,6 +55,10 @@ public class GameController implements IGameController {
     }
 
     @Override
+    @ApiResponses({
+        @ApiResponse(code = 404, message = "Player ou carta não encontrados", response = ErrorResponse.class),
+        @ApiResponse(code = 422, message = "O Player não possui mana suficiente", response = ErrorResponse.class)
+    })
     public ResponseWrapper<RoundResponse> scoreboardPlayer(@PathVariable Long playerId, @PathVariable Long cardId) {
         return new ResponseWrapper<>(roundMapper.toResponse(gameService.scoreboardPlayer(playerId, cardId)));
     }

@@ -1,7 +1,6 @@
 package br.com.magic.application.api;
 
 import br.com.magic.application.api.response.GameResponse;
-import br.com.magic.application.api.response.PlayerResponse;
 import br.com.magic.application.api.response.ResponseWrapper;
 import br.com.magic.application.api.response.RoundResponse;
 import br.com.magic.application.api.response.StackCardsResponse;

@@ -13,5 +13,5 @@ public interface IScoreboardPlayerController {
     @GetMapping("")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    ResponseWrapper<PlayerResponse> scoreboardPlayer (@PathVariable Long id, @PathVariable Long idCard);
+    ResponseWrapper<PlayerResponse> scoreboardPlayer(@PathVariable Long id, @PathVariable Long idCard);
 }

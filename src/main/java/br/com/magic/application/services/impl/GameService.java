@@ -11,15 +11,13 @@ import br.com.magic.application.entity.dto.PlayerWithCardsDTO;
 import br.com.magic.application.entity.dto.RoundDTO;
 import br.com.magic.application.entity.dto.StackCardsDTO;
 import br.com.magic.application.entity.mapper.GameMapper;
+import br.com.magic.application.entity.mapper.PlayerMapper;
 import br.com.magic.application.entity.mapper.RoundMapper;
 import br.com.magic.application.entity.model.Bug;
 import br.com.magic.application.entity.model.Player;
 import br.com.magic.application.exception.InsufficientMana;
 import br.com.magic.application.services.IBugCardService;
 import br.com.magic.application.services.IBugService;
-import br.com.magic.application.entity.mapper.JuniorCardMapper;
-import br.com.magic.application.entity.mapper.PlayerMapper;
-import br.com.magic.application.services.IBugCardService;
 import br.com.magic.application.services.IGameService;
 import br.com.magic.application.services.IJuniorCardService;
 import br.com.magic.application.services.IPlayerService;
@@ -32,13 +30,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class GameService implements IGameService {
 
-    private IPlayerService playerService;
-    private IJuniorCardService juniorCardService;
-    private IBugCardService bugCardService;
-    private IBugService bugService;
-    private GameMapper mapper;
-    private RoundMapper roundMapper;
-    private PlayerMapper playerMapper;
+    private final IPlayerService playerService;
+    private final IJuniorCardService juniorCardService;
+    private final IBugCardService bugCardService;
+    private final IBugService bugService;
+    private final GameMapper mapper;
+    private final RoundMapper roundMapper;
 
     @Autowired
     public GameService(
@@ -47,8 +44,7 @@ public class GameService implements IGameService {
         IBugCardService bugCardService,
         IBugService bugService,
         GameMapper mapper,
-        RoundMapper roundMapper,
-        PlayerMapper playerMapper
+        RoundMapper roundMapper
     ) {
         this.playerService = playerService;
         this.juniorCardService = juniorCardService;
@@ -56,7 +52,6 @@ public class GameService implements IGameService {
         this.bugService = bugService;
         this.mapper = mapper;
         this.roundMapper = roundMapper;
-        this.playerMapper = playerMapper;
     }
 
     @Override
@@ -83,7 +78,7 @@ public class GameService implements IGameService {
     @Override
     @Transactional
     public RoundDTO scoreboardPlayer(Long playerId, Long cardId) {
-        JuniorCardDTO juniorCardDTO = juniorCardService.findById(cardId);
+        JuniorCardDTO juniorCardDTO = juniorCardService.findByPlayerId(cardId);
         PlayerDTO playerDTO = playerService.findById(playerId);
         BugDTO bugDTO = bugService.findById(1L);
 
