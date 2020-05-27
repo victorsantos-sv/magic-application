@@ -12,7 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @Transactional
-public class PlayerControllerIT extends BaseControllerIT {
+public class PlayerControllerTest extends BaseControllerIT {
 
     private final String baseUrl = "http://localhost:8080/player";
 

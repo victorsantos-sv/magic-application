@@ -11,7 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Transactional
-public class GameControllerIT extends BaseControllerIT {
+public class GameControllerTest extends BaseControllerIT {
     private final String baseUrl = "http://localhost:8080/game";
 
     @Test
