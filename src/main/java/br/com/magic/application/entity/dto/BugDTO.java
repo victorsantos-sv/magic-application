@@ -1,7 +1,5 @@
 package br.com.magic.application.entity.dto;
 
-import java.util.List;
-
 public class BugDTO {
     private Long id;
     private Integer life = 20;

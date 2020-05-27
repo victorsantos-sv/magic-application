@@ -3,15 +3,15 @@ package br.com.magic.application.api.response;
 public class RoundResponse {
     private PlayerResponse player;
     private BugResponse bug;
-    private Long bugCardId;
+    private Long cardId;
 
     public RoundResponse() {
     }
 
-    public RoundResponse(PlayerResponse player, BugResponse bug, Long bugCardId) {
+    public RoundResponse(PlayerResponse player, BugResponse bug, Long cardId) {
         this.player = player;
         this.bug = bug;
-        this.bugCardId = bugCardId;
+        this.cardId = cardId;
     }
 
     public PlayerResponse getPlayer() {
@@ -30,11 +30,11 @@ public class RoundResponse {
         this.bug = bug;
     }
 
-    public Long getBugCardId() {
-        return bugCardId;
+    public Long getCardId() {
+        return cardId;
     }
 
-    public void setBugCardId(Long bugCardId) {
-        this.bugCardId = bugCardId;
+    public void setCardId(Long cardId) {
+        this.cardId = cardId;
     }
 }

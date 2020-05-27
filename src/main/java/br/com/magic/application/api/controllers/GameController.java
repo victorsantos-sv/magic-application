@@ -7,15 +7,12 @@ import br.com.magic.application.api.response.RoundResponse;
 import br.com.magic.application.api.response.StackCardsResponse;
 import br.com.magic.application.entity.mapper.GameMapper;
 import br.com.magic.application.entity.mapper.RoundMapper;
-import br.com.magic.application.exception.BaseNotFoundException;
-import br.com.magic.application.exception.InsufficientMana;
 import br.com.magic.application.exception.response.ErrorResponse;
 import br.com.magic.application.services.IGameService;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -56,4 +53,14 @@ public class GameController implements IGameController {
     public ResponseWrapper<RoundResponse> bugRound(@PathVariable Long bugId, @PathVariable Long playerId) {
         return new ResponseWrapper<>(roundMapper.toResponse(gameService.bugTurn(bugId, playerId)));
     }
+
+    @Override
+    @ApiResponses({
+        @ApiResponse(code = 404, message = "Player ou carta não encontrados", response = ErrorResponse.class),
+        @ApiResponse(code = 422, message = "O Player não possui mana suficiente", response = ErrorResponse.class)
+    })
+    public ResponseWrapper<RoundResponse> scoreboardPlayer(@PathVariable Long playerId, @PathVariable Long cardId) {
+        return new ResponseWrapper<>(roundMapper.toResponse(gameService.scoreboardPlayer(playerId, cardId)));
+    }
+
 }

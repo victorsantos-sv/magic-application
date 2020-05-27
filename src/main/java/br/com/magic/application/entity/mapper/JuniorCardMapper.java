@@ -8,5 +8,10 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface JuniorCardMapper {
     List<JuniorCardDTO> toDto(List<JuniorCard> cards);
+
     List<JuniorCard> toEntity(List<JuniorCardDTO> cards);
+
+    JuniorCardDTO toDto(JuniorCard card);
+
+    JuniorCard toEntity(JuniorCardDTO juniorCardDTO);
 }

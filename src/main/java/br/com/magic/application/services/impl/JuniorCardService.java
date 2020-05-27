@@ -7,6 +7,7 @@ import br.com.magic.application.entity.mapper.JuniorCardMapper;
 import br.com.magic.application.entity.mapper.PlayerMapper;
 import br.com.magic.application.entity.model.JuniorCard;
 import br.com.magic.application.entity.model.Player;
+import br.com.magic.application.exception.CardNotFound;
 import br.com.magic.application.exception.PlayerFullCards;
 import br.com.magic.application.repositories.JuniorCardRepositorie;
 import br.com.magic.application.services.IJuniorCardService;
@@ -47,6 +48,20 @@ public class JuniorCardService implements IJuniorCardService {
     }
 
     @Override
+    public JuniorCardDTO findById(Long id) {
+        JuniorCard juniorCard = juniorCardRepositorie.findById(id).orElseThrow(() -> new CardNotFound(MagicErrorCode.MEC004));
+
+        return juniorCardMapper.toDto(juniorCard);
+    }
+
+    @Override
+    public JuniorCardDTO findByPlayerId(Long playerId) {
+        JuniorCard juniorCard = juniorCardRepositorie.findByPlayerId(playerId).orElseThrow(() -> new CardNotFound(MagicErrorCode.MEC004));
+
+        return juniorCardMapper.toDto(juniorCard);
+    }
+
+    @Override
     public void saveCardsIntoPlayer(List<JuniorCardDTO> cardsDto, Long id) {
         List<JuniorCard> cards = juniorCardMapper.toEntity(cardsDto);
         PlayerDTO playerDTO = playerService.findById(id);
@@ -64,4 +79,14 @@ public class JuniorCardService implements IJuniorCardService {
 
         juniorCardRepositorie.saveAll(cards);
     }
+
+    @Override
+    public void removeCardFromJunior(JuniorCardDTO juniorCardDTO) {
+        JuniorCard juniorCard = juniorCardMapper.toEntity(juniorCardDTO);
+        juniorCard.setPlayer(null);
+
+        juniorCardRepositorie.save(juniorCard);
+    }
+
+
 }

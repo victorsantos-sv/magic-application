@@ -9,5 +9,11 @@ public interface IJuniorCardService {
 
     List<JuniorCardDTO> getCardsWithoutPlayer();
 
+    JuniorCardDTO findById(Long id);
+
+    JuniorCardDTO findByPlayerId(Long playerId);
+
     void saveCardsIntoPlayer(List<JuniorCardDTO> cardsDto, Long id);
+
+    void removeCardFromJunior(JuniorCardDTO juniorCardDTO);
 }
