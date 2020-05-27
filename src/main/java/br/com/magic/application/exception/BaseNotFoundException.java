@@ -2,13 +2,13 @@ package br.com.magic.application.exception;
 
 import br.com.magic.application.commons.MagicErrorCode;
 
-public class CardNotFound extends BaseException {
+public class BaseNotFoundException extends BaseException {
     private MagicErrorCode code;
 
-    public CardNotFound() {
+    public BaseNotFoundException() {
     }
 
-    public CardNotFound(MagicErrorCode code) {
+    public BaseNotFoundException(MagicErrorCode code) {
         super(code);
         this.code = code;
     }

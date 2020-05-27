@@ -11,6 +11,8 @@ public interface IJuniorCardService {
 
     List<JuniorCardDTO> getCards();
 
+    List<JuniorCardDTO> getCardsWithoutPlayer();
+
     JuniorCardDTO findById(Long id);
 
     void saveCardsIntoPlayer(List<JuniorCardDTO> cardsDto, Long id);

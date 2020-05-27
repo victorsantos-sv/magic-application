@@ -1,0 +1,83 @@
+[
+  {
+    "id":1,
+    "title":"Carta do Café",
+    "description":"Use esta carta para aumentar em 4 pontos de mana.",
+    "cost":null,
+    "lifeDamage":null,
+    "passive":4,
+    "player":null
+  },
+  {
+    "id":2,
+    "title":"Change Experience Jr Power",
+    "description":"Todos os Jrs se reuniram, cause 6 pontos de dano no BUG, perca 4 pontos de mana para utilizar este poder.",
+    "cost":4,
+    "lifeDamage":6,
+    "passive":null,
+    "player":null
+  },
+  {
+    "id":3,
+    "title":"Antivírus Ativo",
+    "description":"Opa parece que algo vinha para afetar seu sistema, mas seu antivírus não deu mole, recupera 2 pontos de Mana e também golpeie o bug em 2 pontos.",
+    "cost":null,
+    "lifeDamage":2,
+    "passive":2,
+    "player":null
+  },
+  {
+    "id":4,
+    "title":"Tech Lead Power",
+    "description":"As coisas ficaram difíceis? Use o poder do TechLead para conseguir gerar 8 pontos de dano no BUG, porém isso irá lhe custar 6 pontos de mana.",
+    "cost":6,
+    "lifeDamage":8,
+    "passive":null,
+    "player":null
+  },
+  {
+    "id":5,
+    "title":"Framework",
+    "description":"Você mostrou que um framework bem utilizado pode realizar milagres em poupar linhas de código. Gaste 3 pontos de mana, e gere um dano de 3 pontos de vida no Bug.",
+    "cost":3,
+    "lifeDamage":3,
+    "passive":null,
+    "player":null
+  },
+  {
+    "id":6,
+    "title":"DEBUG",
+    "description":"Agora é hora de achar o bug que está escondido no código, vamos analisar linha a linha, mas vamos achar onde se esconde esse inseto maldito. Para isso gaste 6 pontos de mana, mas irá gerar um dano de 8 pontos no bug.",
+    "cost":6,
+    "lifeDamage":8,
+    "passive":null,
+    "player":null
+  },
+  {
+    "id":7,
+    "title":"STACK Trace",
+    "description":"Achamos uma stack trace, só pode estar por ai o bug que procuramos, para isso gaste 5 pontos de mana e gere um dano de 7 pontos no seu bug.",
+    "cost":5,
+    "lifeDamage":7,
+    "passive":null,
+    "player":null
+  },
+  {
+    "id":8,
+    "title":"Coffee Break ZUP",
+    "description":"Sim, está na hora de conversar com aquele seu amigo sobre o bug que está tentando resolver, essa carta irá te recuperar 2 pontos de mana, e irá gerar 2 pontos de dano no bug.",
+    "cost":null,
+    "lifeDamage":2,
+    "passive":2,
+    "player":null
+  },
+  {
+    "id":9,
+    "title":"STACK OVERFLOW",
+    "description":"Se o Stack Overflow está conosco, quem estará contra? Você encontrou um post muito similar ao do Bug que estamos lutando, agora é com você. Gaste 4 de mana para jogar essa carta e então gere um dano de 4 pontos de vida no bug.",
+    "cost":4,
+    "lifeDamage":4,
+    "passive":null,
+    "player":null
+  }
+]
