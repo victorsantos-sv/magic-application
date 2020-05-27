@@ -25,7 +25,7 @@ public class PlayerControllerTest extends BaseControllerIT {
             .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
             .andExpect(status().isCreated())
-            .andExpect(jsonPath("$.content.id").value(1))
+            .andExpect(jsonPath("$.content.id").isNotEmpty())
             .andExpect(jsonPath("$.content.nickName").value("Player"))
             .andExpect(jsonPath("$.content.mana").value(20))
             .andExpect(jsonPath("$.content.life").value(20));

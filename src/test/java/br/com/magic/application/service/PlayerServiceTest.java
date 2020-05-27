@@ -9,7 +9,7 @@ import br.com.magic.application.repositories.PlayerRepositorie;
 import br.com.magic.application.services.impl.PlayerService;
 import java.util.Optional;
 import org.junit.Assert;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
@@ -20,7 +20,7 @@ public class PlayerServiceTest {
     private PlayerService playerService = new PlayerService(playerRepositorie, playerMapper);
 
     @Test
-    void shouldSavePlayerWithSuccess() {
+    public void shouldSavePlayerWithSuccess() {
         PlayerDTO playerDTO = new PlayerDTO();
         playerDTO.setNickName("Player");
         Player player = new Player();
@@ -43,7 +43,7 @@ public class PlayerServiceTest {
     }
 
     @Test
-    void shouldThrowAnExceptionWhenNotFindPlayer() {
+    public void shouldThrowAnExceptionWhenNotFindPlayer() {
         Long id = 1L;
 
         Mockito.when(playerRepositorie.findById(id)).thenReturn(Optional.empty());
@@ -58,7 +58,7 @@ public class PlayerServiceTest {
     }
 
     @Test
-    void shouldFindPlayerById() {
+    public void shouldFindPlayerById() {
         Long id = 1L;
         Player player = new Player(id, "player", 20, 20);
 
@@ -76,7 +76,7 @@ public class PlayerServiceTest {
     }
 
     @Test
-    void shouldUpdatePlayerWithSuccess() {
+    public void shouldUpdatePlayerWithSuccess() {
         PlayerDTO playerDTO = new PlayerDTO(1L, "player", 15, 20);
         Player player = new Player(1L, "player", 15, 20);
 

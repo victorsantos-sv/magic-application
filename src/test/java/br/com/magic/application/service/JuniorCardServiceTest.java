@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Optional;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
@@ -37,7 +37,7 @@ public class JuniorCardServiceTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
-    void shouldFindAllTheCards() throws IOException {
+    public void shouldFindAllTheCards() throws IOException {
         List<JuniorCard> juniorCards = buildJuniorCardList();
         List<JuniorCardDTO> juniorCardDTOList = buildJuniorCardDtoList();
 
@@ -53,7 +53,7 @@ public class JuniorCardServiceTest {
     }
 
     @Test
-    void shouldFindAllCardsWithoutPlayer() {
+    public void shouldFindAllCardsWithoutPlayer() {
         List<JuniorCard> juniorCards = buildStackJuniorCards();
         List<JuniorCardDTO> juniorCardDTOList = buildStackJuniorDtoCards();
 
@@ -69,7 +69,7 @@ public class JuniorCardServiceTest {
     }
 
     @Test
-    void shouldSaveCardsIntoPlayer() {
+    public void shouldSaveCardsIntoPlayer() {
         List<JuniorCard> juniorCards = buildStackJuniorCards();
         List<JuniorCardDTO> juniorCardDTOList = buildStackJuniorDtoCards();
         PlayerDTO playerDTO = new PlayerDTO(1L, "player", 20, 20);
@@ -93,7 +93,7 @@ public class JuniorCardServiceTest {
     }
 
     @Test
-    void shouldThrowAnExceptionWhenUserIsFullCards() {
+    public void shouldThrowAnExceptionWhenUserIsFullCards() {
         List<JuniorCard> juniorCards = buildStackJuniorCards();
         List<JuniorCardDTO> juniorCardDTOList = buildStackJuniorDtoCards();
         PlayerDTO playerDTO = new PlayerDTO(1L, "player", 20, 20);
@@ -120,7 +120,7 @@ public class JuniorCardServiceTest {
     }
 
     @Test
-    void shouldFindCardByIdWithSuccess() {
+    public void shouldFindCardByIdWithSuccess() {
         Long id = 1L;
         JuniorCard juniorCard = new JuniorCard(id, "title", "description", 4, 6, null, null);
         JuniorCardDTO juniorCardDTO = new JuniorCardDTO(id, "title", "description", 4, 5, null);
@@ -137,7 +137,7 @@ public class JuniorCardServiceTest {
     }
 
     @Test
-    void shouldThrowAnExceptionWhenCardNotFoundById() {
+    public void shouldThrowAnExceptionWhenCardNotFoundById() {
         Long id = 1L;
 
         Mockito.when(juniorCardRepositorie.findById(id)).thenReturn(Optional.empty());
@@ -152,7 +152,7 @@ public class JuniorCardServiceTest {
     }
 
     @Test
-    void shouldFindCardByIdAndPlayerIdWithSuccess() {
+    public void shouldFindCardByIdAndPlayerIdWithSuccess() {
         Long cardId = 4L;
         Long playerId = 4L;
         Player player = new Player(playerId, "player", 20, 20);
@@ -171,7 +171,7 @@ public class JuniorCardServiceTest {
     }
 
     @Test
-    void shouldThrowAnExceptionWhenCardNotFoundByIdAndPlayerId() {
+    public void shouldThrowAnExceptionWhenCardNotFoundByIdAndPlayerId() {
         Long cardId = 4L;
         Long playerId = 1L;
 
@@ -187,7 +187,7 @@ public class JuniorCardServiceTest {
     }
 
     @Test
-    void shouldGetARandomCardWithSuccess() {
+    public void shouldGetARandomCardWithSuccess() {
         List<JuniorCard> juniorCards = buildCardsWithUser(null);
         List<JuniorCardDTO> juniorCardDTOList = buildCardsWithUserDTO();
 
@@ -203,7 +203,7 @@ public class JuniorCardServiceTest {
     }
 
     @Test
-    void shouldRemoveCardFromPlayerWithSuccess() {
+    public void shouldRemoveCardFromPlayerWithSuccess() {
         JuniorCardDTO juniorCardDTO = new JuniorCardDTO(1L, "title", "description", 3, 5, null);
         JuniorCard juniorCard = new JuniorCard(1L, "title", "description", 3, 5, null, null);
         ArgumentCaptor<JuniorCard> argumentCaptor = ArgumentCaptor.forClass(JuniorCard.class);
