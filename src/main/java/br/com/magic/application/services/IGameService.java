@@ -11,7 +11,7 @@ public interface IGameService {
 
     StackCardsDTO getStackCards();
 
-    RoundDTO bugTurn(Long bugId, Long playerId);
+    RoundDTO scoreboardBug(Long bugId, Long playerId);
 
     RoundDTO scoreboardPlayer(Long playerId, Long cardId);
 

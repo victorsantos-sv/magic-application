@@ -74,7 +74,7 @@ public class GameService implements IGameService {
 
     @Override
     @Transactional
-    public RoundDTO bugTurn(Long bugId, Long playerId) {
+    public RoundDTO scoreboardBug(Long bugId, Long playerId) {
         BugCardDTO bugCardDTO = bugCardService.selectRandomCard();
         BugDTO bugDTO = bugService.findById(bugId);
         PlayerDTO playerDTO = playerService.findById(playerId);

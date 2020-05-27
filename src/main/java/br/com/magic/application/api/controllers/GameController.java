@@ -48,8 +48,8 @@ public class GameController implements IGameController {
         @ApiResponse(code = 404, message = "Player ou bug não encontrados", response = ErrorResponse.class),
         @ApiResponse(code = 422, message = "O Bug não possui mana suficiente", response = ErrorResponse.class)
     })
-    public ResponseWrapper<RoundResponse> bugRound(@PathVariable Long bugId, @PathVariable Long playerId) {
-        return new ResponseWrapper<>(gameMapper.toResponse(gameService.bugTurn(bugId, playerId)));
+    public ResponseWrapper<RoundResponse> scoreboardBug(@PathVariable Long bugId, @PathVariable Long playerId) {
+        return new ResponseWrapper<>(gameMapper.toResponse(gameService.scoreboardBug(bugId, playerId)));
     }
 
     @Override
@@ -62,6 +62,10 @@ public class GameController implements IGameController {
     }
 
     @Override
+    @ApiResponses({
+        @ApiResponse(code = 404, message = "Player ou bug não encontrados", response = ErrorResponse.class),
+        @ApiResponse(code = 422, message = "Player ou bug já possuem o máximo de cartas em mãos", response = ErrorResponse.class)
+    })
     public ResponseWrapper<EndTurnResponse> endTurn(Long playerId, Long bugId) {
         return new ResponseWrapper<>(gameMapper.toResponse(gameService.endTurn(playerId, bugId)));
     }

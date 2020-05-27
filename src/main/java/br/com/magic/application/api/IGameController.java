@@ -24,10 +24,10 @@ public interface IGameController {
     @ResponseStatus(HttpStatus.OK)
     ResponseWrapper<StackCardsResponse> getStackCards();
 
-    @PutMapping("{bugId}/bug-round/{playerId}")
+    @PutMapping("{bugId}/scoreboard-bug/{playerId}")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    ResponseWrapper<RoundResponse> bugRound(@PathVariable Long bugId, @PathVariable Long playerId);
+    ResponseWrapper<RoundResponse> scoreboardBug(@PathVariable Long bugId, @PathVariable Long playerId);
 
     @PutMapping("/{playerId}/scoreboard-player/{cardId}")
     @ResponseBody
