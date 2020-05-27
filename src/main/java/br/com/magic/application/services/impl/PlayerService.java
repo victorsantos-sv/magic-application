@@ -45,4 +45,11 @@ public class PlayerService implements IPlayerService {
 
         return mapper.toDto(playerRepositorie.save(player));
     }
+
+    @Override
+    public void deleteById(Long playerId) {
+        playerRepositorie.deleteById(playerId);
+    }
+
+
 }

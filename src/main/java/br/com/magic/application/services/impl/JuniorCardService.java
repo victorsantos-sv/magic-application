@@ -98,5 +98,14 @@ public class JuniorCardService implements IJuniorCardService {
         juniorCardRepositorie.save(juniorCard);
     }
 
+    @Override
+    public void removeAllCards() {
+        List<JuniorCard> juniorCards = juniorCardRepositorie.findAll();
 
+        juniorCards.forEach(juniorCard -> {
+            juniorCard.setPlayer(null);
+        });
+
+        juniorCardRepositorie.saveAll(juniorCards);
+    }
 }

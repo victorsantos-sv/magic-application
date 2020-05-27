@@ -147,4 +147,13 @@ public class GameService implements IGameService {
 
         return new EndTurnDTO(playerDTO, juniorCardDTO, bugDTO, bugCardDTO);
     }
+
+    @Override
+    public void logoff(Long playerId) {
+        juniorCardService.removeAllCards();
+        playerService.deleteById(playerId);
+        bugCardService.removeAllCards();
+        bugService.deleteAllBugs();
+
+    }
 }

@@ -11,6 +11,7 @@ import br.com.magic.application.exception.response.ErrorResponse;
 import br.com.magic.application.services.IGameService;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,4 +71,10 @@ public class GameController implements IGameController {
         return new ResponseWrapper<>(gameMapper.toResponse(gameService.endTurn(playerId, bugId)));
     }
 
+    @Override
+    public ResponseEntity<?> logoff(Long playerId) {
+        gameService.logoff(playerId);
+
+        return ResponseEntity.noContent().build();
+    }
 }

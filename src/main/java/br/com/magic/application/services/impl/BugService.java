@@ -49,4 +49,9 @@ public class BugService implements IBugService {
 
         return bugMapper.toDto(bugRepositorie.save(bug));
     }
+
+    @Override
+    public void deleteAllBugs() {
+        bugRepositorie.deleteAll();
+    }
 }

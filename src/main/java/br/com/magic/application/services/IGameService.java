@@ -17,4 +17,6 @@ public interface IGameService {
 
     EndTurnDTO endTurn(Long playerId, Long bugId);
 
+    void logoff(Long playerId);
+
 }

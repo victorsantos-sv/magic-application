@@ -88,4 +88,13 @@ public class BugCardService implements IBugCardService {
 
         bugCardRepositorie.save(bugCard);
     }
+
+    @Override
+    public void removeAllCards() {
+        List<BugCard> bugCards = bugCardRepositorie.findAll();
+
+        bugCards.forEach(bugCard -> bugCard.setInUse(false));
+
+        bugCardRepositorie.saveAll(bugCards);
+    }
 }
