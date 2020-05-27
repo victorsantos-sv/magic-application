@@ -8,11 +8,12 @@ import br.com.magic.application.entity.mapper.PlayerMapper;
 import br.com.magic.application.entity.model.JuniorCard;
 import br.com.magic.application.entity.model.Player;
 import br.com.magic.application.exception.CardNotFound;
-import br.com.magic.application.exception.PlayerFullCards;
+import br.com.magic.application.exception.FullCards;
 import br.com.magic.application.repositories.JuniorCardRepositorie;
 import br.com.magic.application.services.IJuniorCardService;
 import br.com.magic.application.services.IPlayerService;
 import java.util.List;
+import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,10 +56,19 @@ public class JuniorCardService implements IJuniorCardService {
     }
 
     @Override
-    public JuniorCardDTO findByPlayerId(Long playerId) {
-        JuniorCard juniorCard = juniorCardRepositorie.findByPlayerId(playerId).orElseThrow(() -> new CardNotFound(MagicErrorCode.MEC004));
+    public JuniorCardDTO findByPlayerId(Long cardId, Long playerId) {
+        JuniorCard juniorCard = juniorCardRepositorie.findByIdAndPlayerId(cardId, playerId)
+            .orElseThrow(() -> new CardNotFound(MagicErrorCode.MEC004));
 
         return juniorCardMapper.toDto(juniorCard);
+    }
+
+    @Override
+    public JuniorCardDTO getRandomCard() {
+        List<JuniorCardDTO> juniorCardDTOList = getCardsWithoutPlayer();
+        Random random = new Random();
+
+        return juniorCardDTOList.get(random.nextInt(juniorCardDTOList.size()));
     }
 
     @Override
@@ -70,7 +80,7 @@ public class JuniorCardService implements IJuniorCardService {
         List<JuniorCard> cardsWithUser = juniorCardRepositorie.findAllByPlayer(player);
 
         if (cardsWithUser.size() == 4) {
-            throw new PlayerFullCards(MagicErrorCode.MEC002);
+            throw new FullCards(MagicErrorCode.MEC002, Player.class.getSimpleName());
         }
 
         cards.forEach(juniorCard -> {

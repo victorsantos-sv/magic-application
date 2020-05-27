@@ -9,6 +9,4 @@ public interface IPlayerService {
     PlayerDTO findById(Long id);
 
     PlayerDTO update(PlayerDTO playerDTO);
-
-
 }

@@ -30,7 +30,7 @@ public class BugService implements IBugService {
 
     @Override
     public BugWithCardsDTO getInitialCards() {
-        List<BugCardDTO> bugCardDTOList = bugCardService.setCartsOnBug();
+        List<BugCardDTO> bugCardDTOList = bugCardService.setCardsOnBug();
         Bug bug = bugRepositorie.save(new Bug());
 
         return bugMapper.toDto(bug, bugCardDTOList);

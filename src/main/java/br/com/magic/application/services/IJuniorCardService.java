@@ -1,6 +1,7 @@
 package br.com.magic.application.services;
 
 import br.com.magic.application.entity.dto.JuniorCardDTO;
+import br.com.magic.application.entity.dto.PlayerDTO;
 import java.util.List;
 
 public interface IJuniorCardService {
@@ -11,7 +12,9 @@ public interface IJuniorCardService {
 
     JuniorCardDTO findById(Long id);
 
-    JuniorCardDTO findByPlayerId(Long playerId);
+    JuniorCardDTO findByPlayerId(Long cardId, Long playerId);
+
+    JuniorCardDTO getRandomCard();
 
     void saveCardsIntoPlayer(List<JuniorCardDTO> cardsDto, Long id);
 

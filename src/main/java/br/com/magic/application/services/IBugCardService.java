@@ -7,11 +7,13 @@ public interface IBugCardService {
 
     List<BugCardDTO> getCardsWithoutBug();
 
-    List<BugCardDTO> setCartsOnBug();
+    List<BugCardDTO> setCardsOnBug();
 
     BugCardDTO selectRandomCard();
 
     void removeCardFromBug(BugCardDTO bugCardDTO);
 
     BugCardDTO findById(Long id);
+
+    void saveCardOnBug(BugCardDTO bugCardDTO);
 }
