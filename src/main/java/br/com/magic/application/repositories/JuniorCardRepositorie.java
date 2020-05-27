@@ -12,7 +12,5 @@ public interface JuniorCardRepositorie extends JpaRepository<JuniorCard, Long> {
     List<JuniorCard> findAllByPlayer(Player player);
 
     List<JuniorCard> findAllByPlayerIsNullOrderById();
-    List<JuniorCard> findAllByIsInUseTrue();
-    List<JuniorCard> findAllByIsInUseFalse();
 
 }

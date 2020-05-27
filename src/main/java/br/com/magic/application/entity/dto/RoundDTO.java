@@ -3,15 +3,15 @@ package br.com.magic.application.entity.dto;
 public class RoundDTO {
     private PlayerDTO playerDTO;
     private BugDTO bugDTO;
-    private Long bugCardId;
+    private Long cardId;
 
     public RoundDTO() {
     }
 
-    public RoundDTO(PlayerDTO playerDTO, BugDTO bugDTO, Long bugCardId) {
+    public RoundDTO(PlayerDTO playerDTO, BugDTO bugDTO, Long cardId) {
         this.playerDTO = playerDTO;
         this.bugDTO = bugDTO;
-        this.bugCardId = bugCardId;
+        this.cardId = cardId;
     }
 
     public PlayerDTO getPlayerDTO() {
@@ -30,11 +30,11 @@ public class RoundDTO {
         this.bugDTO = bugDTO;
     }
 
-    public Long getBugCardId() {
-        return bugCardId;
+    public Long getCardId() {
+        return cardId;
     }
 
-    public void setBugCardId(Long bugCardId) {
-        this.bugCardId = bugCardId;
+    public void setCardId(Long cardId) {
+        this.cardId = cardId;
     }
 }

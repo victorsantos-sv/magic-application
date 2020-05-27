@@ -17,9 +17,5 @@ public interface IJuniorCardService {
 
     void saveCardsIntoPlayer(List<JuniorCardDTO> cardsDto, Long id);
 
-    void removeCardJunior(JuniorCardDTO juniorCardDTO);
-
-    JuniorCardDTO selectRandomCard();
-
-
+    void removeCardFromJunior(JuniorCardDTO juniorCardDTO);
 }

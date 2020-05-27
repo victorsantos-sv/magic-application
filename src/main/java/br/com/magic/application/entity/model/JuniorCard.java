@@ -16,17 +16,13 @@ public class JuniorCard extends Card {
     @JoinColumn(name = "player_id", nullable = true)
     private Player player;
 
-    @Column(name = "is_in_use")
-    private Boolean isInUse;
-
     public JuniorCard() {
     }
 
-    public JuniorCard(Long id, String title, String description, Integer cost, Integer lifeDamage, Integer passive, Player player, Boolean isInUse) {
+    public JuniorCard(Long id, String title, String description, Integer cost, Integer lifeDamage, Integer passive, Player player) {
         super(id, title, description, cost, lifeDamage);
         this.passive = passive;
         this.player = player;
-        this.isInUse = isInUse;
     }
 
     public Integer getPassive() {
@@ -43,10 +39,5 @@ public class JuniorCard extends Card {
 
     public void setPlayer(Player player) {
         this.player = player;
-    }
-
-
-    public void setInUse(Boolean inUse) {
-        isInUse = inUse;
     }
 }

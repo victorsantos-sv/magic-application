@@ -13,6 +13,7 @@ import br.com.magic.application.entity.dto.StackCardsDTO;
 import br.com.magic.application.entity.mapper.GameMapper;
 import br.com.magic.application.entity.mapper.RoundMapper;
 import br.com.magic.application.entity.model.Bug;
+import br.com.magic.application.entity.model.Player;
 import br.com.magic.application.exception.InsufficientMana;
 import br.com.magic.application.services.IBugCardService;
 import br.com.magic.application.services.IBugService;
@@ -80,18 +81,31 @@ public class GameService implements IGameService {
     }
 
     @Override
-    public PlayerDTO scoreboardPlayer(Long id) {
-        JuniorCardDTO juniorCard= juniorCardService.selectRandomCard();
-        PlayerDTO playerDTO = playerService.findById(id);
+    @Transactional
+    public RoundDTO scoreboardPlayer(Long playerId, Long cardId) {
+        JuniorCardDTO juniorCardDTO = juniorCardService.findById(cardId);
+        PlayerDTO playerDTO = playerService.findById(playerId);
+        BugDTO bugDTO = bugService.findById(1L);
 
-        Integer manaAmount = juniorCard.getPassive() == null ?
-            playerDTO.getMana() - juniorCard.getCost(): playerDTO.getMana() +juniorCard.getPassive();
+        int manaAmount = juniorCardDTO.getPassive() == null ?
+            playerDTO.getMana() - juniorCardDTO.getCost() : playerDTO.getMana() + juniorCardDTO.getPassive();
+
+        if (manaAmount < 0) {
+            throw new InsufficientMana(MagicErrorCode.MEC006, Player.class.getSimpleName());
+        }
+
+        manaAmount = Math.min(manaAmount, 20);
+
+        Integer lifeAmount = juniorCardDTO.getLifeDamage() != null ? bugDTO.getLife() - juniorCardDTO.getLifeDamage() : bugDTO.getLife();
+
+        bugDTO.setLife(lifeAmount);
+        BugDTO bugDTOUpdated = bugService.updateBug(bugDTO);
 
         playerDTO.setMana(manaAmount);
-        juniorCardService.removeCardJunior(juniorCard);
+        juniorCardService.removeCardFromJunior(juniorCardDTO);
         PlayerDTO playerDTOUpdated = playerService.update(playerDTO);
 
-        return playerMapper.toDto(playerDTOUpdated);
+        return roundMapper.toDto(playerDTOUpdated, bugDTOUpdated, cardId);
     }
 
     @Override

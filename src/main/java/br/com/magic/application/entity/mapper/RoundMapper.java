@@ -14,22 +14,22 @@ import org.mapstruct.Named;
 @Mapper(componentModel = "spring")
 public interface RoundMapper {
 
-    RoundDTO toDto(PlayerDTO playerDTO, BugDTO bugDTO, Long bugCardId);
+    RoundDTO toDto(PlayerDTO playerDTO, BugDTO bugDTO, Long cardId);
 
     @Mappings({
         @Mapping(source = "roundDTO.playerDTO", target = "player", qualifiedByName = "toPlayerResponse"),
         @Mapping(source = "roundDTO.bugDTO", target = "bug", qualifiedByName = "toBugResponse"),
-        @Mapping(source = "roundDTO.bugCardId", target = "bugCardId")
+        @Mapping(source = "roundDTO.cardId", target = "cardId")
     })
     RoundResponse toResponse(RoundDTO roundDTO);
 
     @Named("toPlayerResponse")
-    public static PlayerResponse personalizedResponse(PlayerDTO playerDTO) {
+    static PlayerResponse personalizedResponse(PlayerDTO playerDTO) {
         return new PlayerResponse(playerDTO.getId(), playerDTO.getNickName(), playerDTO.getLife(), playerDTO.getMana());
     }
 
     @Named("toBugResponse")
-    public static BugResponse personalizedResponse(BugDTO bugDTO) {
+    static BugResponse personalizedResponse(BugDTO bugDTO) {
         return new BugResponse(bugDTO.getId(), bugDTO.getLife(), bugDTO.getMana());
     }
 }

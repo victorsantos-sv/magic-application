@@ -75,18 +75,9 @@ public class JuniorCardService implements IJuniorCardService {
     }
 
     @Override
-    public JuniorCardDTO selectRandomCard() {
-        List<JuniorCard> juniorCards = juniorCardRepositorie.findAllByIsInUseTrue();
-        Random random = new Random();
-        JuniorCard juniorCard = juniorCards.get(random.nextInt(juniorCards.size()));
-
-        return juniorCardMapper.toDto(juniorCard);
-    }
-
-    @Override
-    public void removeCardJunior(JuniorCardDTO juniorCardDTO) {
+    public void removeCardFromJunior(JuniorCardDTO juniorCardDTO) {
         JuniorCard juniorCard = juniorCardMapper.toEntity(juniorCardDTO);
-        juniorCard.setInUse(false);
+        juniorCard.setPlayer(null);
 
         juniorCardRepositorie.save(juniorCard);
     }

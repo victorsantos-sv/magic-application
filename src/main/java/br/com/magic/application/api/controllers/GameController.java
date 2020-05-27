@@ -59,8 +59,8 @@ public class GameController implements IGameController {
     }
 
     @Override
-    public ResponseWrapper<PlayerResponse> scoreboardPlayer(@PathVariable Long id) {
-        return new ResponseWrapper<>(playerMapper.toResponse(gameService.scoreboardPlayer(id)));
+    public ResponseWrapper<RoundResponse> scoreboardPlayer(@PathVariable Long playerId, @PathVariable Long cardId) {
+        return new ResponseWrapper<>(roundMapper.toResponse(gameService.scoreboardPlayer(playerId, cardId)));
     }
 
 }
