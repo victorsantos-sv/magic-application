@@ -8,7 +8,6 @@ import br.com.magic.application.services.impl.BugCardService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 import java.util.List;
 import org.apache.commons.io.IOUtils;

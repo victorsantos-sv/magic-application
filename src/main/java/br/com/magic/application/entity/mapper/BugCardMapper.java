@@ -9,4 +9,6 @@ import org.mapstruct.Mapper;
 public interface BugCardMapper {
 
     List<BugCardDTO> toDto(List<BugCard> bugCards);
+
+    List<BugCard> toEntity(List<BugCardDTO> bugCardDTOS);
 }

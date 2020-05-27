@@ -1,62 +1,30 @@
 package br.com.magic.application.entity.dto;
 
-import java.util.List;
-
 public class GameDTO {
-    private Long id;
-    private String nickName;
-    private Integer life;
-    private Integer mana;
-    private List<JuniorCardDTO> cards;
+    private PlayerWithCardsDTO playerWithCardsDTO;
+    private BugWithCardsDTO bugWithCardsDTO;
 
     public GameDTO() {
     }
 
-    public GameDTO(Long id, String nickName, Integer life, Integer mana, List<JuniorCardDTO> cards) {
-        this.id = id;
-        this.nickName = nickName;
-        this.life = life;
-        this.mana = mana;
-        this.cards = cards;
+    public GameDTO(PlayerWithCardsDTO playerWithCardsDTO, BugWithCardsDTO bugWithCardsDTO) {
+        this.playerWithCardsDTO = playerWithCardsDTO;
+        this.bugWithCardsDTO = bugWithCardsDTO;
     }
 
-    public Long getId() {
-        return id;
+    public PlayerWithCardsDTO getPlayerWithCardsDTO() {
+        return playerWithCardsDTO;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setPlayerWithCardsDTO(PlayerWithCardsDTO playerWithCardsDTO) {
+        this.playerWithCardsDTO = playerWithCardsDTO;
     }
 
-    public String getNickName() {
-        return nickName;
+    public BugWithCardsDTO getBugWithCardsDTO() {
+        return bugWithCardsDTO;
     }
 
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
-    }
-
-    public Integer getLife() {
-        return life;
-    }
-
-    public void setLife(Integer life) {
-        this.life = life;
-    }
-
-    public Integer getMana() {
-        return mana;
-    }
-
-    public void setMana(Integer mana) {
-        this.mana = mana;
-    }
-
-    public List<JuniorCardDTO> getCards() {
-        return cards;
-    }
-
-    public void setCards(List<JuniorCardDTO> cards) {
-        this.cards = cards;
+    public void setBugWithCardsDTO(BugWithCardsDTO bugWithCardsDTO) {
+        this.bugWithCardsDTO = bugWithCardsDTO;
     }
 }

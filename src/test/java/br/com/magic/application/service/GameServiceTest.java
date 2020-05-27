@@ -1,20 +1,24 @@
 package br.com.magic.application.service;
 
 import br.com.magic.application.entity.dto.BugCardDTO;
+import br.com.magic.application.entity.dto.BugDTO;
+import br.com.magic.application.entity.dto.BugWithCardsDTO;
 import br.com.magic.application.entity.dto.GameDTO;
 import br.com.magic.application.entity.dto.JuniorCardDTO;
 import br.com.magic.application.entity.dto.PlayerDTO;
+import br.com.magic.application.entity.dto.PlayerWithCardsDTO;
 import br.com.magic.application.entity.dto.StackCardsDTO;
 import br.com.magic.application.entity.mapper.GameMapper;
 import br.com.magic.application.services.IBugCardService;
 import br.com.magic.application.services.IJuniorCardService;
 import br.com.magic.application.services.IPlayerService;
 import br.com.magic.application.services.impl.GameService;
+import br.com.magic.application.services.IBugService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
@@ -27,8 +31,9 @@ public class GameServiceTest {
     private IPlayerService playerService = Mockito.mock(IPlayerService.class);
     private IJuniorCardService juniorCardService = Mockito.mock(IJuniorCardService.class);
     private IBugCardService bugCardService = Mockito.mock(IBugCardService.class);
+    private IBugService bugService = Mockito.mock(IBugService.class);
     private GameMapper mapper = Mockito.mock(GameMapper.class);
-    private GameService gameService = new GameService(playerService, juniorCardService, bugCardService, mapper);
+    private GameService gameService = new GameService(playerService, juniorCardService, bugCardService, bugService, mapper);
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -37,13 +42,28 @@ public class GameServiceTest {
         Long id = 1L;
         PlayerDTO playerDTO = buildPlayerDTO(id);
         List<JuniorCardDTO> juniorCards = buildJuniorCardsList();
-        GameDTO gameDTO = buildGameDTO(playerDTO, juniorCards);
+        BugDTO bugDTO = new BugDTO(1L, 20, 20, Collections.emptyList());
+        PlayerWithCardsDTO playerWithCardsDTO = new PlayerWithCardsDTO(
+            playerDTO.getId(),
+            playerDTO.getNickName(),
+            playerDTO.getLife(),
+            playerDTO.getMana(),
+            juniorCards
+        );
+        BugWithCardsDTO bugWithCardsDTO = new BugWithCardsDTO(
+            bugDTO.getId(),
+            bugDTO.getLife(),
+            bugDTO.getMana(),
+            bugDTO.getCards()
+        );
+        GameDTO gameDTO = buildGameDTO(playerWithCardsDTO, bugWithCardsDTO);
         ArgumentCaptor<List<JuniorCardDTO>> argumentCaptor = ArgumentCaptor.forClass(List.class);
 
         Mockito.when(playerService.findById(id)).thenReturn(playerDTO);
         Mockito.when(juniorCardService.getCards()).thenReturn(juniorCards);
         Mockito.doNothing().when(juniorCardService).saveCardsIntoPlayer(Mockito.anyList(), Mockito.eq(id));
-        Mockito.when(mapper.toDto(Mockito.eq(playerDTO), Mockito.anyList())).thenReturn(gameDTO);
+        Mockito.when(bugService.getInitialCards()).thenReturn(bugDTO);
+        Mockito.when(mapper.toDto(Mockito.any(), Mockito.any())).thenReturn(gameDTO);
 
         GameDTO gameDTOCreated = gameService.loadBoard(id);
 
@@ -53,7 +73,8 @@ public class GameServiceTest {
         Mockito.verify(playerService, Mockito.times(1)).findById(id);
 
         Assert.assertSame(argumentCaptor.getValue().size(), 4);
-        Assert.assertSame(gameDTOCreated.getId(), playerDTO.getId());
+        Assert.assertSame(gameDTOCreated.getBugWithCardsDTO().getId(), gameDTO.getBugWithCardsDTO().getId());
+        Assert.assertSame(gameDTOCreated.getPlayerWithCardsDTO().getId(), gameDTO.getPlayerWithCardsDTO().getId());
     }
 
     @Test
@@ -77,19 +98,10 @@ public class GameServiceTest {
         return new PlayerDTO(id, "player", 20, 20);
     }
 
-    private GameDTO buildGameDTO(PlayerDTO playerDTO, List<JuniorCardDTO> juniorCardDTOS) {
-        List<JuniorCardDTO> juniorCardDTOList = new ArrayList<>();
-
-        for (int i = 0; i < 4; i++) {
-            juniorCardDTOList.add(juniorCardDTOS.get(i));
-        }
-
+    private GameDTO buildGameDTO(PlayerWithCardsDTO playerWithCardsDTO, BugWithCardsDTO bugWithCardsDTO) {
         return new GameDTO(
-            playerDTO.getId(),
-            playerDTO.getNickName(),
-            playerDTO.getLife(),
-            playerDTO.getMana(),
-            juniorCardDTOList
+            playerWithCardsDTO,
+            bugWithCardsDTO
         );
     }
 
