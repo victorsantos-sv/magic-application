@@ -5,6 +5,7 @@ public class PlayerResponse {
     private String nickName;
     private Integer life;
     private Integer mana;
+    private JuniorCardResponse juniorCard;
 
     public PlayerResponse() {
     }
@@ -14,6 +15,14 @@ public class PlayerResponse {
         this.nickName = nickName;
         this.life = life;
         this.mana = mana;
+    }
+
+    public PlayerResponse(Long id, String nickName, Integer life, Integer mana, JuniorCardResponse juniorCard) {
+        this.id = id;
+        this.nickName = nickName;
+        this.life = life;
+        this.mana = mana;
+        this.juniorCard = juniorCard;
     }
 
     public Long getId() {
@@ -46,5 +55,13 @@ public class PlayerResponse {
 
     public void setMana(Integer mana) {
         this.mana = mana;
+    }
+
+    public JuniorCardResponse getJuniorCard() {
+        return juniorCard;
+    }
+
+    public void setJuniorCard(JuniorCardResponse juniorCard) {
+        this.juniorCard = juniorCard;
     }
 }

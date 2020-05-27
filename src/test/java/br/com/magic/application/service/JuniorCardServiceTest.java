@@ -7,7 +7,7 @@ import br.com.magic.application.entity.mapper.JuniorCardMapper;
 import br.com.magic.application.entity.mapper.PlayerMapper;
 import br.com.magic.application.entity.model.JuniorCard;
 import br.com.magic.application.entity.model.Player;
-import br.com.magic.application.exception.PlayerFullCards;
+import br.com.magic.application.exception.FullCards;
 import br.com.magic.application.repositories.JuniorCardRepositorie;
 import br.com.magic.application.services.IPlayerService;
 import br.com.magic.application.services.impl.JuniorCardService;
@@ -106,7 +106,7 @@ public class JuniorCardServiceTest {
 
         try {
             juniorCardService.saveCardsIntoPlayer(juniorCardDTOList, 1L);
-        } catch (PlayerFullCards ex) {
+        } catch (FullCards ex) {
             Assert.assertSame(ex.getCode(), MagicErrorCode.MEC002);
         } finally {
             Mockito.verify(juniorCardMapper, Mockito.times(1)).toEntity(juniorCardDTOList);

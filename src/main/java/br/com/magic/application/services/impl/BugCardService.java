@@ -3,8 +3,10 @@ package br.com.magic.application.services.impl;
 import br.com.magic.application.commons.MagicErrorCode;
 import br.com.magic.application.entity.dto.BugCardDTO;
 import br.com.magic.application.entity.mapper.BugCardMapper;
+import br.com.magic.application.entity.model.Bug;
 import br.com.magic.application.entity.model.BugCard;
 import br.com.magic.application.exception.CardNotFound;
+import br.com.magic.application.exception.FullCards;
 import br.com.magic.application.repositories.BugCardRepositorie;
 import br.com.magic.application.services.IBugCardService;
 import br.com.magic.application.utils.RandomUtils;
@@ -33,7 +35,7 @@ public class BugCardService implements IBugCardService {
     }
 
     @Override
-    public List<BugCardDTO> setCartsOnBug() {
+    public List<BugCardDTO> setCardsOnBug() {
         List<BugCardDTO> bugCards = getCardsWithoutBug();
         List<BugCardDTO> sortedCarts = RandomUtils.sortCards(bugCards);
 
@@ -71,5 +73,19 @@ public class BugCardService implements IBugCardService {
         BugCard bugCard = bugCardRepositorie.findById(id).orElseThrow(() -> new CardNotFound(MagicErrorCode.MEC004));
 
         return bugCardMapper.toDto(bugCard);
+    }
+
+    @Override
+    public void saveCardOnBug(BugCardDTO bugCardDTO) {
+        List<BugCardDTO> bugCards = getCardsWithoutBug();
+        BugCard bugCard = bugCardMapper.toEntity(bugCardDTO);
+
+        if (bugCards.size() <= 5) {
+            throw new FullCards(MagicErrorCode.MEC002, Bug.class.getSimpleName());
+        }
+
+        bugCard.setInUse(true);
+
+        bugCardRepositorie.save(bugCard);
     }
 }
