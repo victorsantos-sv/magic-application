@@ -1,4 +1,4 @@
-package br.com.magic.application.services.impl;
+package br.com.magic.application.services;
 
 import br.com.magic.application.entity.dto.BugDTO;
 

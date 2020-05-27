@@ -13,7 +13,7 @@ import br.com.magic.application.services.IBugCardService;
 import br.com.magic.application.services.IJuniorCardService;
 import br.com.magic.application.services.IPlayerService;
 import br.com.magic.application.services.impl.GameService;
-import br.com.magic.application.services.impl.IBugService;
+import br.com.magic.application.services.IBugService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
