@@ -16,7 +16,6 @@ public class PlayerService implements IPlayerService {
     private final PlayerRepositorie playerRepositorie;
     private final PlayerMapper mapper;
 
-    @Autowired
     public PlayerService(PlayerRepositorie playerRepositorie, PlayerMapper mapper) {
         this.playerRepositorie = playerRepositorie;
         this.mapper = mapper;

@@ -10,7 +10,6 @@ public class ResourceBundle {
 
     private static MessageSource messageSource;
 
-    @Autowired
     private ResourceBundle(MessageSource messageSource) {
         ResourceBundle.messageSource = messageSource;
     }

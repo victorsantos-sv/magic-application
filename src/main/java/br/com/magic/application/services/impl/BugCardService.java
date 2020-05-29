@@ -22,7 +22,6 @@ public class BugCardService implements IBugCardService {
     private final BugCardRepositorie bugCardRepositorie;
     private final BugCardMapper bugCardMapper;
 
-    @Autowired
     public BugCardService(BugCardRepositorie bugCardRepositorie, BugCardMapper bugCardMapper) {
         this.bugCardRepositorie = bugCardRepositorie;
         this.bugCardMapper = bugCardMapper;

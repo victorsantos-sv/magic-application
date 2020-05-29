@@ -21,7 +21,6 @@ public class MagicExceptionHandler {
 
     private final ResourceBundle resourceBundle;
 
-    @Autowired
     public MagicExceptionHandler(ResourceBundle resourceBundle) {
         this.resourceBundle = resourceBundle;
     }

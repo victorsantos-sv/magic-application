@@ -25,7 +25,6 @@ public class JuniorCardService implements IJuniorCardService {
     private final JuniorCardMapper juniorCardMapper;
     private final PlayerMapper playerMapper;
 
-    @Autowired
     public JuniorCardService(JuniorCardRepositorie juniorCardRepositorie, IPlayerService playerService, JuniorCardMapper juniorCardMapper,
                              PlayerMapper playerMapper) {
         this.juniorCardRepositorie = juniorCardRepositorie;

@@ -28,7 +28,6 @@ public class PlayerController implements IPlayerController {
     private final PlayerMapper mapper;
     private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
     public PlayerController(IPlayerService playerService, PlayerMapper mapper) {
         this.playerService = playerService;
         this.mapper = mapper;

@@ -36,7 +36,6 @@ public class GameService implements IGameService {
     private final IBugService bugService;
     private final GameMapper mapper;
 
-    @Autowired
     public GameService(
         IPlayerService playerService,
         IJuniorCardService juniorCardService,
