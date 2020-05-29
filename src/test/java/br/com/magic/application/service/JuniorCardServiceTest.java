@@ -15,24 +15,30 @@ import br.com.magic.application.services.impl.JuniorCardService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.apache.commons.io.IOUtils;
-import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class JuniorCardServiceTest {
 
-    private final JuniorCardRepositorie juniorCardRepositorie = Mockito.mock(JuniorCardRepositorie.class);
-    private final IPlayerService playerService = Mockito.mock(IPlayerService.class);
-    private final JuniorCardMapper juniorCardMapper = Mockito.mock(JuniorCardMapper.class);
-    private final PlayerMapper playerMapper = Mockito.mock(PlayerMapper.class);
+    private final JuniorCardRepositorie juniorCardRepositorie = mock(JuniorCardRepositorie.class);
+    private final IPlayerService playerService = mock(IPlayerService.class);
+    private final JuniorCardMapper juniorCardMapper = mock(JuniorCardMapper.class);
+    private final PlayerMapper playerMapper = mock(PlayerMapper.class);
     private final JuniorCardService juniorCardService = new JuniorCardService(juniorCardRepositorie, playerService, juniorCardMapper, playerMapper);
 
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -42,15 +48,15 @@ public class JuniorCardServiceTest {
         List<JuniorCard> juniorCards = buildJuniorCardList();
         List<JuniorCardDTO> juniorCardDTOList = buildJuniorCardDtoList();
 
-        Mockito.when(juniorCardRepositorie.findAll()).thenReturn(juniorCards);
-        Mockito.when(juniorCardMapper.toDto(juniorCards)).thenReturn(juniorCardDTOList);
+        when(juniorCardRepositorie.findAll()).thenReturn(juniorCards);
+        when(juniorCardMapper.toDto(juniorCards)).thenReturn(juniorCardDTOList);
 
         List<JuniorCardDTO> juniorCardDTOS = juniorCardService.getCards();
 
-        Assert.assertSame(juniorCardDTOList, juniorCardDTOS);
+        assertSame(juniorCardDTOList, juniorCardDTOS);
 
-        Mockito.verify(juniorCardRepositorie, Mockito.times(1)).findAll();
-        Mockito.verify(juniorCardMapper, Mockito.times(1)).toDto(juniorCards);
+        verify(juniorCardRepositorie, times(1)).findAll();
+        verify(juniorCardMapper, times(1)).toDto(juniorCards);
     }
 
     @Test
@@ -58,15 +64,15 @@ public class JuniorCardServiceTest {
         List<JuniorCard> juniorCards = buildStackJuniorCards();
         List<JuniorCardDTO> juniorCardDTOList = buildStackJuniorDtoCards();
 
-        Mockito.when(juniorCardRepositorie.findAllByPlayerIsNullOrderById()).thenReturn(juniorCards);
-        Mockito.when(juniorCardMapper.toDto(juniorCards)).thenReturn(juniorCardDTOList);
+        when(juniorCardRepositorie.findAllByPlayerIsNullOrderById()).thenReturn(juniorCards);
+        when(juniorCardMapper.toDto(juniorCards)).thenReturn(juniorCardDTOList);
 
         List<JuniorCardDTO> juniorCardDTOS = juniorCardService.getCardsWithoutPlayer();
 
-        Assert.assertSame(juniorCardDTOList, juniorCardDTOS);
+        assertSame(juniorCardDTOList, juniorCardDTOS);
 
-        Mockito.verify(juniorCardRepositorie, Mockito.times(1)).findAllByPlayerIsNullOrderById();
-        Mockito.verify(juniorCardMapper, Mockito.times(1)).toDto(juniorCards);
+        verify(juniorCardRepositorie, times(1)).findAllByPlayerIsNullOrderById();
+        verify(juniorCardMapper, times(1)).toDto(juniorCards);
     }
 
     @Test
@@ -78,19 +84,19 @@ public class JuniorCardServiceTest {
 
         juniorCards.get(0).setPlayer(player);
 
-        Mockito.when(juniorCardMapper.toEntity(juniorCardDTOList)).thenReturn(juniorCards);
-        Mockito.when(playerService.findById(1L)).thenReturn(playerDTO);
-        Mockito.when(playerMapper.toEntity(playerDTO)).thenReturn(player);
-        Mockito.when(juniorCardRepositorie.findAllByPlayer(player)).thenReturn(Collections.emptyList());
-        Mockito.when(juniorCardRepositorie.saveAll(juniorCards)).thenReturn(null);
+        when(juniorCardMapper.toEntity(juniorCardDTOList)).thenReturn(juniorCards);
+        when(playerService.findById(1L)).thenReturn(playerDTO);
+        when(playerMapper.toEntity(playerDTO)).thenReturn(player);
+        when(juniorCardRepositorie.findAllByPlayer(player)).thenReturn(Collections.emptyList());
+        when(juniorCardRepositorie.saveAll(juniorCards)).thenReturn(null);
 
         juniorCardService.saveCardsIntoPlayer(juniorCardDTOList, 1L);
 
-        Mockito.verify(juniorCardMapper, Mockito.times(1)).toEntity(juniorCardDTOList);
-        Mockito.verify(playerService, Mockito.times(1)).findById(1L);
-        Mockito.verify(playerMapper, Mockito.times(1)).toEntity(playerDTO);
-        Mockito.verify(juniorCardRepositorie, Mockito.times(1)).findAllByPlayer(player);
-        Mockito.verify(juniorCardRepositorie, Mockito.times(1)).saveAll(juniorCards);
+        verify(juniorCardMapper, times(1)).toEntity(juniorCardDTOList);
+        verify(playerService, times(1)).findById(1L);
+        verify(playerMapper, times(1)).toEntity(playerDTO);
+        verify(juniorCardRepositorie, times(1)).findAllByPlayer(player);
+        verify(juniorCardRepositorie, times(1)).saveAll(juniorCards);
     }
 
     @Test
@@ -103,21 +109,21 @@ public class JuniorCardServiceTest {
 
         juniorCards.get(0).setPlayer(player);
 
-        Mockito.when(juniorCardMapper.toEntity(juniorCardDTOList)).thenReturn(juniorCards);
-        Mockito.when(playerService.findById(1L)).thenReturn(playerDTO);
-        Mockito.when(playerMapper.toEntity(playerDTO)).thenReturn(player);
-        Mockito.when(juniorCardRepositorie.findAllByPlayer(player)).thenReturn(cardsWithUser);
+        when(juniorCardMapper.toEntity(juniorCardDTOList)).thenReturn(juniorCards);
+        when(playerService.findById(1L)).thenReturn(playerDTO);
+        when(playerMapper.toEntity(playerDTO)).thenReturn(player);
+        when(juniorCardRepositorie.findAllByPlayer(player)).thenReturn(cardsWithUser);
 
-        try {
+        FullCards fullCards = assertThrows(FullCards.class, () -> {
             juniorCardService.saveCardsIntoPlayer(juniorCardDTOList, 1L);
-        } catch (FullCards ex) {
-            Assert.assertSame(ex.getCode(), MagicErrorCode.MEC002);
-        } finally {
-            Mockito.verify(juniorCardMapper, Mockito.times(1)).toEntity(juniorCardDTOList);
-            Mockito.verify(playerService, Mockito.times(1)).findById(1L);
-            Mockito.verify(playerMapper, Mockito.times(1)).toEntity(playerDTO);
-            Mockito.verify(juniorCardRepositorie, Mockito.times(1)).findAllByPlayer(player);
-        }
+        });
+
+        assertSame(fullCards.getCode(), MagicErrorCode.MEC002);
+
+        verify(juniorCardMapper, times(1)).toEntity(juniorCardDTOList);
+        verify(playerService, times(1)).findById(1L);
+        verify(playerMapper, times(1)).toEntity(playerDTO);
+        verify(juniorCardRepositorie, times(1)).findAllByPlayer(player);
     }
 
     @Test
@@ -126,29 +132,29 @@ public class JuniorCardServiceTest {
         JuniorCard juniorCard = new JuniorCard(id, "title", "description", 4, 6, null, null);
         JuniorCardDTO juniorCardDTO = new JuniorCardDTO(id, "title", "description", 4, 5, null);
 
-        Mockito.when(juniorCardRepositorie.findById(id)).thenReturn(Optional.of(juniorCard));
-        Mockito.when(juniorCardMapper.toDto(juniorCard)).thenReturn(juniorCardDTO);
+        when(juniorCardRepositorie.findById(id)).thenReturn(Optional.of(juniorCard));
+        when(juniorCardMapper.toDto(juniorCard)).thenReturn(juniorCardDTO);
 
         JuniorCardDTO juniorCardDTOFound = juniorCardService.findById(id);
 
-        Assert.assertSame(juniorCardDTO, juniorCardDTOFound);
+        assertSame(juniorCardDTO, juniorCardDTOFound);
 
-        Mockito.verify(juniorCardRepositorie, Mockito.times(1)).findById(id);
-        Mockito.verify(juniorCardMapper, Mockito.times(1)).toDto(juniorCard);
+        verify(juniorCardRepositorie, times(1)).findById(id);
+        verify(juniorCardMapper, times(1)).toDto(juniorCard);
     }
 
     @Test
     public void shouldThrowAnExceptionWhenCardNotFoundById() {
         Long id = 1L;
 
-        Mockito.when(juniorCardRepositorie.findById(id)).thenReturn(Optional.empty());
+        when(juniorCardRepositorie.findById(id)).thenReturn(Optional.empty());
 
         try {
             juniorCardService.findById(id);
         } catch (CardNotFound ex) {
-            Assert.assertSame(ex.getCode(), MagicErrorCode.MEC004);
+            assertSame(ex.getCode(), MagicErrorCode.MEC004);
         } finally {
-            Mockito.verify(juniorCardRepositorie, Mockito.times(1)).findById(id);
+            verify(juniorCardRepositorie, times(1)).findById(id);
         }
     }
 
@@ -160,15 +166,15 @@ public class JuniorCardServiceTest {
         JuniorCard juniorCard = new JuniorCard(cardId, "title", "description", 4, 6, null, player);
         JuniorCardDTO juniorCardDTO = new JuniorCardDTO(cardId, "title", "description", 4, 5, null);
 
-        Mockito.when(juniorCardRepositorie.findByIdAndPlayerId(cardId, playerId)).thenReturn(Optional.of(juniorCard));
-        Mockito.when(juniorCardMapper.toDto(juniorCard)).thenReturn(juniorCardDTO);
+        when(juniorCardRepositorie.findByIdAndPlayerId(cardId, playerId)).thenReturn(Optional.of(juniorCard));
+        when(juniorCardMapper.toDto(juniorCard)).thenReturn(juniorCardDTO);
 
         JuniorCardDTO juniorCardDTOFound = juniorCardService.findByPlayerId(cardId, playerId);
 
-        Assert.assertSame(juniorCardDTO, juniorCardDTOFound);
+        assertSame(juniorCardDTO, juniorCardDTOFound);
 
-        Mockito.verify(juniorCardRepositorie, Mockito.times(1)).findByIdAndPlayerId(cardId, playerId);
-        Mockito.verify(juniorCardMapper, Mockito.times(1)).toDto(juniorCard);
+        verify(juniorCardRepositorie, times(1)).findByIdAndPlayerId(cardId, playerId);
+        verify(juniorCardMapper, times(1)).toDto(juniorCard);
     }
 
     @Test
@@ -176,15 +182,15 @@ public class JuniorCardServiceTest {
         Long cardId = 4L;
         Long playerId = 1L;
 
-        Mockito.when(juniorCardRepositorie.findByIdAndPlayerId(cardId, playerId)).thenReturn(Optional.empty());
+        when(juniorCardRepositorie.findByIdAndPlayerId(cardId, playerId)).thenReturn(Optional.empty());
 
-        try {
-            juniorCardService.findByPlayerId(cardId, playerId);
-        } catch (CardNotFound ex) {
-            Assert.assertSame(ex.getCode(), MagicErrorCode.MEC004);
-        } finally {
-            Mockito.verify(juniorCardRepositorie, Mockito.times(1)).findByIdAndPlayerId(cardId, playerId);
-        }
+        CardNotFound cardNotFound = assertThrows(CardNotFound.class, () ->
+            juniorCardService.findByPlayerId(cardId, playerId)
+        );
+
+        assertSame(cardNotFound.getCode(), MagicErrorCode.MEC004);
+
+        verify(juniorCardRepositorie, times(1)).findByIdAndPlayerId(cardId, playerId);
     }
 
     @Test
@@ -192,15 +198,15 @@ public class JuniorCardServiceTest {
         List<JuniorCard> juniorCards = buildCardsWithUser(null);
         List<JuniorCardDTO> juniorCardDTOList = buildCardsWithUserDTO();
 
-        Mockito.when(juniorCardRepositorie.findAllByPlayerIsNullOrderById()).thenReturn(juniorCards);
-        Mockito.when(juniorCardMapper.toDto(juniorCards)).thenReturn(juniorCardDTOList);
+        when(juniorCardRepositorie.findAllByPlayerIsNullOrderById()).thenReturn(juniorCards);
+        when(juniorCardMapper.toDto(juniorCards)).thenReturn(juniorCardDTOList);
 
         JuniorCardDTO randomCard = juniorCardService.getRandomCard();
 
-        Assert.assertNotNull(randomCard);
-        Assert.assertTrue(juniorCardDTOList.contains(randomCard));
+        assertNotNull(randomCard);
+        assertTrue(juniorCardDTOList.contains(randomCard));
 
-        Mockito.verify(juniorCardRepositorie, Mockito.times(1)).findAllByPlayerIsNullOrderById();
+        verify(juniorCardRepositorie, times(1)).findAllByPlayerIsNullOrderById();
     }
 
     @Test
@@ -209,15 +215,28 @@ public class JuniorCardServiceTest {
         JuniorCard juniorCard = new JuniorCard(1L, "title", "description", 3, 5, null, null);
         ArgumentCaptor<JuniorCard> argumentCaptor = ArgumentCaptor.forClass(JuniorCard.class);
 
-        Mockito.when(juniorCardMapper.toEntity(juniorCardDTO)).thenReturn(juniorCard);
-        Mockito.when(juniorCardRepositorie.save(juniorCard)).thenReturn(juniorCard);
+        when(juniorCardMapper.toEntity(juniorCardDTO)).thenReturn(juniorCard);
+        when(juniorCardRepositorie.save(juniorCard)).thenReturn(juniorCard);
 
         juniorCardService.removeCardFromJunior(juniorCardDTO);
 
-        Mockito.verify(juniorCardMapper, Mockito.times(1)).toEntity(juniorCardDTO);
-        Mockito.verify(juniorCardRepositorie, Mockito.times(1)).save(argumentCaptor.capture());
+        verify(juniorCardMapper, times(1)).toEntity(juniorCardDTO);
+        verify(juniorCardRepositorie, times(1)).save(argumentCaptor.capture());
 
-        Assert.assertSame(juniorCard, argumentCaptor.getValue());
+        assertSame(juniorCard, argumentCaptor.getValue());
+    }
+
+    @Test
+    public void shouldRemoveAllCards() throws IOException {
+        List<JuniorCard> juniorCards = buildJuniorCardList();
+
+        when(juniorCardRepositorie.findAll()).thenReturn(juniorCards);
+        when(juniorCardRepositorie.saveAll(juniorCards)).thenReturn(null);
+
+        juniorCardService.removeAllCards();
+
+        verify(juniorCardRepositorie, times(1)).findAll();
+        verify(juniorCardRepositorie, times(1)).saveAll(juniorCards);
     }
 
     private List<JuniorCard> buildCardsWithUser(Player player) {
