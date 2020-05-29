@@ -7,7 +7,6 @@ import br.com.magic.application.entity.model.Player;
 import br.com.magic.application.exception.PlayerNotFound;
 import br.com.magic.application.repositories.PlayerRepositorie;
 import br.com.magic.application.services.IPlayerService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -47,6 +46,8 @@ public class PlayerService implements IPlayerService {
 
     @Override
     public void deleteById(Long playerId) {
+        findById(playerId);
+
         playerRepositorie.deleteById(playerId);
     }
 

@@ -14,7 +14,6 @@ import br.com.magic.application.services.IJuniorCardService;
 import br.com.magic.application.services.IPlayerService;
 import java.util.List;
 import java.util.Random;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service

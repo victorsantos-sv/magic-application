@@ -102,6 +102,9 @@ public class PlayerServiceTest {
     @Test
     public void shouldDeletePlayerById() {
         Long id = 1L;
+        Player player = new Player(id, "player", 20, 20);
+
+        when(playerRepositorie.findById(id)).thenReturn(Optional.of(player));
 
         doNothing().when(playerRepositorie).deleteById(id);
 
