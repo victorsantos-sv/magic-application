@@ -193,7 +193,7 @@ public class BugCardServiceTest {
         List<BugCard> bugCards = new ArrayList<BugCard>();
         BugCard bugCard1 = new BugCard(1L, "title", "description", 3, 5, null, true);
         BugCard bugCard2 = new BugCard(2L, "title", "description", 3, 5, null, true);
-        BugCard bugCard3 =new BugCard(3L, "title", "description", 3, 5, null, true);
+        BugCard bugCard3 = new BugCard(3L, "title", "description", 3, 5, null, true);
         BugCard bugCard4 = new BugCard(4L, "title", "description", 3, 5, null, true);
         bugCards.add(bugCard1);
         bugCards.add(bugCard2);

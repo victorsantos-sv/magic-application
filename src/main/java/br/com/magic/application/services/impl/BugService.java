@@ -11,7 +11,6 @@ import br.com.magic.application.repositories.BugRepositorie;
 import br.com.magic.application.services.IBugCardService;
 import br.com.magic.application.services.IBugService;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service

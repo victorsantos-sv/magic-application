@@ -11,7 +11,6 @@ import br.com.magic.application.repositories.BugCardRepositorie;
 import br.com.magic.application.services.IBugCardService;
 import java.util.List;
 import java.util.Random;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import static br.com.magic.application.utils.RandomUtils.sortCards;
