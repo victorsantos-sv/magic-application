@@ -9,11 +9,12 @@ import br.com.magic.application.exception.CardNotFound;
 import br.com.magic.application.exception.FullCards;
 import br.com.magic.application.repositories.BugCardRepositorie;
 import br.com.magic.application.services.IBugCardService;
-import br.com.magic.application.utils.RandomUtils;
 import java.util.List;
 import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import static br.com.magic.application.utils.RandomUtils.sortCards;
 
 @Service
 public class BugCardService implements IBugCardService {
@@ -37,7 +38,7 @@ public class BugCardService implements IBugCardService {
     @Override
     public List<BugCardDTO> setCardsOnBug() {
         List<BugCardDTO> bugCards = getCardsWithoutBug();
-        List<BugCardDTO> sortedCarts = RandomUtils.sortCards(bugCards);
+        List<BugCardDTO> sortedCarts = sortCards(bugCards);
 
         List<BugCard> cardsToSave = bugCardMapper.toEntityList(sortedCarts);
 
@@ -91,7 +92,7 @@ public class BugCardService implements IBugCardService {
 
     @Override
     public void removeAllCards() {
-        List<BugCard> bugCards = bugCardRepositorie.findAll();
+        List<BugCard> bugCards = bugCardRepositorie.findAllByIsInUseTrue();
 
         bugCards.forEach(bugCard -> bugCard.setInUse(false));
 
