@@ -1,25 +1,15 @@
 package br.com.magic.application.exception;
 
 import br.com.magic.application.commons.MagicErrorCode;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
+@EqualsAndHashCode(callSuper = true)
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class CardNotFound extends BaseNotFoundException {
     private MagicErrorCode code;
-
-    public CardNotFound() {
-    }
-
-    public CardNotFound(MagicErrorCode code) {
-        super(code);
-        this.code = code;
-    }
-
-    @Override
-    public MagicErrorCode getCode() {
-        return code;
-    }
-
-    @Override
-    public void setCode(MagicErrorCode code) {
-        this.code = code;
-    }
 }

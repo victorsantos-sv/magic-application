@@ -40,9 +40,9 @@ public class BugCardService implements IBugCardService {
 
         List<BugCard> cardsToSave = bugCardMapper.toEntityList(sortedCarts);
 
-        cardsToSave.forEach(bugCard -> {
-            bugCard.setInUse(true);
-        });
+        cardsToSave.forEach(bugCard ->
+            bugCard.setInUse(true)
+        );
 
         bugCardRepositorie.saveAll(cardsToSave);
 
