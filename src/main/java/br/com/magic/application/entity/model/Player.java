@@ -6,9 +6,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "player")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Player {
     @Id
     @Column(name = "id", unique = true, nullable = false)
@@ -23,46 +29,4 @@ public class Player {
 
     @Column(name = "life")
     private Integer life = 20;
-
-    public Player() {
-    }
-
-    public Player(Long id, String nickName, Integer mana, Integer life) {
-        this.id = id;
-        this.nickName = nickName;
-        this.mana = mana;
-        this.life = life;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNickName() {
-        return nickName;
-    }
-
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
-    }
-
-    public Integer getMana() {
-        return mana;
-    }
-
-    public void setMana(Integer mana) {
-        this.mana = mana;
-    }
-
-    public Integer getLife() {
-        return life;
-    }
-
-    public void setLife(Integer life) {
-        this.life = life;
-    }
 }
