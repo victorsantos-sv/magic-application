@@ -55,11 +55,22 @@ public interface GameMapper {
 
     @Named("toPlayerResponse")
     static PlayerResponse personalizedResponse(PlayerDTO playerDTO) {
-        return new PlayerResponse(playerDTO.getId(), playerDTO.getNickName(), playerDTO.getLife(), playerDTO.getMana());
+        PlayerResponse playerResponse = new PlayerResponse();
+        playerResponse.setId(playerDTO.getId());
+        playerResponse.setNickName(playerDTO.getNickName());
+        playerResponse.setLife(playerDTO.getLife());
+        playerResponse.setMana(playerDTO.getMana());
+
+        return playerResponse;
     }
 
     @Named("toBugResponse")
     static BugResponse personalizedResponse(BugDTO bugDTO) {
-        return new BugResponse(bugDTO.getId(), bugDTO.getLife(), bugDTO.getMana());
+        BugResponse bugResponse = new BugResponse();
+        bugResponse.setId(bugDTO.getId());
+        bugResponse.setLife(bugDTO.getLife());
+        bugResponse.setMana(bugDTO.getMana());
+
+        return bugResponse;
     }
 }
