@@ -9,6 +9,7 @@ import br.com.magic.application.api.response.StackCardsResponse;
 import br.com.magic.application.entity.mapper.GameMapper;
 import br.com.magic.application.exception.response.ErrorResponse;
 import br.com.magic.application.services.IGameService;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,7 @@ public class GameController implements IGameController {
     }
 
     @Override
+    @ApiOperation(value = "Returns the initial cards with de player and the bug")
     @ApiResponses(value = {
         @ApiResponse(code = 404, message = "Player não encontrado", response = ErrorResponse.class),
         @ApiResponse(code = 422, message = "Player já possui o máximo de cartas em mãos", response = ErrorResponse.class)
@@ -40,11 +42,13 @@ public class GameController implements IGameController {
     }
 
     @Override
+    @ApiOperation(value = "Returns the cards without use, bug cards and player cards")
     public ResponseWrapper<StackCardsResponse> getStackCards() {
         return new ResponseWrapper<>(gameMapper.toResponse(gameService.getStackCards()));
     }
 
     @Override
+    @ApiOperation(value = "Bug turn")
     @ApiResponses({
         @ApiResponse(code = 404, message = "Player ou bug não encontrados", response = ErrorResponse.class),
         @ApiResponse(code = 422, message = "O Bug não possui mana suficiente", response = ErrorResponse.class)
@@ -54,6 +58,7 @@ public class GameController implements IGameController {
     }
 
     @Override
+    @ApiOperation(value = "Player turn")
     @ApiResponses({
         @ApiResponse(code = 404, message = "Player ou carta não encontrados", response = ErrorResponse.class),
         @ApiResponse(code = 422, message = "O Player não possui mana suficiente", response = ErrorResponse.class)
@@ -63,6 +68,7 @@ public class GameController implements IGameController {
     }
 
     @Override
+    @ApiOperation(value = "Ends the turn and give 2 points of mana to each player and bug")
     @ApiResponses({
         @ApiResponse(code = 404, message = "Player ou bug não encontrados", response = ErrorResponse.class),
         @ApiResponse(code = 422, message = "Player ou bug já possuem o máximo de cartas em mãos", response = ErrorResponse.class)
@@ -72,6 +78,7 @@ public class GameController implements IGameController {
     }
 
     @Override
+    @ApiOperation(value = "Ends the game and delete the player, bug and clear the cards")
     public ResponseEntity<?> logoff(Long playerId) {
         gameService.logoff(playerId);
 
