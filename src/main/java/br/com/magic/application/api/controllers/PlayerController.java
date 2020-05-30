@@ -37,7 +37,7 @@ public class PlayerController implements IPlayerController {
         @ApiResponse(code = 400, message = "Alguns campos são inválidos", response = ErrorResponseWithFields.class)
     })
     public ResponseWrapper<PlayerResponse> create(@RequestBody @Valid PlayerRequest playerRequest) {
-        LOG.info("Player registering: { \"nickName\": \"" + playerRequest.getNickName() + "\" }");
+        LOG.info("Player registering: " + playerRequest.toString());
 
         PlayerDTO playerDTO = playerService.create(mapper.toDto(playerRequest));
 
