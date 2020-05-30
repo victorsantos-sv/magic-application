@@ -8,6 +8,7 @@ import br.com.magic.application.entity.dto.PlayerDTO;
 import br.com.magic.application.entity.mapper.PlayerMapper;
 import br.com.magic.application.exception.response.ErrorResponseWithFields;
 import br.com.magic.application.services.IPlayerService;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import javax.validation.Valid;
@@ -33,6 +34,7 @@ public class PlayerController implements IPlayerController {
     }
 
     @Override
+    @ApiOperation(value = "Creates a new player")
     @ApiResponses({
         @ApiResponse(code = 400, message = "Alguns campos são inválidos", response = ErrorResponseWithFields.class)
     })
