@@ -14,7 +14,6 @@ import br.com.magic.application.services.IJuniorCardService;
 import br.com.magic.application.services.IPlayerService;
 import java.util.List;
 import java.util.Random;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,7 +24,6 @@ public class JuniorCardService implements IJuniorCardService {
     private final JuniorCardMapper juniorCardMapper;
     private final PlayerMapper playerMapper;
 
-    @Autowired
     public JuniorCardService(JuniorCardRepositorie juniorCardRepositorie, IPlayerService playerService, JuniorCardMapper juniorCardMapper,
                              PlayerMapper playerMapper) {
         this.juniorCardRepositorie = juniorCardRepositorie;
@@ -98,5 +96,14 @@ public class JuniorCardService implements IJuniorCardService {
         juniorCardRepositorie.save(juniorCard);
     }
 
+    @Override
+    public void removeAllCards() {
+        List<JuniorCard> juniorCards = juniorCardRepositorie.findAll();
 
+        juniorCards.forEach(juniorCard -> {
+            juniorCard.setPlayer(null);
+        });
+
+        juniorCardRepositorie.saveAll(juniorCards);
+    }
 }

@@ -8,15 +8,21 @@ import br.com.magic.application.exception.PlayerNotFound;
 import br.com.magic.application.repositories.PlayerRepositorie;
 import br.com.magic.application.services.impl.PlayerService;
 import java.util.Optional;
-import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
+
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThrows;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class PlayerServiceTest {
 
-    private final PlayerRepositorie playerRepositorie = Mockito.mock(PlayerRepositorie.class);
-    private final PlayerMapper playerMapper = Mockito.mock(PlayerMapper.class);
+    private final PlayerRepositorie playerRepositorie = mock(PlayerRepositorie.class);
+    private final PlayerMapper playerMapper = mock(PlayerMapper.class);
     private final PlayerService playerService = new PlayerService(playerRepositorie, playerMapper);
 
     @Test
@@ -28,33 +34,33 @@ public class PlayerServiceTest {
         PlayerDTO playerDTOSaved = new PlayerDTO(playerSaved.getId(), playerSaved.getNickName(), playerSaved.getMana(), playerSaved.getLife());
         ArgumentCaptor<Player> captor = ArgumentCaptor.forClass(Player.class);
 
-        Mockito.when(playerMapper.toEntity(playerDTO)).thenReturn(player);
-        Mockito.when(playerMapper.toDto(playerSaved)).thenReturn(playerDTOSaved);
-        Mockito.when(playerRepositorie.save(player)).thenReturn(playerSaved);
+        when(playerMapper.toEntity(playerDTO)).thenReturn(player);
+        when(playerMapper.toDto(playerSaved)).thenReturn(playerDTOSaved);
+        when(playerRepositorie.save(player)).thenReturn(playerSaved);
 
         playerDTOSaved = playerService.create(playerDTO);
 
-        Assert.assertSame(playerDTO.getNickName(), playerDTOSaved.getNickName());
-        Assert.assertSame(playerSaved.getId(), playerDTOSaved.getId());
+        assertSame(playerDTO.getNickName(), playerDTOSaved.getNickName());
+        assertSame(playerSaved.getId(), playerDTOSaved.getId());
 
-        Mockito.verify(playerMapper, Mockito.times(1)).toEntity(playerDTO);
-        Mockito.verify(playerMapper, Mockito.times(1)).toDto(playerSaved);
-        Mockito.verify(playerRepositorie, Mockito.times(1)).save(player);
+        verify(playerMapper, times(1)).toEntity(playerDTO);
+        verify(playerMapper, times(1)).toDto(playerSaved);
+        verify(playerRepositorie, times(1)).save(player);
     }
 
     @Test
     public void shouldThrowAnExceptionWhenNotFindPlayer() {
         Long id = 1L;
 
-        Mockito.when(playerRepositorie.findById(id)).thenReturn(Optional.empty());
+        when(playerRepositorie.findById(id)).thenReturn(Optional.empty());
 
-        PlayerNotFound playerNotFound = Assert.assertThrows(PlayerNotFound.class, () -> {
+        PlayerNotFound playerNotFound = assertThrows(PlayerNotFound.class, () -> {
             playerService.findById(id);
         });
 
-        Assert.assertSame(playerNotFound.getCode(), MagicErrorCode.MEC001);
+        assertSame(playerNotFound.getCode(), MagicErrorCode.MEC001);
 
-        Mockito.verify(playerRepositorie, Mockito.times(1)).findById(id);
+        verify(playerRepositorie, times(1)).findById(id);
     }
 
     @Test
@@ -62,17 +68,17 @@ public class PlayerServiceTest {
         Long id = 1L;
         Player player = new Player(id, "player", 20, 20);
 
-        Mockito.when(playerRepositorie.findById(id)).thenReturn(Optional.of(player));
-        Mockito.when(playerMapper.toDto(player)).thenReturn(new PlayerDTO(id, "player", 20, 20));
+        when(playerRepositorie.findById(id)).thenReturn(Optional.of(player));
+        when(playerMapper.toDto(player)).thenReturn(new PlayerDTO(id, "player", 20, 20));
 
         PlayerDTO playerDTO = playerService.findById(id);
 
-        Assert.assertSame(player.getId(), playerDTO.getId());
-        Assert.assertSame(player.getNickName(), playerDTO.getNickName());
-        Assert.assertSame(player.getMana(), playerDTO.getMana());
-        Assert.assertSame(player.getLife(), playerDTO.getLife());
+        assertSame(player.getId(), playerDTO.getId());
+        assertSame(player.getNickName(), playerDTO.getNickName());
+        assertSame(player.getMana(), playerDTO.getMana());
+        assertSame(player.getLife(), playerDTO.getLife());
 
-        Mockito.verify(playerRepositorie, Mockito.times(1)).findById(id);
+        verify(playerRepositorie, times(1)).findById(id);
     }
 
     @Test
@@ -80,16 +86,30 @@ public class PlayerServiceTest {
         PlayerDTO playerDTO = new PlayerDTO(1L, "player", 15, 20);
         Player player = new Player(1L, "player", 15, 20);
 
-        Mockito.when(playerMapper.toEntity(playerDTO)).thenReturn(player);
-        Mockito.when(playerMapper.toDto(player)).thenReturn(playerDTO);
-        Mockito.when(playerRepositorie.save(player)).thenReturn(player);
+        when(playerMapper.toEntity(playerDTO)).thenReturn(player);
+        when(playerMapper.toDto(player)).thenReturn(playerDTO);
+        when(playerRepositorie.save(player)).thenReturn(player);
 
         PlayerDTO playerDTOUpdated = playerService.update(playerDTO);
 
-        Assert.assertSame(playerDTO, playerDTOUpdated);
+        assertSame(playerDTO, playerDTOUpdated);
 
-        Mockito.verify(playerMapper, Mockito.times(1)).toDto(player);
-        Mockito.verify(playerMapper, Mockito.times(1)).toEntity(playerDTO);
-        Mockito.verify(playerRepositorie, Mockito.times(1)).save(player);
+        verify(playerMapper, times(1)).toDto(player);
+        verify(playerMapper, times(1)).toEntity(playerDTO);
+        verify(playerRepositorie, times(1)).save(player);
+    }
+
+    @Test
+    public void shouldDeletePlayerById() {
+        Long id = 1L;
+        Player player = new Player(id, "player", 20, 20);
+
+        when(playerRepositorie.findById(id)).thenReturn(Optional.of(player));
+
+        doNothing().when(playerRepositorie).deleteById(id);
+
+        playerService.deleteById(id);
+
+        verify(playerRepositorie, times(1)).deleteById(id);
     }
 }

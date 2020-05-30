@@ -23,7 +23,6 @@ import br.com.magic.application.services.IPlayerService;
 import br.com.magic.application.utils.RandomUtils;
 import java.util.Collections;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,7 +35,6 @@ public class GameService implements IGameService {
     private final IBugService bugService;
     private final GameMapper mapper;
 
-    @Autowired
     public GameService(
         IPlayerService playerService,
         IJuniorCardService juniorCardService,
@@ -146,5 +144,14 @@ public class GameService implements IGameService {
         bugCardService.saveCardOnBug(bugCardDTO);
 
         return new EndTurnDTO(playerDTO, juniorCardDTO, bugDTO, bugCardDTO);
+    }
+
+    @Override
+    public void logoff(Long playerId) {
+        juniorCardService.removeAllCards();
+        playerService.deleteById(playerId);
+        bugCardService.removeAllCards();
+        bugService.deleteAllBugs();
+
     }
 }

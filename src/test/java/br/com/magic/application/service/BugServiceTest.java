@@ -13,21 +13,27 @@ import br.com.magic.application.services.impl.BugService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 import org.apache.commons.io.IOUtils;
-import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
+
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThrows;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class BugServiceTest {
 
-    private final BugRepositorie bugRepositorie = Mockito.mock(BugRepositorie.class);
-    private final IBugCardService bugCardService = Mockito.mock(IBugCardService.class);
-    private final BugMapper bugMapper = Mockito.mock(BugMapper.class);
+    private final BugRepositorie bugRepositorie = mock(BugRepositorie.class);
+    private final IBugCardService bugCardService = mock(IBugCardService.class);
+    private final BugMapper bugMapper = mock(BugMapper.class);
     private final BugService bugService = new BugService(bugRepositorie, bugCardService, bugMapper);
 
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -40,19 +46,19 @@ public class BugServiceTest {
         BugWithCardsDTO bugWithCardsDTO = buildBugWithCardsDTO(bug, bugCardDTOList);
         ArgumentCaptor<Bug> argumentCaptor = ArgumentCaptor.forClass(Bug.class);
 
-        Mockito.when(bugCardService.setCardsOnBug()).thenReturn(bugCardDTOList);
-        Mockito.when(bugRepositorie.save(Mockito.any())).thenReturn(bug);
-        Mockito.when(bugMapper.toDto(bug, bugCardDTOList)).thenReturn(bugWithCardsDTO);
+        when(bugCardService.setCardsOnBug()).thenReturn(bugCardDTOList);
+        when(bugRepositorie.save(any())).thenReturn(bug);
+        when(bugMapper.toDto(bug, bugCardDTOList)).thenReturn(bugWithCardsDTO);
 
         BugWithCardsDTO bugWithCardsDTOLoaded = bugService.getInitialCards();
 
-        Assert.assertSame(bugWithCardsDTOLoaded, bugWithCardsDTO);
+        assertSame(bugWithCardsDTOLoaded, bugWithCardsDTO);
 
-        Mockito.verify(bugRepositorie, Mockito.times(1)).save(argumentCaptor.capture());
-        Mockito.verify(bugMapper, Mockito.times(1)).toDto(bug, bugCardDTOList);
+        verify(bugRepositorie, times(1)).save(argumentCaptor.capture());
+        verify(bugMapper, times(1)).toDto(bug, bugCardDTOList);
 
-        Assert.assertSame(argumentCaptor.getValue().getLife(), new Bug().getLife());
-        Assert.assertSame(argumentCaptor.getValue().getMana(), new Bug().getMana());
+        assertSame(argumentCaptor.getValue().getLife(), new Bug().getLife());
+        assertSame(argumentCaptor.getValue().getMana(), new Bug().getMana());
     }
 
     @Test
@@ -61,30 +67,30 @@ public class BugServiceTest {
         Bug bug = new Bug(id, 20, 20);
         BugDTO bugDTO = new BugDTO(id, 20, 20);
 
-        Mockito.when(bugRepositorie.findById(id)).thenReturn(Optional.of(bug));
-        Mockito.when(bugMapper.toDto(bug)).thenReturn(bugDTO);
+        when(bugRepositorie.findById(id)).thenReturn(Optional.of(bug));
+        when(bugMapper.toDto(bug)).thenReturn(bugDTO);
 
         BugDTO bugDTOFound = bugService.findById(id);
 
-        Assert.assertSame(bugDTOFound, bugDTO);
+        assertSame(bugDTOFound, bugDTO);
 
-        Mockito.verify(bugRepositorie, Mockito.times(1)).findById(id);
-        Mockito.verify(bugMapper, Mockito.times(1)).toDto(bug);
+        verify(bugRepositorie, times(1)).findById(id);
+        verify(bugMapper, times(1)).toDto(bug);
     }
 
     @Test
     public void shouldThrowAnExceptionWhenNotFindBug() {
         Long id = 1L;
 
-        Mockito.when(bugRepositorie.findById(id)).thenReturn(Optional.empty());
+        when(bugRepositorie.findById(id)).thenReturn(Optional.empty());
 
-        try {
-            bugService.findById(id);
-        } catch (BugNotFound ex) {
-            Assert.assertSame(ex.getCode(), MagicErrorCode.MEC005);
-        } finally {
-            Mockito.verify(bugRepositorie, Mockito.times(1)).findById(id);
-        }
+        BugNotFound bugNotFound = assertThrows(BugNotFound.class, () ->
+            bugService.findById(id)
+        );
+
+        assertSame(bugNotFound.getCode(), MagicErrorCode.MEC005);
+
+        verify(bugRepositorie, times(1)).findById(id);
     }
 
     @Test
@@ -92,17 +98,26 @@ public class BugServiceTest {
         BugDTO bugDTO = new BugDTO(1L, 15, 20);
         Bug bug = new Bug(1L, 15, 20);
 
-        Mockito.when(bugMapper.toEntity(bugDTO)).thenReturn(bug);
-        Mockito.when(bugMapper.toDto(bug)).thenReturn(bugDTO);
-        Mockito.when(bugRepositorie.save(bug)).thenReturn(bug);
+        when(bugMapper.toEntity(bugDTO)).thenReturn(bug);
+        when(bugMapper.toDto(bug)).thenReturn(bugDTO);
+        when(bugRepositorie.save(bug)).thenReturn(bug);
 
         BugDTO bugDTOUpdated = bugService.updateBug(bugDTO);
 
-        Assert.assertSame(bugDTOUpdated, bugDTO);
+        assertSame(bugDTOUpdated, bugDTO);
 
-        Mockito.verify(bugMapper, Mockito.times(1)).toEntity(bugDTO);
-        Mockito.verify(bugMapper, Mockito.times(1)).toDto(bug);
-        Mockito.verify(bugRepositorie, Mockito.times(1)).save(bug);
+        verify(bugMapper, times(1)).toEntity(bugDTO);
+        verify(bugMapper, times(1)).toDto(bug);
+        verify(bugRepositorie, times(1)).save(bug);
+    }
+
+    @Test
+    public void shouldRemoveAllBugs() {
+        doNothing().when(bugRepositorie).deleteAll();
+
+        bugService.deleteAllBugs();
+
+        verify(bugRepositorie, times(1)).deleteAll();
     }
 
     private BugWithCardsDTO buildBugWithCardsDTO(Bug bug, List<BugCardDTO> bugCardDTOList) {

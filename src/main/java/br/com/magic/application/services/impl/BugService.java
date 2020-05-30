@@ -11,7 +11,6 @@ import br.com.magic.application.repositories.BugRepositorie;
 import br.com.magic.application.services.IBugCardService;
 import br.com.magic.application.services.IBugService;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,7 +20,6 @@ public class BugService implements IBugService {
     private final IBugCardService bugCardService;
     private final BugMapper bugMapper;
 
-    @Autowired
     public BugService(BugRepositorie bugRepositorie, IBugCardService bugCardService, BugMapper bugMapper) {
         this.bugRepositorie = bugRepositorie;
         this.bugCardService = bugCardService;
@@ -48,5 +46,10 @@ public class BugService implements IBugService {
         Bug bug = bugMapper.toEntity(bugDTO);
 
         return bugMapper.toDto(bugRepositorie.save(bug));
+    }
+
+    @Override
+    public void deleteAllBugs() {
+        bugRepositorie.deleteAll();
     }
 }

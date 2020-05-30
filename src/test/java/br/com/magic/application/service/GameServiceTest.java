@@ -21,23 +21,31 @@ import br.com.magic.application.services.impl.GameService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 import org.apache.commons.io.IOUtils;
-import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
+
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThrows;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyList;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class GameServiceTest {
 
-    private final IPlayerService playerService = Mockito.mock(IPlayerService.class);
-    private final IJuniorCardService juniorCardService = Mockito.mock(IJuniorCardService.class);
-    private final IBugCardService bugCardService = Mockito.mock(IBugCardService.class);
-    private final IBugService bugService = Mockito.mock(IBugService.class);
-    private final GameMapper mapper = Mockito.mock(GameMapper.class);
+    private final IPlayerService playerService = mock(IPlayerService.class);
+    private final IJuniorCardService juniorCardService = mock(IJuniorCardService.class);
+    private final IBugCardService bugCardService = mock(IBugCardService.class);
+    private final IBugService bugService = mock(IBugService.class);
+    private final GameMapper mapper = mock(GameMapper.class);
     private final GameService gameService = new GameService(playerService, juniorCardService, bugCardService, bugService, mapper);
 
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -58,22 +66,22 @@ public class GameServiceTest {
         GameDTO gameDTO = buildGameDTO(playerWithCardsDTO, bugWithCardsDTO);
         ArgumentCaptor<List<JuniorCardDTO>> argumentCaptor = ArgumentCaptor.forClass(List.class);
 
-        Mockito.when(playerService.findById(id)).thenReturn(playerDTO);
-        Mockito.when(juniorCardService.getCards()).thenReturn(juniorCards);
-        Mockito.doNothing().when(juniorCardService).saveCardsIntoPlayer(Mockito.anyList(), Mockito.eq(id));
-        Mockito.when(bugService.getInitialCards()).thenReturn(bugWithCardsDTO);
-        Mockito.when(mapper.toDto(Mockito.any(), Mockito.any())).thenReturn(gameDTO);
+        when(playerService.findById(id)).thenReturn(playerDTO);
+        when(juniorCardService.getCards()).thenReturn(juniorCards);
+        doNothing().when(juniorCardService).saveCardsIntoPlayer(anyList(), eq(id));
+        when(bugService.getInitialCards()).thenReturn(bugWithCardsDTO);
+        when(mapper.toDto(any(), any())).thenReturn(gameDTO);
 
         GameDTO gameDTOCreated = gameService.loadBoard(id);
 
-        Mockito.verify(playerService, Mockito.times(1)).findById(id);
-        Mockito.verify(juniorCardService, Mockito.times(1)).getCards();
-        Mockito.verify(juniorCardService, Mockito.times(1)).saveCardsIntoPlayer(argumentCaptor.capture(), Mockito.eq(id));
-        Mockito.verify(playerService, Mockito.times(1)).findById(id);
+        verify(playerService, times(1)).findById(id);
+        verify(juniorCardService, times(1)).getCards();
+        verify(juniorCardService, times(1)).saveCardsIntoPlayer(argumentCaptor.capture(), eq(id));
+        verify(playerService, times(1)).findById(id);
 
-        Assert.assertSame(argumentCaptor.getValue().size(), 4);
-        Assert.assertSame(gameDTOCreated.getBugWithCardsDTO().getId(), gameDTO.getBugWithCardsDTO().getId());
-        Assert.assertSame(gameDTOCreated.getPlayerWithCardsDTO().getId(), gameDTO.getPlayerWithCardsDTO().getId());
+        assertSame(argumentCaptor.getValue().size(), 4);
+        assertSame(gameDTOCreated.getBugWithCardsDTO().getId(), gameDTO.getBugWithCardsDTO().getId());
+        assertSame(gameDTOCreated.getPlayerWithCardsDTO().getId(), gameDTO.getPlayerWithCardsDTO().getId());
     }
 
     @Test
@@ -81,16 +89,16 @@ public class GameServiceTest {
         List<JuniorCardDTO> juniorCards = buildStackJuniorCards();
         List<BugCardDTO> bugCards = buildStackBugCards();
 
-        Mockito.when(juniorCardService.getCardsWithoutPlayer()).thenReturn(juniorCards);
-        Mockito.when(bugCardService.getCardsWithoutBug()).thenReturn(bugCards);
+        when(juniorCardService.getCardsWithoutPlayer()).thenReturn(juniorCards);
+        when(bugCardService.getCardsWithoutBug()).thenReturn(bugCards);
 
         StackCardsDTO stackCardsDTO = gameService.getStackCards();
 
-        Assert.assertSame(stackCardsDTO.getBugCards(), bugCards);
-        Assert.assertSame(stackCardsDTO.getJuniorCards(), juniorCards);
+        assertSame(stackCardsDTO.getBugCards(), bugCards);
+        assertSame(stackCardsDTO.getJuniorCards(), juniorCards);
 
-        Mockito.verify(juniorCardService, Mockito.times(1)).getCardsWithoutPlayer();
-        Mockito.verify(bugCardService, Mockito.times(1)).getCardsWithoutBug();
+        verify(juniorCardService, times(1)).getCardsWithoutPlayer();
+        verify(bugCardService, times(1)).getCardsWithoutBug();
     }
 
     @Test
@@ -100,29 +108,29 @@ public class GameServiceTest {
         PlayerDTO playerDTO = new PlayerDTO(1L, "player", 20, 20);
         RoundDTO roundDTO = new RoundDTO(playerDTO, bugDTO, 5L);
 
-        Mockito.when(bugCardService.selectRandomCard()).thenReturn(bugCardDTO);
-        Mockito.when(bugService.findById(1L)).thenReturn(bugDTO);
-        Mockito.when(playerService.findById(1L)).thenReturn(playerDTO);
-        Mockito.doNothing().when(bugCardService).removeCardFromBug(bugCardDTO);
+        when(bugCardService.selectRandomCard()).thenReturn(bugCardDTO);
+        when(bugService.findById(1L)).thenReturn(bugDTO);
+        when(playerService.findById(1L)).thenReturn(playerDTO);
+        doNothing().when(bugCardService).removeCardFromBug(bugCardDTO);
 
         bugDTO.setMana(17);
         playerDTO.setLife(16);
 
-        Mockito.when(bugService.updateBug(bugDTO)).thenReturn(bugDTO);
-        Mockito.when(playerService.update(playerDTO)).thenReturn(playerDTO);
-        Mockito.when(mapper.toDto(playerDTO, bugDTO, 5L)).thenReturn(roundDTO);
+        when(bugService.updateBug(bugDTO)).thenReturn(bugDTO);
+        when(playerService.update(playerDTO)).thenReturn(playerDTO);
+        when(mapper.toDto(playerDTO, bugDTO, 5L)).thenReturn(roundDTO);
 
         RoundDTO roundDTOScored = gameService.scoreboardBug(1L, 1L);
 
-        Assert.assertSame(roundDTOScored, roundDTO);
+        assertSame(roundDTOScored, roundDTO);
 
-        Mockito.verify(bugCardService, Mockito.times(1)).selectRandomCard();
-        Mockito.verify(bugService, Mockito.times(1)).findById(1L);
-        Mockito.verify(playerService, Mockito.times(1)).findById(1L);
-        Mockito.verify(bugCardService, Mockito.times(1)).removeCardFromBug(bugCardDTO);
-        Mockito.verify(bugService, Mockito.times(1)).updateBug(bugDTO);
-        Mockito.verify(playerService, Mockito.times(1)).update(playerDTO);
-        Mockito.verify(mapper, Mockito.times(1)).toDto(playerDTO, bugDTO, 5L);
+        verify(bugCardService, times(1)).selectRandomCard();
+        verify(bugService, times(1)).findById(1L);
+        verify(playerService, times(1)).findById(1L);
+        verify(bugCardService, times(1)).removeCardFromBug(bugCardDTO);
+        verify(bugService, times(1)).updateBug(bugDTO);
+        verify(playerService, times(1)).update(playerDTO);
+        verify(mapper, times(1)).toDto(playerDTO, bugDTO, 5L);
     }
 
     @Test
@@ -131,20 +139,19 @@ public class GameServiceTest {
         BugDTO bugDTO = new BugDTO(1L, 20, 1);
         PlayerDTO playerDTO = new PlayerDTO(1L, "player", 20, 20);
 
-        Mockito.when(bugCardService.selectRandomCard()).thenReturn(bugCardDTO);
-        Mockito.when(bugService.findById(1L)).thenReturn(bugDTO);
-        Mockito.when(playerService.findById(1L)).thenReturn(playerDTO);
+        when(bugCardService.selectRandomCard()).thenReturn(bugCardDTO);
+        when(bugService.findById(1L)).thenReturn(bugDTO);
+        when(playerService.findById(1L)).thenReturn(playerDTO);
 
+        InsufficientMana insufficientMana = assertThrows(InsufficientMana.class, () ->
+            gameService.scoreboardBug(1L, 1L)
+        );
 
-        try {
-            gameService.scoreboardBug(1L, 1L);
-        } catch (InsufficientMana ex) {
-            Assert.assertSame(ex.getCode(), MagicErrorCode.MEC006);
-        } finally {
-            Mockito.verify(bugCardService, Mockito.times(1)).selectRandomCard();
-            Mockito.verify(bugService, Mockito.times(1)).findById(1L);
-            Mockito.verify(playerService, Mockito.times(1)).findById(1L);
-        }
+        assertSame(insufficientMana.getCode(), MagicErrorCode.MEC006);
+
+        verify(bugCardService, times(1)).selectRandomCard();
+        verify(bugService, times(1)).findById(1L);
+        verify(playerService, times(1)).findById(1L);
     }
 
     @Test
@@ -156,28 +163,28 @@ public class GameServiceTest {
         PlayerDTO playerDTO = new PlayerDTO(playerId, "player", 20, 20);
         RoundDTO roundDTO = new RoundDTO(playerDTO, bugDTO, cardId);
 
-        Mockito.when(juniorCardService.findByPlayerId(cardId, playerId)).thenReturn(juniorCardDTO);
-        Mockito.when(playerService.findById(1L)).thenReturn(playerDTO);
-        Mockito.when(bugService.findById(1L)).thenReturn(bugDTO);
-        Mockito.doNothing().when(juniorCardService).removeCardFromJunior(juniorCardDTO);
+        when(juniorCardService.findByPlayerId(cardId, playerId)).thenReturn(juniorCardDTO);
+        when(playerService.findById(1L)).thenReturn(playerDTO);
+        when(bugService.findById(1L)).thenReturn(bugDTO);
+        doNothing().when(juniorCardService).removeCardFromJunior(juniorCardDTO);
 
         playerDTO.setMana(17);
         bugDTO.setLife(16);
 
-        Mockito.when(bugService.updateBug(bugDTO)).thenReturn(bugDTO);
-        Mockito.when(playerService.update(playerDTO)).thenReturn(playerDTO);
-        Mockito.when(mapper.toDto(playerDTO, bugDTO, cardId)).thenReturn(roundDTO);
+        when(bugService.updateBug(bugDTO)).thenReturn(bugDTO);
+        when(playerService.update(playerDTO)).thenReturn(playerDTO);
+        when(mapper.toDto(playerDTO, bugDTO, cardId)).thenReturn(roundDTO);
 
         RoundDTO roundDTOScored = gameService.scoreboardPlayer(playerId, cardId);
 
-        Assert.assertSame(roundDTOScored, roundDTO);
+        assertSame(roundDTOScored, roundDTO);
 
-        Mockito.verify(bugService, Mockito.times(1)).findById(1L);
-        Mockito.verify(playerService, Mockito.times(1)).findById(1L);
-        Mockito.verify(juniorCardService, Mockito.times(1)).removeCardFromJunior(juniorCardDTO);
-        Mockito.verify(bugService, Mockito.times(1)).updateBug(bugDTO);
-        Mockito.verify(playerService, Mockito.times(1)).update(playerDTO);
-        Mockito.verify(mapper, Mockito.times(1)).toDto(playerDTO, bugDTO, cardId);
+        verify(bugService, times(1)).findById(1L);
+        verify(playerService, times(1)).findById(1L);
+        verify(juniorCardService, times(1)).removeCardFromJunior(juniorCardDTO);
+        verify(bugService, times(1)).updateBug(bugDTO);
+        verify(playerService, times(1)).update(playerDTO);
+        verify(mapper, times(1)).toDto(playerDTO, bugDTO, cardId);
     }
 
     @Test
@@ -188,18 +195,18 @@ public class GameServiceTest {
         BugDTO bugDTO = new BugDTO(1L, 20, 20);
         PlayerDTO playerDTO = new PlayerDTO(playerId, "player", 2, 20);
 
-        Mockito.when(juniorCardService.findByPlayerId(cardId, playerId)).thenReturn(juniorCardDTO);
-        Mockito.when(playerService.findById(1L)).thenReturn(playerDTO);
-        Mockito.when(bugService.findById(1L)).thenReturn(bugDTO);
+        when(juniorCardService.findByPlayerId(cardId, playerId)).thenReturn(juniorCardDTO);
+        when(playerService.findById(1L)).thenReturn(playerDTO);
+        when(bugService.findById(1L)).thenReturn(bugDTO);
 
-        try {
-            gameService.scoreboardPlayer(playerId, cardId);
-        } catch (InsufficientMana ex) {
-            Assert.assertSame(ex.getCode(), MagicErrorCode.MEC006);
-        } finally {
-            Mockito.verify(bugService, Mockito.times(1)).findById(1L);
-            Mockito.verify(playerService, Mockito.times(1)).findById(1L);
-        }
+        InsufficientMana insufficientMana = assertThrows(InsufficientMana.class, () ->
+            gameService.scoreboardPlayer(playerId, cardId)
+        );
+
+        assertSame(insufficientMana.getCode(), MagicErrorCode.MEC006);
+
+        verify(bugService, times(1)).findById(1L);
+        verify(playerService, times(1)).findById(1L);
     }
 
     @Test
@@ -211,27 +218,44 @@ public class GameServiceTest {
         JuniorCardDTO juniorCardDTO = new JuniorCardDTO(3L, "title", "description", 3, 4, null);
         BugCardDTO bugCardDTO = new BugCardDTO(5L, "title", "description", 3, 4, null);
 
-        Mockito.when(playerService.findById(playerId)).thenReturn(playerDTO);
-        Mockito.when(bugService.findById(bugId)).thenReturn(bugDTO);
-        Mockito.when(juniorCardService.getRandomCard()).thenReturn(juniorCardDTO);
-        Mockito.when(bugCardService.selectRandomCard()).thenReturn(bugCardDTO);
-        Mockito.doNothing().when(juniorCardService).saveCardsIntoPlayer(Collections.singletonList(juniorCardDTO), playerId);
-        Mockito.doNothing().when(bugCardService).saveCardOnBug(bugCardDTO);
+        when(playerService.findById(playerId)).thenReturn(playerDTO);
+        when(bugService.findById(bugId)).thenReturn(bugDTO);
+        when(juniorCardService.getRandomCard()).thenReturn(juniorCardDTO);
+        when(bugCardService.selectRandomCard()).thenReturn(bugCardDTO);
+        doNothing().when(juniorCardService).saveCardsIntoPlayer(Collections.singletonList(juniorCardDTO), playerId);
+        doNothing().when(bugCardService).saveCardOnBug(bugCardDTO);
 
         EndTurnDTO endTurnDTO = gameService.endTurn(playerId, bugId);
 
-        Assert.assertSame(endTurnDTO.getBugCardDTO(), bugCardDTO);
-        Assert.assertSame(endTurnDTO.getBugDTO(), bugDTO);
-        Assert.assertSame(endTurnDTO.getJuniorCardDTO(), juniorCardDTO);
-        Assert.assertSame(endTurnDTO.getPlayerDTO(), playerDTO);
+        assertSame(endTurnDTO.getBugCardDTO(), bugCardDTO);
+        assertSame(endTurnDTO.getBugDTO(), bugDTO);
+        assertSame(endTurnDTO.getJuniorCardDTO(), juniorCardDTO);
+        assertSame(endTurnDTO.getPlayerDTO(), playerDTO);
 
-        Mockito.verify(playerService, Mockito.times(1)).findById(playerId);
-        Mockito.verify(bugService, Mockito.times(1)).findById(bugId);
-        Mockito.verify(juniorCardService, Mockito.times(1)).getRandomCard();
-        Mockito.verify(bugCardService, Mockito.times(1)).selectRandomCard();
-        Mockito.verify(juniorCardService, Mockito.times(1))
+        verify(playerService, times(1)).findById(playerId);
+        verify(bugService, times(1)).findById(bugId);
+        verify(juniorCardService, times(1)).getRandomCard();
+        verify(bugCardService, times(1)).selectRandomCard();
+        verify(juniorCardService, times(1))
             .saveCardsIntoPlayer(Collections.singletonList(juniorCardDTO), playerId);
-        Mockito.verify(bugCardService, Mockito.times(1)).saveCardOnBug(bugCardDTO);
+        verify(bugCardService, times(1)).saveCardOnBug(bugCardDTO);
+    }
+
+    @Test
+    public void shouldLogoff() {
+        Long playerId = 1L;
+
+        doNothing().when(juniorCardService).removeAllCards();
+        doNothing().when(playerService).deleteById(playerId);
+        doNothing().when(bugCardService).removeAllCards();
+        doNothing().when(bugService).deleteAllBugs();
+
+        gameService.logoff(playerId);
+
+        verify(juniorCardService, times(1)).removeAllCards();
+        verify(playerService, times(1)).deleteById(playerId);
+        verify(bugCardService, times(1)).removeAllCards();
+        verify(bugService, times(1)).deleteAllBugs();
     }
 
     private PlayerDTO buildPlayerDTO(Long id) {

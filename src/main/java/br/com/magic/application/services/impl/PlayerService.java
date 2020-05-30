@@ -7,7 +7,6 @@ import br.com.magic.application.entity.model.Player;
 import br.com.magic.application.exception.PlayerNotFound;
 import br.com.magic.application.repositories.PlayerRepositorie;
 import br.com.magic.application.services.IPlayerService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,7 +15,6 @@ public class PlayerService implements IPlayerService {
     private final PlayerRepositorie playerRepositorie;
     private final PlayerMapper mapper;
 
-    @Autowired
     public PlayerService(PlayerRepositorie playerRepositorie, PlayerMapper mapper) {
         this.playerRepositorie = playerRepositorie;
         this.mapper = mapper;
@@ -45,4 +43,13 @@ public class PlayerService implements IPlayerService {
 
         return mapper.toDto(playerRepositorie.save(player));
     }
+
+    @Override
+    public void deleteById(Long playerId) {
+        findById(playerId);
+
+        playerRepositorie.deleteById(playerId);
+    }
+
+
 }

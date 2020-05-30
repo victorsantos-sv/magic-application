@@ -16,4 +16,6 @@ public interface IBugCardService {
     BugCardDTO findById(Long id);
 
     void saveCardOnBug(BugCardDTO bugCardDTO);
+
+    void removeAllCards();
 }

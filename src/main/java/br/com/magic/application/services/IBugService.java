@@ -10,4 +10,6 @@ public interface IBugService {
     BugDTO findById(Long id);
 
     BugDTO updateBug(BugDTO bugDTO);
+
+    void deleteAllBugs();
 }

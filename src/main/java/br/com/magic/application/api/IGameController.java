@@ -6,6 +6,7 @@ import br.com.magic.application.api.response.ResponseWrapper;
 import br.com.magic.application.api.response.RoundResponse;
 import br.com.magic.application.api.response.StackCardsResponse;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -38,4 +39,9 @@ public interface IGameController {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     ResponseWrapper<EndTurnResponse> endTurn(@PathVariable Long playerId, @PathVariable Long bugId);
+
+    @PutMapping("/logoff/{playerId}")
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    ResponseEntity<?> logoff(@PathVariable Long playerId);
 }

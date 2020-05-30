@@ -18,4 +18,6 @@ public interface IJuniorCardService {
     void saveCardsIntoPlayer(List<JuniorCardDTO> cardsDto, Long id);
 
     void removeCardFromJunior(JuniorCardDTO juniorCardDTO);
+
+    void removeAllCards();
 }
