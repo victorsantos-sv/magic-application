@@ -1,16 +1,20 @@
 package br.com.magic.application.service;
 
 import br.com.magic.application.commons.MagicErrorCode;
+import br.com.magic.application.entity.dto.BugDTO;
+import br.com.magic.application.entity.dto.LoginDTO;
 import br.com.magic.application.entity.dto.PlayerDTO;
 import br.com.magic.application.entity.mapper.PlayerMapper;
 import br.com.magic.application.entity.model.Player;
 import br.com.magic.application.exception.PlayerNotFound;
 import br.com.magic.application.repositories.PlayerRepositorie;
+import br.com.magic.application.services.IBugService;
 import br.com.magic.application.services.impl.PlayerService;
 import java.util.Optional;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.doNothing;
@@ -23,7 +27,8 @@ public class PlayerServiceTest {
 
     private final PlayerRepositorie playerRepositorie = mock(PlayerRepositorie.class);
     private final PlayerMapper playerMapper = mock(PlayerMapper.class);
-    private final PlayerService playerService = new PlayerService(playerRepositorie, playerMapper);
+    private final IBugService bugService = mock(IBugService.class);
+    private final PlayerService playerService = new PlayerService(playerRepositorie, playerMapper, bugService);
 
     @Test
     public void shouldSavePlayerWithSuccess() {
@@ -33,19 +38,26 @@ public class PlayerServiceTest {
         Player playerSaved = new Player(1L, playerDTO.getNickName(), player.getMana(), player.getLife());
         PlayerDTO playerDTOSaved = new PlayerDTO(playerSaved.getId(), playerSaved.getNickName(), playerSaved.getMana(), playerSaved.getLife());
         ArgumentCaptor<Player> captor = ArgumentCaptor.forClass(Player.class);
+        BugDTO bugDTO = new BugDTO(1L, 20, 20);
+        LoginDTO loginDTO = new LoginDTO(playerDTOSaved, bugDTO);
 
         when(playerMapper.toEntity(playerDTO)).thenReturn(player);
         when(playerMapper.toDto(playerSaved)).thenReturn(playerDTOSaved);
+        when(playerMapper.toDto(playerDTOSaved, bugDTO)).thenReturn(loginDTO);
         when(playerRepositorie.save(player)).thenReturn(playerSaved);
+        when(bugService.createBug()).thenReturn(bugDTO);
 
-        playerDTOSaved = playerService.create(playerDTO);
+        LoginDTO loginDTOCreated = playerService.create(playerDTO);
 
-        assertSame(playerDTO.getNickName(), playerDTOSaved.getNickName());
-        assertSame(playerSaved.getId(), playerDTOSaved.getId());
+        assertSame(loginDTOCreated.getPlayerDTO().getNickName(), playerDTOSaved.getNickName());
+        assertSame(loginDTOCreated.getPlayerDTO().getId(), playerDTOSaved.getId());
+        assertNotNull(loginDTOCreated.getBugDTO().getId());
 
         verify(playerMapper, times(1)).toEntity(playerDTO);
+        verify(playerMapper, times(1)).toDto(playerDTOSaved, bugDTO);
         verify(playerMapper, times(1)).toDto(playerSaved);
         verify(playerRepositorie, times(1)).save(player);
+        verify(bugService, times(1)).createBug();
     }
 
     @Test
