@@ -66,9 +66,9 @@ public class GameService implements IGameService {
     @Override
     @Transactional
     public RoundDTO scoreboardBug(Long bugId, Long playerId) {
-        BugCardDTO bugCardDTO = bugCardService.selectRandomCard(bugId);
         BugDTO bugDTO = bugService.findById(bugId);
         PlayerDTO playerDTO = playerService.findById(playerId);
+        BugCardDTO bugCardDTO = bugCardService.selectRandomCard(bugId);
 
         int manaCost = bugDTO.getMana() - bugCardDTO.getCost();
 
@@ -94,9 +94,9 @@ public class GameService implements IGameService {
     @Override
     @Transactional
     public RoundDTO scoreboardPlayer(Long playerId, Long cardId, Long bugId) {
-        JuniorCardDTO juniorCardDTO = juniorCardService.findByPlayerId(cardId, playerId);
         PlayerDTO playerDTO = playerService.findById(playerId);
         BugDTO bugDTO = bugService.findById(bugId);
+        JuniorCardDTO juniorCardDTO = juniorCardService.findByPlayerId(cardId, playerId);
 
         int manaAmount = juniorCardDTO.getPassive() == null ?
             playerDTO.getMana() - juniorCardDTO.getCost() : playerDTO.getMana() + juniorCardDTO.getPassive();

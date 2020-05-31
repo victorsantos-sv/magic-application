@@ -100,13 +100,11 @@ public class BugCardService implements IBugCardService {
         BugCard bugCard = bugCardMapper.toEntity(bugCardDTO);
         Bug bug = bugMapper.toEntity(bugDTO);
 
-        if (bugCards.size() <= 5) {
-            throw new FullCards(MagicErrorCode.MEC002, Bug.class.getSimpleName());
+        if (bugCards.size() > 5) {
+            bugCard.setBug(bug);
+
+            bugCardRepositorie.save(bugCard);
         }
-
-        bugCard.setBug(bug);
-
-        bugCardRepositorie.save(bugCard);
     }
 
     @Override
