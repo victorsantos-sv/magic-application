@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 public interface IGameController {
 
-    @GetMapping("/load-board/{playerId}")
+    @GetMapping("{bugId}/load-board/{playerId}")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    ResponseWrapper<GameResponse> loadBoardGame(@PathVariable Long playerId);
+    ResponseWrapper<GameResponse> loadBoardGame(@PathVariable Long bugId, @PathVariable Long playerId);
 
     @GetMapping("/stack-cards")
     @ResponseBody
@@ -43,8 +43,8 @@ public interface IGameController {
     @ResponseStatus(HttpStatus.OK)
     ResponseWrapper<EndTurnResponse> endTurn(@PathVariable Long playerId, @PathVariable Long bugId);
 
-    @DeleteMapping("/logoff/{playerId}")
+    @DeleteMapping("{bugId}/logoff/{playerId}")
     @ResponseBody
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    ResponseEntity<?> logoff(@PathVariable Long playerId);
+    ResponseEntity<?> logoff(@PathVariable Long bugId, @PathVariable Long playerId);
 }

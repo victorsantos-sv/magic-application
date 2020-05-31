@@ -42,8 +42,8 @@ public class GameController implements IGameController {
         @ApiResponse(code = 404, message = "Player não encontrado", response = ErrorResponse.class),
         @ApiResponse(code = 422, message = "Player já possui o máximo de cartas em mãos", response = ErrorResponse.class)
     })
-    public ResponseWrapper<GameResponse> loadBoardGame(@PathVariable Long playerId) {
-        return new ResponseWrapper<>(gameMapper.toResponse(gameService.loadBoard(playerId)));
+    public ResponseWrapper<GameResponse> loadBoardGame(@PathVariable Long bugId, @PathVariable Long playerId) {
+        return new ResponseWrapper<>(gameMapper.toResponse(gameService.loadBoard(bugId, playerId)));
     }
 
     @Override
@@ -81,15 +81,15 @@ public class GameController implements IGameController {
         @ApiResponse(code = 404, message = "Player ou bug não encontrados", response = ErrorResponse.class),
         @ApiResponse(code = 422, message = "Player ou bug já possuem o máximo de cartas em mãos", response = ErrorResponse.class)
     })
-    public ResponseWrapper<EndTurnResponse> endTurn(Long playerId, Long bugId) {
+    public ResponseWrapper<EndTurnResponse> endTurn(@PathVariable Long playerId, @PathVariable Long bugId) {
         return new ResponseWrapper<>(gameMapper.toResponse(gameService.endTurn(playerId, bugId)));
     }
 
     @Override
     @ApiOperation(value = "Ends the game and delete the player, bug and clear the cards")
-    public ResponseEntity<?> logoff(Long playerId) {
+    public ResponseEntity<?> logoff(@PathVariable Long bugId, @PathVariable Long playerId) {
         LOG.info("PlayerId for logoff: [{" + playerId + "}]");
-        gameService.logoff(playerId);
+        gameService.logoff(bugId, playerId);
 
         return ResponseEntity.noContent().build();
     }

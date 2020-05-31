@@ -3,6 +3,7 @@ package br.com.magic.application.services.impl;
 import br.com.magic.application.commons.MagicErrorCode;
 import br.com.magic.application.entity.dto.BugCardDTO;
 import br.com.magic.application.entity.dto.BugDTO;
+import br.com.magic.application.entity.dto.BugWithCardsDTO;
 import br.com.magic.application.entity.mapper.BugCardMapper;
 import br.com.magic.application.entity.mapper.BugMapper;
 import br.com.magic.application.entity.model.Bug;
@@ -32,31 +33,45 @@ public class BugCardService implements IBugCardService {
 
     @Override
     public List<BugCardDTO> getCardsWithoutBug() {
-        List<BugCard> bugCards = bugCardRepositorie.findAllByIsInUseFalse();
+        List<BugCard> bugCards = bugCardRepositorie.findAllByBugIsNull();
 
         return bugCardMapper.toDtoList(bugCards);
     }
 
     @Override
-    public List<BugCardDTO> setCardsOnBug(BugDTO bugDTO) {
-        List<BugCardDTO> bugCards = getCardsWithoutBug();
-        List<BugCardDTO> sortedCarts = sortCards(bugCards);
-        Bug bug = bugMapper.toEntity(bugDTO);
+    public List<BugCardDTO> getCards() {
+        List<BugCard> bugCards = bugCardRepositorie.findAll();
 
-        List<BugCard> cardsToSave = bugCardMapper.toEntityList(sortedCarts);
-
-        cardsToSave.forEach(bugCard ->
-            bugCard.setBug(bug)
-        );
-
-        bugCardRepositorie.saveAll(cardsToSave);
-
-        return bugCardMapper.toDtoList(cardsToSave);
+        return bugCardMapper.toDtoList(bugCards);
     }
 
     @Override
-    public BugCardDTO selectRandomCard() {
-        List<BugCard> bugCards = bugCardRepositorie.findAllByIsInUseTrue();
+    public BugWithCardsDTO setCardsOnBug(BugDTO bugDTO) {
+        List<BugCardDTO> sortedCards = sortCards(getCards());
+        List<BugCard> cards = bugCardMapper.toEntityList(sortedCards);
+        Bug bug = bugMapper.toEntity(bugDTO);
+
+        List<BugCard> cardsWithBug = bugCardRepositorie.findAllByBugId(bug.getId());
+        List<BugCardDTO> cardsWithBugDTO = bugCardMapper.toDtoList(cardsWithBug);
+
+        if (cardsWithBug.size() <= 4) {
+            return new BugWithCardsDTO(bugDTO.getId(), bugDTO.getLife(), bugDTO.getMana(), cardsWithBugDTO);
+        }
+
+        cards.forEach(bugCard -> {
+            bugCard.setBug(bug);
+        });
+
+        bugCardRepositorie.saveAll(cards);
+
+        List<BugCardDTO> cardDTOS = bugCardMapper.toDtoList(cards);
+
+        return new BugWithCardsDTO(bugDTO.getId(), bugDTO.getLife(), bugDTO.getMana(), cardDTOS);
+    }
+
+    @Override
+    public BugCardDTO selectRandomCard(Long bugId) {
+        List<BugCard> bugCards = bugCardRepositorie.findAllByBugId(bugId);
         Random random = new Random();
         BugCard bugCard = bugCards.get(random.nextInt(bugCards.size()));
 
@@ -80,22 +95,23 @@ public class BugCardService implements IBugCardService {
     }
 
     @Override
-    public void saveCardOnBug(BugCardDTO bugCardDTO) {
+    public void saveCardOnBug(BugCardDTO bugCardDTO, BugDTO bugDTO) {
         List<BugCardDTO> bugCards = getCardsWithoutBug();
         BugCard bugCard = bugCardMapper.toEntity(bugCardDTO);
+        Bug bug = bugMapper.toEntity(bugDTO);
 
         if (bugCards.size() <= 5) {
             throw new FullCards(MagicErrorCode.MEC002, Bug.class.getSimpleName());
         }
 
-        bugCard.setInUse(true);
+        bugCard.setBug(bug);
 
         bugCardRepositorie.save(bugCard);
     }
 
     @Override
-    public void removeAllCards() {
-        List<BugCard> bugCards = bugCardRepositorie.findAllByIsInUseTrue();
+    public void removeAllCards(Long bugId) {
+        List<BugCard> bugCards = bugCardRepositorie.findAllByBugId(bugId);
 
         bugCards.forEach(bugCard -> bugCard.setBug(null));
 

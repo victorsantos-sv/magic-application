@@ -7,7 +7,7 @@ import br.com.magic.application.entity.dto.StackCardsDTO;
 
 public interface IGameService {
 
-    GameDTO loadBoard(Long id);
+    GameDTO loadBoard(Long bugId, Long playerId);
 
     StackCardsDTO getStackCards();
 
@@ -17,6 +17,6 @@ public interface IGameService {
 
     EndTurnDTO endTurn(Long playerId, Long bugId);
 
-    void logoff(Long playerId);
+    void logoff(Long bugId, Long playerId);
 
 }

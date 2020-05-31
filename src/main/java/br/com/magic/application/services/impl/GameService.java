@@ -50,9 +50,9 @@ public class GameService implements IGameService {
     }
 
     @Override
-    public GameDTO loadBoard(Long id) {
-        PlayerWithCardsDTO playerWithCardsDTO = juniorCardService.saveCardsIntoPlayer(id);
-        BugWithCardsDTO bugWithCardsDTO = bugService.getInitialCards();
+    public GameDTO loadBoard(Long bugId, Long playerId) {
+        PlayerWithCardsDTO playerWithCardsDTO = juniorCardService.saveCardsIntoPlayer(playerId);
+        BugWithCardsDTO bugWithCardsDTO = bugService.getInitialCards(bugId);
 
         return mapper.toDto(playerWithCardsDTO, bugWithCardsDTO);
     }
@@ -68,7 +68,7 @@ public class GameService implements IGameService {
     @Override
     @Transactional
     public RoundDTO scoreboardBug(Long bugId, Long playerId) {
-        BugCardDTO bugCardDTO = bugCardService.selectRandomCard();
+        BugCardDTO bugCardDTO = bugCardService.selectRandomCard(bugId);
         BugDTO bugDTO = bugService.findById(bugId);
         PlayerDTO playerDTO = playerService.findById(playerId);
 
@@ -127,7 +127,7 @@ public class GameService implements IGameService {
         PlayerDTO playerDTO = playerService.findById(playerId);
         BugDTO bugDTO = bugService.findById(bugId);
         JuniorCardDTO juniorCardDTO = juniorCardService.getRandomCard();
-        BugCardDTO bugCardDTO = bugCardService.selectRandomCard();
+        BugCardDTO bugCardDTO = bugCardService.selectRandomCard(bugId);
 
         Integer playerManaAmount = playerDTO.getMana() + 2 > 20 ? playerDTO.getMana() : playerDTO.getMana() + 2;
         Integer bugManaAmount = bugDTO.getMana() + 2 > 20 ? bugDTO.getMana() : bugDTO.getMana() + 2;
@@ -136,16 +136,16 @@ public class GameService implements IGameService {
         bugDTO.setMana(bugManaAmount);
 
         juniorCardService.saveCardIntoPlayer(juniorCardDTO, playerId);
-        bugCardService.saveCardOnBug(bugCardDTO);
+        bugCardService.saveCardOnBug(bugCardDTO, bugDTO);
 
         return new EndTurnDTO(playerDTO, juniorCardDTO, bugDTO, bugCardDTO);
     }
 
     @Override
-    public void logoff(Long playerId) {
+    public void logoff(Long bugId, Long playerId) {
         juniorCardService.removeAllCards();
         playerService.deleteById(playerId);
-        bugCardService.removeAllCards();
+        bugCardService.removeAllCards(bugId);
         bugService.deleteAllBugs();
 
     }

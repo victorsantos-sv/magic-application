@@ -7,7 +7,7 @@ public interface IBugService {
 
     BugDTO createBug();
 
-    BugWithCardsDTO getInitialCards();
+    BugWithCardsDTO getInitialCards(Long bugId);
 
     BugDTO findById(Long id);
 
