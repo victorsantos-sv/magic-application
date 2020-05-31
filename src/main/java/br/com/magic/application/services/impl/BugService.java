@@ -36,10 +36,8 @@ public class BugService implements IBugService {
     @Override
     public BugWithCardsDTO getInitialCards(Long bugId) {
         BugDTO bugDTO = findById(bugId);
-        List<BugCardDTO> bugCardDTOList = bugCardService.setCardsOnBug(bugDTO);
-        Bug bug = bugRepositorie.save(new Bug());
 
-        return bugMapper.toDto(bug, bugCardDTOList);
+        return bugCardService.setCardsOnBug(bugDTO);
     }
 
     @Override

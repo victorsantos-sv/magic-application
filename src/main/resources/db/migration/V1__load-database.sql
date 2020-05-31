@@ -33,7 +33,8 @@ CREATE TABLE if not exists bug_card
     cost        int,
     life_damage int,
     mana_damage int,
-    is_in_use   boolean
+    bug_id      bigint,
+    foreign key (bug_id) references bug(id)
 );
 
 INSERT INTO junior_card(title,
@@ -65,34 +66,33 @@ INSERT INTO bug_card(title,
                      description,
                      cost,
                      life_damage,
-                     mana_damage,
-                     is_in_use)
+                     mana_damage)
 VALUES ('Golpe do Não Consigo',
         'Sim, parece que o Bug está te sabotando, você acaba de perder 3 pontos de mana, e 2 pontos de energia, isso custou 4 pontos de mana para o' ||
-        ' BUG', 4, 2, 3, false),
+        ' BUG', 4, 2, 3),
        ('Código Mal Escrito',
         'Variáveis mal nomeadas, código confuso, não consigo achar nada aqui dentro, o bug parece que vai se esconder melhor que nunca, isso vai te' ||
-        ' custar muito esforço. O bug te tira 2 pontos de vida  e 2 pontos de mana. Isso custou 6 pontos de mana para o Bug', 6, 2, 2, false),
+        ' custar muito esforço. O bug te tira 2 pontos de vida  e 2 pontos de mana. Isso custou 6 pontos de mana para o Bug', 6, 2, 2),
        ('Perdeu a Daily',
         'Sim, algo estranho aconteceu, só pode ser sobrenatural. Você perdeu a Daily, não sabe para onde seu time está levando o sistema, não' ||
         ' conseguiu aproveitar para mostrar alguns dos impedimentos. Perca 5 pontos de vida, isso irá custar para o bug 3 pontos de mana', 3, 5,
-        null, false),
+        null),
        ('EndPoint Batendo errado',
         'Puxa, que distração. Você está recebendo um erro 500, NullPointerException, tanto tempo perdido, e só agora entendeu que esse não era o' ||
         ' seu erro, era apenas o endpoint que estava batendo errado, perdeu tempo e tempo é vida. Perca 4 pontos de vida, e isso irá custar 4 pontos' ||
-        ' de mana para o Bug', 4, 4, null, false),
+        ' de mana para o Bug', 4, 4, null),
        ('Perdendo Contato',
         'Você ficou dedicado algum tempo ao bug, não conversou com o time, não entrou no Change Experience Jr, e nem pediu ajuda para a equipe.' ||
-        ' Acho que essa timidez irá lhe custar caro. Perca 4 pontos de vida e o bug irá perder 6 pontos de mana', 6, 4, null, false),
+        ' Acho que essa timidez irá lhe custar caro. Perca 4 pontos de vida e o bug irá perder 6 pontos de mana', 6, 4, null),
        ('Má administração do Tempo ',
         'Sim, parece que acumularam algumas atividades extras, você sabe que deveria ter feito, e agora as atividades que estavam previstas' ||
-        ' certamente irão atrasar. Perca 3 pontos de vida para o bug, irá custar 1 ponto de mana.', 1, 3, null, false),
+        ' certamente irão atrasar. Perca 3 pontos de vida para o bug, irá custar 1 ponto de mana.', 1, 3, null),
        ('GIT',
         'Parece que você não deu Git Pull recentemente não é mesmo ? Vejo muito conflito entre os códigos da master e da sua Branch… isso vai te' ||
-        ' custar algum tempo também, você perdeu 2 pontos de vida,  e isso custou ao bug apenas 1 ponto de mana.', 1, 2, null, false),
+        ' custar algum tempo também, você perdeu 2 pontos de vida,  e isso custou ao bug apenas 1 ponto de mana.', 1, 2, null),
        ('Pandemia',
         'Você se arriscou, não respeitou a pandemia, tentou sair para trabalhar e adoeceu, virus e bug ? um belo estrago, você perdeu 6 pontos de' ||
-        ' vida e isso custou 8 pontos de mana para o Bug.', 8, 6, null, false),
+        ' vida e isso custou 8 pontos de mana para o Bug.', 8, 6, null),
        ('Sem teste',
         'Hm…. achou que tinha me vencido e não me venceu não é mesmo ? Acho que alguem irá perder alguns belos pontos de vida 5 para ser mais exato' ||
-        '. Para te pregar esta peça o Bug irá gastar 6 pontos de mana.', 6, 5, null, false);
+        '. Para te pregar esta peça o Bug irá gastar 6 pontos de mana.', 6, 5, null);

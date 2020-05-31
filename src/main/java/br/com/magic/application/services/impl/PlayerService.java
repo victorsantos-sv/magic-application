@@ -1,11 +1,14 @@
 package br.com.magic.application.services.impl;
 
 import br.com.magic.application.commons.MagicErrorCode;
+import br.com.magic.application.entity.dto.BugDTO;
+import br.com.magic.application.entity.dto.LoginDTO;
 import br.com.magic.application.entity.dto.PlayerDTO;
 import br.com.magic.application.entity.mapper.PlayerMapper;
 import br.com.magic.application.entity.model.Player;
 import br.com.magic.application.exception.PlayerNotFound;
 import br.com.magic.application.repositories.PlayerRepositorie;
+import br.com.magic.application.services.IBugService;
 import br.com.magic.application.services.IPlayerService;
 import org.springframework.stereotype.Service;
 
@@ -13,21 +16,24 @@ import org.springframework.stereotype.Service;
 public class PlayerService implements IPlayerService {
 
     private final PlayerRepositorie playerRepositorie;
+    private final IBugService bugService;
     private final PlayerMapper mapper;
 
-    public PlayerService(PlayerRepositorie playerRepositorie, PlayerMapper mapper) {
+    public PlayerService(PlayerRepositorie playerRepositorie, PlayerMapper mapper, IBugService bugService) {
         this.playerRepositorie = playerRepositorie;
         this.mapper = mapper;
+        this.bugService = bugService;
     }
 
     @Override
-    public PlayerDTO create(PlayerDTO playerDTO) {
+    public LoginDTO create(PlayerDTO playerDTO) {
+        BugDTO bugDTO = bugService.createBug();
         Player player = mapper.toEntity(playerDTO);
-        player.setNickName(playerDTO.getNickName());
 
         player = playerRepositorie.save(player);
+        playerDTO = mapper.toDto(player);
 
-        return mapper.toDto(player);
+        return mapper.toDto(playerDTO, bugDTO);
     }
 
     @Override

@@ -2,9 +2,8 @@ package br.com.magic.application.api.controllers;
 
 import br.com.magic.application.api.IPlayerController;
 import br.com.magic.application.api.request.PlayerRequest;
-import br.com.magic.application.api.response.PlayerResponse;
+import br.com.magic.application.api.response.LoginResponse;
 import br.com.magic.application.api.response.ResponseWrapper;
-import br.com.magic.application.entity.dto.PlayerDTO;
 import br.com.magic.application.entity.mapper.PlayerMapper;
 import br.com.magic.application.exception.response.ErrorResponseWithFields;
 import br.com.magic.application.services.IPlayerService;
@@ -38,11 +37,9 @@ public class PlayerController implements IPlayerController {
     @ApiResponses({
         @ApiResponse(code = 400, message = "Alguns campos são inválidos", response = ErrorResponseWithFields.class)
     })
-    public ResponseWrapper<PlayerResponse> create(@RequestBody @Valid PlayerRequest playerRequest) {
+    public ResponseWrapper<LoginResponse> create(@RequestBody @Valid PlayerRequest playerRequest) {
         LOG.info("Player registering: " + playerRequest.toString());
 
-        PlayerDTO playerDTO = playerService.create(mapper.toDto(playerRequest));
-
-        return new ResponseWrapper<>(mapper.toResponse(playerDTO));
+        return new ResponseWrapper<>(mapper.toResponse(playerService.create(mapper.toDto(playerRequest))));
     }
 }
