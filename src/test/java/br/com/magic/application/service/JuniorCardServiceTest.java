@@ -216,27 +216,6 @@ public class JuniorCardServiceTest {
     }
 
     @Test
-    public void shouldThrowAnExceptionWhenPlayerIsFullCards() {
-        Long playerId = 1L;
-        JuniorCardDTO juniorCardDTO = new JuniorCardDTO(1L, "title", "description", 3, 5, null);
-        PlayerDTO playerDTO = new PlayerDTO(playerId, "player", 20, 20);
-        Player player = new Player(playerId, "player", 20, 20);
-        List<JuniorCard> juniorCards = buildCardsWithUser(player);
-
-        when(juniorCardRepositorie.findAllByPlayerId(playerId)).thenReturn(juniorCards);
-        when(playerService.findById(playerId)).thenReturn(playerDTO);
-
-        FullCards fullCards = assertThrows(FullCards.class, () ->
-            juniorCardService.saveCardIntoPlayer(juniorCardDTO, playerId)
-        );
-
-        assertSame(fullCards.getCode(), MagicErrorCode.MEC002);
-
-        verify(juniorCardRepositorie, times(1)).findAllByPlayerId(playerId);
-        verify(playerService, times(1)).findById(playerId);
-    }
-
-    @Test
     public void shouldRemoveCardFromPlayerWithSuccess() {
         JuniorCardDTO juniorCardDTO = new JuniorCardDTO(1L, "title", "description", 3, 5, null);
         JuniorCard juniorCard = new JuniorCard(1L, "title", "description", 3, 5, null, null);

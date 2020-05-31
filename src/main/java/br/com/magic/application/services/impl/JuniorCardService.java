@@ -101,15 +101,13 @@ public class JuniorCardService implements IJuniorCardService {
         List<JuniorCard> cardsWithUser = juniorCardRepositorie.findAllByPlayerId(playerId);
         PlayerDTO playerDTO = playerService.findById(playerId);
 
-        if (cardsWithUser.size() == 4) {
-            throw new FullCards(MagicErrorCode.MEC002, Player.class.getSimpleName());
+        if (cardsWithUser.size() < 4) {
+            JuniorCard juniorCard = juniorCardMapper.toEntity(juniorCardDTO);
+
+            juniorCard.setPlayer(playerMapper.toEntity(playerDTO));
+
+            juniorCardRepositorie.save(juniorCard);
         }
-
-        JuniorCard juniorCard = juniorCardMapper.toEntity(juniorCardDTO);
-
-        juniorCard.setPlayer(playerMapper.toEntity(playerDTO));
-
-        juniorCardRepositorie.save(juniorCard);
     }
 
     @Override

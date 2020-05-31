@@ -1,6 +1,7 @@
 package br.com.magic.application.interfaces;
 
 import br.com.magic.application.api.request.PlayerRequest;
+import br.com.magic.application.commons.MagicErrorCode;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
@@ -33,6 +34,20 @@ public class PlayerControllerTest extends BaseControllerIT {
             .andExpect(jsonPath("$.content.bug.id").isNotEmpty())
             .andExpect(jsonPath("$.content.bug.mana").value(20))
             .andExpect(jsonPath("$.content.bug.life").value(20));
+    }
+
+    @Test
+    public void shouldThrowAnExceptionWhenFieldIsEmpty() throws Exception {
+        this.mvc.perform(MockMvcRequestBuilders
+            .post(baseUrl + "/login")
+            .content(toJson(new PlayerRequest("")))
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON))
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value("MEC003"))
+            .andExpect(jsonPath("$.message").value("Alguns campos são inválidos."))
+            .andExpect(jsonPath("$.fields").isNotEmpty());
 
     }
 
