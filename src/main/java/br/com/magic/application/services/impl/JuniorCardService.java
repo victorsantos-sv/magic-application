@@ -3,6 +3,7 @@ package br.com.magic.application.services.impl;
 import br.com.magic.application.commons.MagicErrorCode;
 import br.com.magic.application.entity.dto.JuniorCardDTO;
 import br.com.magic.application.entity.dto.PlayerDTO;
+import br.com.magic.application.entity.dto.PlayerWithCardsDTO;
 import br.com.magic.application.entity.mapper.JuniorCardMapper;
 import br.com.magic.application.entity.mapper.PlayerMapper;
 import br.com.magic.application.entity.model.JuniorCard;
@@ -12,6 +13,7 @@ import br.com.magic.application.exception.FullCards;
 import br.com.magic.application.repositories.JuniorCardRepositorie;
 import br.com.magic.application.services.IJuniorCardService;
 import br.com.magic.application.services.IPlayerService;
+import br.com.magic.application.utils.RandomUtils;
 import java.util.List;
 import java.util.Random;
 import org.springframework.stereotype.Service;
@@ -70,15 +72,17 @@ public class JuniorCardService implements IJuniorCardService {
     }
 
     @Override
-    public void saveCardsIntoPlayer(List<JuniorCardDTO> cardsDto, Long id) {
-        List<JuniorCard> cards = juniorCardMapper.toEntity(cardsDto);
-        PlayerDTO playerDTO = playerService.findById(id);
+    public PlayerWithCardsDTO saveCardsIntoPlayer(Long playerId) {
+        List<JuniorCardDTO> sortedCards = RandomUtils.sortCards(getCards());
+        List<JuniorCard> cards = juniorCardMapper.toEntity(sortedCards);
+        PlayerDTO playerDTO = playerService.findById(playerId);
         Player player = playerMapper.toEntity(playerDTO);
 
-        List<JuniorCard> cardsWithUser = juniorCardRepositorie.findAllByPlayer(player);
+        List<JuniorCard> cardsWithUser = juniorCardRepositorie.findAllByPlayerId(player.getId());
+        List<JuniorCardDTO> cardsWithUserDTO = juniorCardMapper.toDto(cardsWithUser);
 
-        if (cardsWithUser.size() == 4) {
-            throw new FullCards(MagicErrorCode.MEC002, Player.class.getSimpleName());
+        if (cardsWithUser.size() <= 4) {
+            return new PlayerWithCardsDTO(playerDTO.getId(), playerDTO.getNickName(), playerDTO.getLife(), playerDTO.getMana(), cardsWithUserDTO);
         }
 
         cards.forEach(juniorCard -> {
@@ -86,6 +90,26 @@ public class JuniorCardService implements IJuniorCardService {
         });
 
         juniorCardRepositorie.saveAll(cards);
+
+        List<JuniorCardDTO> cardDTOS = juniorCardMapper.toDto(cards);
+
+        return new PlayerWithCardsDTO(playerDTO.getId(), playerDTO.getNickName(), playerDTO.getLife(), playerDTO.getMana(), cardDTOS);
+    }
+
+    @Override
+    public void saveCardIntoPlayer(JuniorCardDTO juniorCardDTO, Long playerId) {
+        List<JuniorCard> cardsWithUser = juniorCardRepositorie.findAllByPlayerId(playerId);
+        PlayerDTO playerDTO = playerService.findById(playerId);
+
+        if (cardsWithUser.size() == 4) {
+            throw new FullCards(MagicErrorCode.MEC002, Player.class.getSimpleName());
+        }
+
+        JuniorCard juniorCard = juniorCardMapper.toEntity(juniorCardDTO);
+
+        juniorCard.setPlayer(playerMapper.toEntity(playerDTO));
+
+        juniorCardRepositorie.save(juniorCard);
     }
 
     @Override

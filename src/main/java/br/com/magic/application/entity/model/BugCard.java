@@ -2,6 +2,8 @@ package br.com.magic.application.entity.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -10,16 +12,17 @@ public class BugCard extends Card {
     @Column(name = "mana_damage")
     private Integer manaDamage;
 
-    @Column(name = "is_in_use")
-    private Boolean isInUse;
+    @ManyToOne(targetEntity = Bug.class)
+    @JoinColumn(name = "bug_id", nullable = true)
+    private Bug bug;
 
     public BugCard() {
     }
 
-    public BugCard(Long id, String title, String description, Integer cost, Integer lifeDamage, Integer manaDamage, Boolean isInUse) {
+    public BugCard(Long id, String title, String description, Integer cost, Integer lifeDamage, Integer manaDamage, Bug bug) {
         super(id, title, description, cost, lifeDamage);
         this.manaDamage = manaDamage;
-        this.isInUse = isInUse;
+        this.bug = bug;
     }
 
     public Integer getManaDamage() {
@@ -30,11 +33,11 @@ public class BugCard extends Card {
         this.manaDamage = manaDamage;
     }
 
-    public Boolean getInUse() {
-        return isInUse;
+    public Bug getBug() {
+        return bug;
     }
 
-    public void setInUse(Boolean inUse) {
-        isInUse = inUse;
+    public void setBug(Bug bug) {
+        this.bug = bug;
     }
 }

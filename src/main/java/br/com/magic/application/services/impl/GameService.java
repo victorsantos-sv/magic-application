@@ -51,13 +51,8 @@ public class GameService implements IGameService {
 
     @Override
     public GameDTO loadBoard(Long id) {
-        PlayerDTO playerDTO = playerService.findById(id);
-        List<JuniorCardDTO> cards = juniorCardService.getCards();
-        List<JuniorCardDTO> sortedCards = RandomUtils.sortCards(cards);
-        juniorCardService.saveCardsIntoPlayer(sortedCards, id);
+        PlayerWithCardsDTO playerWithCardsDTO = juniorCardService.saveCardsIntoPlayer(id);
         BugWithCardsDTO bugWithCardsDTO = bugService.getInitialCards();
-        PlayerWithCardsDTO playerWithCardsDTO = new PlayerWithCardsDTO(
-            playerDTO.getId(), playerDTO.getNickName(), playerDTO.getLife(), playerDTO.getMana(), sortedCards);
 
         return mapper.toDto(playerWithCardsDTO, bugWithCardsDTO);
     }
@@ -140,7 +135,7 @@ public class GameService implements IGameService {
         playerDTO.setMana(playerManaAmount);
         bugDTO.setMana(bugManaAmount);
 
-        juniorCardService.saveCardsIntoPlayer(Collections.singletonList(juniorCardDTO), playerId);
+        juniorCardService.saveCardIntoPlayer(juniorCardDTO, playerId);
         bugCardService.saveCardOnBug(bugCardDTO);
 
         return new EndTurnDTO(playerDTO, juniorCardDTO, bugDTO, bugCardDTO);

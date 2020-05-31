@@ -2,7 +2,9 @@ package br.com.magic.application.services.impl;
 
 import br.com.magic.application.commons.MagicErrorCode;
 import br.com.magic.application.entity.dto.BugCardDTO;
+import br.com.magic.application.entity.dto.BugDTO;
 import br.com.magic.application.entity.mapper.BugCardMapper;
+import br.com.magic.application.entity.mapper.BugMapper;
 import br.com.magic.application.entity.model.Bug;
 import br.com.magic.application.entity.model.BugCard;
 import br.com.magic.application.exception.CardNotFound;
@@ -20,10 +22,12 @@ public class BugCardService implements IBugCardService {
 
     private final BugCardRepositorie bugCardRepositorie;
     private final BugCardMapper bugCardMapper;
+    private final BugMapper bugMapper;
 
-    public BugCardService(BugCardRepositorie bugCardRepositorie, BugCardMapper bugCardMapper) {
+    public BugCardService(BugCardRepositorie bugCardRepositorie, BugCardMapper bugCardMapper, BugMapper bugMapper) {
         this.bugCardRepositorie = bugCardRepositorie;
         this.bugCardMapper = bugCardMapper;
+        this.bugMapper = bugMapper;
     }
 
     @Override
@@ -34,14 +38,15 @@ public class BugCardService implements IBugCardService {
     }
 
     @Override
-    public List<BugCardDTO> setCardsOnBug() {
+    public List<BugCardDTO> setCardsOnBug(BugDTO bugDTO) {
         List<BugCardDTO> bugCards = getCardsWithoutBug();
         List<BugCardDTO> sortedCarts = sortCards(bugCards);
+        Bug bug = bugMapper.toEntity(bugDTO);
 
         List<BugCard> cardsToSave = bugCardMapper.toEntityList(sortedCarts);
 
         cardsToSave.forEach(bugCard ->
-            bugCard.setInUse(true)
+            bugCard.setBug(bug)
         );
 
         bugCardRepositorie.saveAll(cardsToSave);
@@ -62,7 +67,7 @@ public class BugCardService implements IBugCardService {
     public void removeCardFromBug(BugCardDTO bugCardDTO) {
         BugCard bugCard = bugCardMapper.toEntity(bugCardDTO);
 
-        bugCard.setInUse(false);
+        bugCard.setBug(null);
 
         bugCardRepositorie.save(bugCard);
     }
@@ -92,7 +97,7 @@ public class BugCardService implements IBugCardService {
     public void removeAllCards() {
         List<BugCard> bugCards = bugCardRepositorie.findAllByIsInUseTrue();
 
-        bugCards.forEach(bugCard -> bugCard.setInUse(false));
+        bugCards.forEach(bugCard -> bugCard.setBug(null));
 
         bugCardRepositorie.saveAll(bugCards);
     }
