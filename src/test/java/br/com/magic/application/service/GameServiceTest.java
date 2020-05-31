@@ -175,7 +175,7 @@ public class GameServiceTest {
         when(playerService.update(playerDTO)).thenReturn(playerDTO);
         when(mapper.toDto(playerDTO, bugDTO, cardId)).thenReturn(roundDTO);
 
-        RoundDTO roundDTOScored = gameService.scoreboardPlayer(playerId, cardId);
+        RoundDTO roundDTOScored = gameService.scoreboardPlayer(playerId, cardId, 1L);
 
         assertSame(roundDTOScored, roundDTO);
 
@@ -200,7 +200,7 @@ public class GameServiceTest {
         when(bugService.findById(1L)).thenReturn(bugDTO);
 
         InsufficientMana insufficientMana = assertThrows(InsufficientMana.class, () ->
-            gameService.scoreboardPlayer(playerId, cardId)
+            gameService.scoreboardPlayer(playerId, cardId, 1L)
         );
 
         assertSame(insufficientMana.getCode(), MagicErrorCode.MEC006);

@@ -1,5 +1,6 @@
 package br.com.magic.application.api;
 
+import br.com.magic.application.api.request.ScoreboardRequest;
 import br.com.magic.application.api.response.EndTurnResponse;
 import br.com.magic.application.api.response.GameResponse;
 import br.com.magic.application.api.response.ResponseWrapper;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -31,10 +33,10 @@ public interface IGameController {
     @ResponseStatus(HttpStatus.OK)
     ResponseWrapper<RoundResponse> scoreboardBug(@PathVariable Long bugId, @PathVariable Long playerId);
 
-    @PutMapping("/{playerId}/scoreboard-player/{cardId}")
+    @PutMapping("/{playerId}/scoreboard-player")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    ResponseWrapper<RoundResponse> scoreboardPlayer(@PathVariable Long playerId, @PathVariable Long cardId);
+    ResponseWrapper<RoundResponse> scoreboardPlayer(@PathVariable Long playerId, @RequestBody ScoreboardRequest scoreboardRequest);
 
     @PutMapping("/{playerId}/end-turn/{bugId}")
     @ResponseBody

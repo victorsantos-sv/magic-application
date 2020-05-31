@@ -100,10 +100,10 @@ public class GameService implements IGameService {
 
     @Override
     @Transactional
-    public RoundDTO scoreboardPlayer(Long playerId, Long cardId) {
+    public RoundDTO scoreboardPlayer(Long playerId, Long cardId, Long bugId) {
         JuniorCardDTO juniorCardDTO = juniorCardService.findByPlayerId(cardId, playerId);
         PlayerDTO playerDTO = playerService.findById(playerId);
-        BugDTO bugDTO = bugService.findById(1L);
+        BugDTO bugDTO = bugService.findById(bugId);
 
         int manaAmount = juniorCardDTO.getPassive() == null ?
             playerDTO.getMana() - juniorCardDTO.getCost() : playerDTO.getMana() + juniorCardDTO.getPassive();

@@ -1,6 +1,7 @@
 package br.com.magic.application.api.controllers;
 
 import br.com.magic.application.api.IGameController;
+import br.com.magic.application.api.request.ScoreboardRequest;
 import br.com.magic.application.api.response.EndTurnResponse;
 import br.com.magic.application.api.response.GameResponse;
 import br.com.magic.application.api.response.ResponseWrapper;
@@ -17,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -66,8 +68,11 @@ public class GameController implements IGameController {
         @ApiResponse(code = 404, message = "Player ou carta não encontrados", response = ErrorResponse.class),
         @ApiResponse(code = 422, message = "O Player não possui mana suficiente", response = ErrorResponse.class)
     })
-    public ResponseWrapper<RoundResponse> scoreboardPlayer(@PathVariable Long playerId, @PathVariable Long cardId) {
-        return new ResponseWrapper<>(gameMapper.toResponse(gameService.scoreboardPlayer(playerId, cardId)));
+    public ResponseWrapper<RoundResponse> scoreboardPlayer(@PathVariable Long playerId, @RequestBody ScoreboardRequest scoreboardRequest) {
+        Long cardId = scoreboardRequest.getCardId();
+        Long bugId = scoreboardRequest.getBugId();
+
+        return new ResponseWrapper<>(gameMapper.toResponse(gameService.scoreboardPlayer(playerId, cardId, bugId)));
     }
 
     @Override
