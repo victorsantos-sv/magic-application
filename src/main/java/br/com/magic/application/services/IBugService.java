@@ -5,7 +5,9 @@ import br.com.magic.application.entity.dto.BugWithCardsDTO;
 
 public interface IBugService {
 
-    BugWithCardsDTO getInitialCards();
+    BugDTO createBug();
+
+    BugWithCardsDTO getInitialCards(Long bugId);
 
     BugDTO findById(Long id);
 

@@ -1,7 +1,7 @@
 package br.com.magic.application.api;
 
 import br.com.magic.application.api.request.PlayerRequest;
-import br.com.magic.application.api.response.PlayerResponse;
+import br.com.magic.application.api.response.LoginResponse;
 import br.com.magic.application.api.response.ResponseWrapper;
 import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -15,5 +15,5 @@ public interface IPlayerController {
     @PostMapping(path = "/login")
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
-    ResponseWrapper<PlayerResponse> create(@RequestBody @Valid PlayerRequest playerRequest);
+    ResponseWrapper<LoginResponse> create(@RequestBody @Valid PlayerRequest playerRequest);
 }

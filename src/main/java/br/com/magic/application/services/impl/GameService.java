@@ -20,8 +20,6 @@ import br.com.magic.application.services.IBugService;
 import br.com.magic.application.services.IGameService;
 import br.com.magic.application.services.IJuniorCardService;
 import br.com.magic.application.services.IPlayerService;
-import br.com.magic.application.utils.RandomUtils;
-import java.util.Collections;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,14 +48,9 @@ public class GameService implements IGameService {
     }
 
     @Override
-    public GameDTO loadBoard(Long id) {
-        PlayerDTO playerDTO = playerService.findById(id);
-        List<JuniorCardDTO> cards = juniorCardService.getCards();
-        List<JuniorCardDTO> sortedCards = RandomUtils.sortCards(cards);
-        juniorCardService.saveCardsIntoPlayer(sortedCards, id);
-        BugWithCardsDTO bugWithCardsDTO = bugService.getInitialCards();
-        PlayerWithCardsDTO playerWithCardsDTO = new PlayerWithCardsDTO(
-            playerDTO.getId(), playerDTO.getNickName(), playerDTO.getLife(), playerDTO.getMana(), sortedCards);
+    public GameDTO loadBoard(Long bugId, Long playerId) {
+        PlayerWithCardsDTO playerWithCardsDTO = juniorCardService.saveCardsIntoPlayer(playerId);
+        BugWithCardsDTO bugWithCardsDTO = bugService.getInitialCards(bugId);
 
         return mapper.toDto(playerWithCardsDTO, bugWithCardsDTO);
     }
@@ -73,7 +66,7 @@ public class GameService implements IGameService {
     @Override
     @Transactional
     public RoundDTO scoreboardBug(Long bugId, Long playerId) {
-        BugCardDTO bugCardDTO = bugCardService.selectRandomCard();
+        BugCardDTO bugCardDTO = bugCardService.selectRandomCard(bugId);
         BugDTO bugDTO = bugService.findById(bugId);
         PlayerDTO playerDTO = playerService.findById(playerId);
 
@@ -132,7 +125,7 @@ public class GameService implements IGameService {
         PlayerDTO playerDTO = playerService.findById(playerId);
         BugDTO bugDTO = bugService.findById(bugId);
         JuniorCardDTO juniorCardDTO = juniorCardService.getRandomCard();
-        BugCardDTO bugCardDTO = bugCardService.selectRandomCard();
+        BugCardDTO bugCardDTO = bugCardService.selectRandomCard(bugId);
 
         Integer playerManaAmount = playerDTO.getMana() + 2 > 20 ? playerDTO.getMana() : playerDTO.getMana() + 2;
         Integer bugManaAmount = bugDTO.getMana() + 2 > 20 ? bugDTO.getMana() : bugDTO.getMana() + 2;
@@ -140,17 +133,17 @@ public class GameService implements IGameService {
         playerDTO.setMana(playerManaAmount);
         bugDTO.setMana(bugManaAmount);
 
-        juniorCardService.saveCardsIntoPlayer(Collections.singletonList(juniorCardDTO), playerId);
-        bugCardService.saveCardOnBug(bugCardDTO);
+        juniorCardService.saveCardIntoPlayer(juniorCardDTO, playerId);
+        bugCardService.saveCardOnBug(bugCardDTO, bugDTO);
 
         return new EndTurnDTO(playerDTO, juniorCardDTO, bugDTO, bugCardDTO);
     }
 
     @Override
-    public void logoff(Long playerId) {
+    public void logoff(Long bugId, Long playerId) {
         juniorCardService.removeAllCards();
         playerService.deleteById(playerId);
-        bugCardService.removeAllCards();
+        bugCardService.removeAllCards(bugId);
         bugService.deleteAllBugs();
 
     }

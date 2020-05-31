@@ -22,18 +22,13 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
 import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThrows;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.anyList;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -52,36 +47,26 @@ public class GameServiceTest {
 
     @Test
     public void shouldLoadBoardGame() throws IOException {
-        Long id = 1L;
-        PlayerDTO playerDTO = buildPlayerDTO(id);
-        List<JuniorCardDTO> juniorCards = buildJuniorCardsList();
-        PlayerWithCardsDTO playerWithCardsDTO = new PlayerWithCardsDTO(
-            playerDTO.getId(),
-            playerDTO.getNickName(),
-            playerDTO.getLife(),
-            playerDTO.getMana(),
-            juniorCards
-        );
-        BugWithCardsDTO bugWithCardsDTO = new BugWithCardsDTO(1L, 20, 20, Collections.emptyList());
+        Long playerId = 1L;
+        Long bugId = 1L;
+        List<JuniorCardDTO> juniorCardDTOList = buildJuniorCardsList();
+        List<BugCardDTO> bugCardDTOList = buildBugCardsInUse();
+        PlayerWithCardsDTO playerWithCardsDTO = new PlayerWithCardsDTO(playerId, "player", 20, 20, juniorCardDTOList);
+        BugWithCardsDTO bugWithCardsDTO = new BugWithCardsDTO(bugId, 20, 20, bugCardDTOList);
         GameDTO gameDTO = buildGameDTO(playerWithCardsDTO, bugWithCardsDTO);
-        ArgumentCaptor<List<JuniorCardDTO>> argumentCaptor = ArgumentCaptor.forClass(List.class);
 
-        when(playerService.findById(id)).thenReturn(playerDTO);
-        when(juniorCardService.getCards()).thenReturn(juniorCards);
-        doNothing().when(juniorCardService).saveCardsIntoPlayer(anyList(), eq(id));
-        when(bugService.getInitialCards()).thenReturn(bugWithCardsDTO);
-        when(mapper.toDto(any(), any())).thenReturn(gameDTO);
+        when(juniorCardService.saveCardsIntoPlayer(playerId)).thenReturn(playerWithCardsDTO);
+        when(bugService.getInitialCards(bugId)).thenReturn(bugWithCardsDTO);
+        when(mapper.toDto(playerWithCardsDTO, bugWithCardsDTO)).thenReturn(gameDTO);
 
-        GameDTO gameDTOCreated = gameService.loadBoard(id);
+        GameDTO gameDTOLoaded = gameService.loadBoard(bugId, playerId);
 
-        verify(playerService, times(1)).findById(id);
-        verify(juniorCardService, times(1)).getCards();
-        verify(juniorCardService, times(1)).saveCardsIntoPlayer(argumentCaptor.capture(), eq(id));
-        verify(playerService, times(1)).findById(id);
+        assertSame(gameDTOLoaded, gameDTO);
 
-        assertSame(argumentCaptor.getValue().size(), 4);
-        assertSame(gameDTOCreated.getBugWithCardsDTO().getId(), gameDTO.getBugWithCardsDTO().getId());
-        assertSame(gameDTOCreated.getPlayerWithCardsDTO().getId(), gameDTO.getPlayerWithCardsDTO().getId());
+        verify(juniorCardService, times(1)).saveCardsIntoPlayer(playerId);
+        verify(bugService, times(1)).getInitialCards(bugId);
+        verify(mapper, times(1)).toDto(playerWithCardsDTO, bugWithCardsDTO);
+
     }
 
     @Test
@@ -108,7 +93,7 @@ public class GameServiceTest {
         PlayerDTO playerDTO = new PlayerDTO(1L, "player", 20, 20);
         RoundDTO roundDTO = new RoundDTO(playerDTO, bugDTO, 5L);
 
-        when(bugCardService.selectRandomCard()).thenReturn(bugCardDTO);
+        when(bugCardService.selectRandomCard(1L)).thenReturn(bugCardDTO);
         when(bugService.findById(1L)).thenReturn(bugDTO);
         when(playerService.findById(1L)).thenReturn(playerDTO);
         doNothing().when(bugCardService).removeCardFromBug(bugCardDTO);
@@ -124,7 +109,7 @@ public class GameServiceTest {
 
         assertSame(roundDTOScored, roundDTO);
 
-        verify(bugCardService, times(1)).selectRandomCard();
+        verify(bugCardService, times(1)).selectRandomCard(1L);
         verify(bugService, times(1)).findById(1L);
         verify(playerService, times(1)).findById(1L);
         verify(bugCardService, times(1)).removeCardFromBug(bugCardDTO);
@@ -139,7 +124,7 @@ public class GameServiceTest {
         BugDTO bugDTO = new BugDTO(1L, 20, 1);
         PlayerDTO playerDTO = new PlayerDTO(1L, "player", 20, 20);
 
-        when(bugCardService.selectRandomCard()).thenReturn(bugCardDTO);
+        when(bugCardService.selectRandomCard(1L)).thenReturn(bugCardDTO);
         when(bugService.findById(1L)).thenReturn(bugDTO);
         when(playerService.findById(1L)).thenReturn(playerDTO);
 
@@ -149,7 +134,7 @@ public class GameServiceTest {
 
         assertSame(insufficientMana.getCode(), MagicErrorCode.MEC006);
 
-        verify(bugCardService, times(1)).selectRandomCard();
+        verify(bugCardService, times(1)).selectRandomCard(1L);
         verify(bugService, times(1)).findById(1L);
         verify(playerService, times(1)).findById(1L);
     }
@@ -221,9 +206,9 @@ public class GameServiceTest {
         when(playerService.findById(playerId)).thenReturn(playerDTO);
         when(bugService.findById(bugId)).thenReturn(bugDTO);
         when(juniorCardService.getRandomCard()).thenReturn(juniorCardDTO);
-        when(bugCardService.selectRandomCard()).thenReturn(bugCardDTO);
-        doNothing().when(juniorCardService).saveCardsIntoPlayer(Collections.singletonList(juniorCardDTO), playerId);
-        doNothing().when(bugCardService).saveCardOnBug(bugCardDTO);
+        when(bugCardService.selectRandomCard(1L)).thenReturn(bugCardDTO);
+        doNothing().when(juniorCardService).saveCardIntoPlayer(juniorCardDTO, playerId);
+        doNothing().when(bugCardService).saveCardOnBug(bugCardDTO, bugDTO);
 
         EndTurnDTO endTurnDTO = gameService.endTurn(playerId, bugId);
 
@@ -235,31 +220,27 @@ public class GameServiceTest {
         verify(playerService, times(1)).findById(playerId);
         verify(bugService, times(1)).findById(bugId);
         verify(juniorCardService, times(1)).getRandomCard();
-        verify(bugCardService, times(1)).selectRandomCard();
-        verify(juniorCardService, times(1))
-            .saveCardsIntoPlayer(Collections.singletonList(juniorCardDTO), playerId);
-        verify(bugCardService, times(1)).saveCardOnBug(bugCardDTO);
+        verify(bugCardService, times(1)).selectRandomCard(1L);
+        verify(juniorCardService, times(1)).saveCardIntoPlayer(juniorCardDTO, playerId);
+        verify(bugCardService, times(1)).saveCardOnBug(bugCardDTO, bugDTO);
     }
 
     @Test
     public void shouldLogoff() {
         Long playerId = 1L;
+        Long bugId = 1L;
 
         doNothing().when(juniorCardService).removeAllCards();
         doNothing().when(playerService).deleteById(playerId);
-        doNothing().when(bugCardService).removeAllCards();
+        doNothing().when(bugCardService).removeAllCards(bugId);
         doNothing().when(bugService).deleteAllBugs();
 
-        gameService.logoff(playerId);
+        gameService.logoff(bugId, playerId);
 
         verify(juniorCardService, times(1)).removeAllCards();
         verify(playerService, times(1)).deleteById(playerId);
-        verify(bugCardService, times(1)).removeAllCards();
+        verify(bugCardService, times(1)).removeAllCards(bugId);
         verify(bugService, times(1)).deleteAllBugs();
-    }
-
-    private PlayerDTO buildPlayerDTO(Long id) {
-        return new PlayerDTO(id, "player", 20, 20);
     }
 
     private GameDTO buildGameDTO(PlayerWithCardsDTO playerWithCardsDTO, BugWithCardsDTO bugWithCardsDTO) {
@@ -282,6 +263,14 @@ public class GameServiceTest {
             .getResourceAsStream("payloads/bug-cards-on-stack.json"), StandardCharsets.UTF_8);
 
         return objectMapper.readValue(juniorCardsJson, new TypeReference<List<BugCardDTO>>() {
+        });
+    }
+
+    private List<BugCardDTO> buildBugCardsInUse() throws IOException {
+        String bugCardsJson = IOUtils.toString(getClass().getClassLoader().
+            getResourceAsStream("payloads/bug-cards-dto-in-use.json"), StandardCharsets.UTF_8);
+
+        return objectMapper.readValue(bugCardsJson, new TypeReference<List<BugCardDTO>>() {
         });
     }
 

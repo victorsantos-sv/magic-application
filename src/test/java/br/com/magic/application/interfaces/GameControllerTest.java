@@ -1,6 +1,5 @@
 package br.com.magic.application.interfaces;
 
-import br.com.magic.application.api.request.PlayerRequest;
 import br.com.magic.application.api.request.ScoreboardRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,13 +22,13 @@ public class GameControllerTest extends BaseControllerIT {
     @Sql(value = "/scripts/initial-load.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void shouldLoadTheBoardWithSuccess() throws Exception {
         this.mvc.perform(MockMvcRequestBuilders
-            .get(baseUrl + "/load-board/{id}", 1)
+            .get(baseUrl + "/{bugId}/load-board/{playerId}", 1, 1)
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.content.player.id").value(1))
-            .andExpect(jsonPath("$.content.bug.id").isNotEmpty())
+            .andExpect(jsonPath("$.content.bug.id").value(1))
             .andExpect(jsonPath("$.content.player.cards").isNotEmpty())
             .andExpect(jsonPath("$.content.bug.cards").isNotEmpty());
     }

@@ -3,6 +3,7 @@ package br.com.magic.application.service;
 import br.com.magic.application.commons.MagicErrorCode;
 import br.com.magic.application.entity.dto.JuniorCardDTO;
 import br.com.magic.application.entity.dto.PlayerDTO;
+import br.com.magic.application.entity.dto.PlayerWithCardsDTO;
 import br.com.magic.application.entity.mapper.JuniorCardMapper;
 import br.com.magic.application.entity.mapper.PlayerMapper;
 import br.com.magic.application.entity.model.JuniorCard;
@@ -17,7 +18,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.apache.commons.io.IOUtils;
@@ -28,6 +28,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -76,54 +78,30 @@ public class JuniorCardServiceTest {
     }
 
     @Test
-    public void shouldSaveCardsIntoPlayer() {
-        List<JuniorCard> juniorCards = buildStackJuniorCards();
-        List<JuniorCardDTO> juniorCardDTOList = buildStackJuniorDtoCards();
+    public void shouldSaveCardsIntoPlayer() throws IOException {
+        List<JuniorCard> juniorCards = buildJuniorCardList();
+        List<JuniorCardDTO> juniorCardDTOList = buildJuniorCardDtoList();
         PlayerDTO playerDTO = new PlayerDTO(1L, "player", 20, 20);
         Player player = new Player(1L, "player", 20, 20);
 
-        juniorCards.get(0).setPlayer(player);
-
-        when(juniorCardMapper.toEntity(juniorCardDTOList)).thenReturn(juniorCards);
+        when(juniorCardRepositorie.findAll()).thenReturn(juniorCards);
+        when(juniorCardMapper.toDto(juniorCards)).thenReturn(juniorCardDTOList);
+        when(juniorCardMapper.toEntity(anyList())).thenReturn(juniorCards);
         when(playerService.findById(1L)).thenReturn(playerDTO);
         when(playerMapper.toEntity(playerDTO)).thenReturn(player);
-        when(juniorCardRepositorie.findAllByPlayer(player)).thenReturn(Collections.emptyList());
-        when(juniorCardRepositorie.saveAll(juniorCards)).thenReturn(null);
+        when(juniorCardRepositorie.saveAll(anyList())).thenReturn(juniorCards);
+        when(juniorCardMapper.toDto(juniorCards)).thenReturn(juniorCardDTOList);
 
-        juniorCardService.saveCardsIntoPlayer(juniorCardDTOList, 1L);
+        PlayerWithCardsDTO playerWithCardsDTO = juniorCardService.saveCardsIntoPlayer(1L);
 
-        verify(juniorCardMapper, times(1)).toEntity(juniorCardDTOList);
+        assertNotNull(playerWithCardsDTO);
+
+        verify(juniorCardRepositorie, times(1)).findAll();
+        verify(juniorCardMapper, times(2)).toDto(juniorCards);
+        verify(juniorCardMapper, times(1)).toEntity(anyList());
         verify(playerService, times(1)).findById(1L);
         verify(playerMapper, times(1)).toEntity(playerDTO);
-        verify(juniorCardRepositorie, times(1)).findAllByPlayer(player);
-        verify(juniorCardRepositorie, times(1)).saveAll(juniorCards);
-    }
-
-    @Test
-    public void shouldThrowAnExceptionWhenUserIsFullCards() {
-        List<JuniorCard> juniorCards = buildStackJuniorCards();
-        List<JuniorCardDTO> juniorCardDTOList = buildStackJuniorDtoCards();
-        PlayerDTO playerDTO = new PlayerDTO(1L, "player", 20, 20);
-        Player player = new Player(1L, "player", 20, 20);
-        List<JuniorCard> cardsWithUser = buildCardsWithUser(player);
-
-        juniorCards.get(0).setPlayer(player);
-
-        when(juniorCardMapper.toEntity(juniorCardDTOList)).thenReturn(juniorCards);
-        when(playerService.findById(1L)).thenReturn(playerDTO);
-        when(playerMapper.toEntity(playerDTO)).thenReturn(player);
-        when(juniorCardRepositorie.findAllByPlayer(player)).thenReturn(cardsWithUser);
-
-        FullCards fullCards = assertThrows(FullCards.class, () -> {
-            juniorCardService.saveCardsIntoPlayer(juniorCardDTOList, 1L);
-        });
-
-        assertSame(fullCards.getCode(), MagicErrorCode.MEC002);
-
-        verify(juniorCardMapper, times(1)).toEntity(juniorCardDTOList);
-        verify(playerService, times(1)).findById(1L);
-        verify(playerMapper, times(1)).toEntity(playerDTO);
-        verify(juniorCardRepositorie, times(1)).findAllByPlayer(player);
+        verify(juniorCardRepositorie, times(1)).saveAll(anyList());
     }
 
     @Test
@@ -207,6 +185,55 @@ public class JuniorCardServiceTest {
         assertTrue(juniorCardDTOList.contains(randomCard));
 
         verify(juniorCardRepositorie, times(1)).findAllByPlayerIsNullOrderById();
+    }
+
+    @Test
+    public void shouldSaveCartIntoPlayerWithSuccess() {
+        Long playerId = 1L;
+        JuniorCardDTO juniorCardDTO = new JuniorCardDTO(1L, "title", "description", 3, 5, null);
+        JuniorCard juniorCard = new JuniorCard(1L, "title", "description", 3, 5, null, null);
+        PlayerDTO playerDTO = new PlayerDTO(playerId, "player", 20, 20);
+        Player player = new Player(playerId, "player", 20, 20);
+        List<JuniorCard> juniorCards = buildCardsWithUser(player);
+        juniorCards.remove(3);
+        ArgumentCaptor<JuniorCard> argumentCaptor = ArgumentCaptor.forClass(JuniorCard.class);
+
+        when(juniorCardRepositorie.findAllByPlayerId(playerId)).thenReturn(juniorCards);
+        when(playerService.findById(playerId)).thenReturn(playerDTO);
+        when(juniorCardMapper.toEntity(juniorCardDTO)).thenReturn(juniorCard);
+        when(playerMapper.toEntity(playerDTO)).thenReturn(player);
+        when(juniorCardRepositorie.save(any())).thenReturn(null);
+
+        juniorCardService.saveCardIntoPlayer(juniorCardDTO, playerId);
+
+        verify(juniorCardRepositorie, times(1)).findAllByPlayerId(playerId);
+        verify(playerService, times(1)).findById(playerId);
+        verify(juniorCardMapper, times(1)).toEntity(juniorCardDTO);
+        verify(playerMapper, times(1)).toEntity(playerDTO);
+        verify(juniorCardRepositorie, times(1)).save(argumentCaptor.capture());
+
+        assertNotNull(argumentCaptor.getValue().getPlayer());
+    }
+
+    @Test
+    public void shouldThrowAnExceptionWhenPlayerIsFullCards() {
+        Long playerId = 1L;
+        JuniorCardDTO juniorCardDTO = new JuniorCardDTO(1L, "title", "description", 3, 5, null);
+        PlayerDTO playerDTO = new PlayerDTO(playerId, "player", 20, 20);
+        Player player = new Player(playerId, "player", 20, 20);
+        List<JuniorCard> juniorCards = buildCardsWithUser(player);
+
+        when(juniorCardRepositorie.findAllByPlayerId(playerId)).thenReturn(juniorCards);
+        when(playerService.findById(playerId)).thenReturn(playerDTO);
+
+        FullCards fullCards = assertThrows(FullCards.class, () ->
+            juniorCardService.saveCardIntoPlayer(juniorCardDTO, playerId)
+        );
+
+        assertSame(fullCards.getCode(), MagicErrorCode.MEC002);
+
+        verify(juniorCardRepositorie, times(1)).findAllByPlayerId(playerId);
+        verify(playerService, times(1)).findById(playerId);
     }
 
     @Test

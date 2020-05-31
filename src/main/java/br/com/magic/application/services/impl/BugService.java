@@ -1,7 +1,6 @@
 package br.com.magic.application.services.impl;
 
 import br.com.magic.application.commons.MagicErrorCode;
-import br.com.magic.application.entity.dto.BugCardDTO;
 import br.com.magic.application.entity.dto.BugDTO;
 import br.com.magic.application.entity.dto.BugWithCardsDTO;
 import br.com.magic.application.entity.mapper.BugMapper;
@@ -10,7 +9,6 @@ import br.com.magic.application.exception.BugNotFound;
 import br.com.magic.application.repositories.BugRepositorie;
 import br.com.magic.application.services.IBugCardService;
 import br.com.magic.application.services.IBugService;
-import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,11 +25,17 @@ public class BugService implements IBugService {
     }
 
     @Override
-    public BugWithCardsDTO getInitialCards() {
-        List<BugCardDTO> bugCardDTOList = bugCardService.setCardsOnBug();
-        Bug bug = bugRepositorie.save(new Bug());
+    public BugDTO createBug() {
+        Bug bug = new Bug();
 
-        return bugMapper.toDto(bug, bugCardDTOList);
+        return bugMapper.toDto(bugRepositorie.save(bug));
+    }
+
+    @Override
+    public BugWithCardsDTO getInitialCards(Long bugId) {
+        BugDTO bugDTO = findById(bugId);
+
+        return bugCardService.setCardsOnBug(bugDTO);
     }
 
     @Override

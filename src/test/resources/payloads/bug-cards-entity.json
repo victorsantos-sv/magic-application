@@ -6,7 +6,7 @@
     "cost": 4,
     "lifeDamage": 2,
     "manaDamage": 3,
-    "inUse": false
+    "bug": null
   },
   {
     "id": 4,
@@ -15,7 +15,7 @@
     "cost": 4,
     "lifeDamage": 4,
     "manaDamage": null,
-    "inUse": false
+    "bug": null
   },
   {
     "id": 5,
@@ -24,7 +24,7 @@
     "cost": 6,
     "lifeDamage": 4,
     "manaDamage": null,
-    "inUse": false
+    "bug": null
   },
   {
     "id": 7,
@@ -33,7 +33,7 @@
     "cost": 1,
     "lifeDamage": 2,
     "manaDamage": null,
-    "inUse": false
+    "bug": null
   },
   {
     "id": 8,
@@ -42,6 +42,6 @@
     "cost": 8,
     "lifeDamage": 6,
     "manaDamage": null,
-    "inUse": false
+    "bug": null
   }
 ]
