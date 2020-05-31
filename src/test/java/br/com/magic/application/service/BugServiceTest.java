@@ -20,6 +20,7 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.any;
@@ -39,26 +40,44 @@ public class BugServiceTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
-    public void shouldLoadCardsAndCreateBug() throws IOException {
-        List<BugCardDTO> bugCardDTOList = buildBugCardsInUse();
-        Bug bug = new Bug();
-        bug.setId(1L);
-        BugWithCardsDTO bugWithCardsDTO = buildBugWithCardsDTO(bug, bugCardDTOList);
+    public void shouldCreateBugWithSuccess() {
+        Bug bug = new Bug(1L, 20, 20);
+        BugDTO bugDTO = new BugDTO(1L, 20, 20);
         ArgumentCaptor<Bug> argumentCaptor = ArgumentCaptor.forClass(Bug.class);
 
-        when(bugCardService.setCardsOnBug()).thenReturn(bugCardDTOList);
         when(bugRepositorie.save(any())).thenReturn(bug);
-        when(bugMapper.toDto(bug, bugCardDTOList)).thenReturn(bugWithCardsDTO);
+        when(bugMapper.toDto(bug)).thenReturn(bugDTO);
 
-        BugWithCardsDTO bugWithCardsDTOLoaded = bugService.getInitialCards();
+        BugDTO bugDTOCreated = bugService.createBug();
+
+        assertSame(bugDTOCreated, bugDTO);
+
+        verify(bugRepositorie, times(1)).save(argumentCaptor.capture());
+        verify(bugMapper, times(1)).toDto(bug);
+
+        assertSame(argumentCaptor.getValue().getId(), null);
+    }
+
+    @Test
+    public void shouldLoadCards() throws IOException {
+        Long id = 1L;
+        Bug bug = new Bug();
+        BugDTO bugDTO = new BugDTO(1L, 20, 20);
+        bug.setId(id);
+        BugWithCardsDTO bugWithCardsDTO = buildBugWithCardsDTO(bug, buildBugCardsInUse());
+
+
+        when(bugRepositorie.findById(id)).thenReturn(Optional.of(bug));
+        when(bugMapper.toDto(bug)).thenReturn(bugDTO);
+        when(bugCardService.setCardsOnBug(bugDTO)).thenReturn(bugWithCardsDTO);
+
+        BugWithCardsDTO bugWithCardsDTOLoaded = bugService.getInitialCards(1L);
 
         assertSame(bugWithCardsDTOLoaded, bugWithCardsDTO);
 
-        verify(bugRepositorie, times(1)).save(argumentCaptor.capture());
-        verify(bugMapper, times(1)).toDto(bug, bugCardDTOList);
-
-        assertSame(argumentCaptor.getValue().getLife(), new Bug().getLife());
-        assertSame(argumentCaptor.getValue().getMana(), new Bug().getMana());
+        verify(bugRepositorie, times(1)).findById(id);
+        verify(bugMapper, times(1)).toDto(bug);
+        verify(bugCardService, times(1)).setCardsOnBug(bugDTO);
     }
 
     @Test
