@@ -12,6 +12,8 @@ import br.com.magic.application.services.IGameService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +27,7 @@ public class GameController implements IGameController {
 
     private final IGameService gameService;
     private final GameMapper gameMapper;
+    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
     public GameController(IGameService gameService, GameMapper gameMapper) {
         this.gameService = gameService;
@@ -80,6 +83,7 @@ public class GameController implements IGameController {
     @Override
     @ApiOperation(value = "Ends the game and delete the player, bug and clear the cards")
     public ResponseEntity<?> logoff(Long playerId) {
+        LOG.info("PlayerId for logoff: [{" + playerId + "}]");
         gameService.logoff(playerId);
 
         return ResponseEntity.noContent().build();
