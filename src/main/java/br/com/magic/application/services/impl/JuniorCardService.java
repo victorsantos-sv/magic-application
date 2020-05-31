@@ -81,7 +81,7 @@ public class JuniorCardService implements IJuniorCardService {
         List<JuniorCard> cardsWithUser = juniorCardRepositorie.findAllByPlayerId(player.getId());
         List<JuniorCardDTO> cardsWithUserDTO = juniorCardMapper.toDto(cardsWithUser);
 
-        if (cardsWithUser.size() <= 4) {
+        if (cardsWithUser.size() <= 4 && cardsWithUser.size() > 0) {
             return new PlayerWithCardsDTO(playerDTO.getId(), playerDTO.getNickName(), playerDTO.getLife(), playerDTO.getMana(), cardsWithUserDTO);
         }
 

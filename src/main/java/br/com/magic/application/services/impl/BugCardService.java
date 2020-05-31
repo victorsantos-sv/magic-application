@@ -54,7 +54,7 @@ public class BugCardService implements IBugCardService {
         List<BugCard> cardsWithBug = bugCardRepositorie.findAllByBugId(bug.getId());
         List<BugCardDTO> cardsWithBugDTO = bugCardMapper.toDtoList(cardsWithBug);
 
-        if (cardsWithBug.size() <= 4) {
+        if (cardsWithBug.size() <= 4 && cardsWithBug.size() > 0) {
             return new BugWithCardsDTO(bugDTO.getId(), bugDTO.getLife(), bugDTO.getMana(), cardsWithBugDTO);
         }
 
