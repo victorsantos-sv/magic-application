@@ -13,7 +13,7 @@ public interface IGameService {
 
     RoundDTO scoreboardBug(Long bugId, Long playerId);
 
-    RoundDTO scoreboardPlayer(Long playerId, Long cardId);
+    RoundDTO scoreboardPlayer(Long playerId, Long cardId, Long bugId);
 
     EndTurnDTO endTurn(Long playerId, Long bugId);
 

@@ -1,5 +1,9 @@
 package br.com.magic.application.interfaces;
 
+import br.com.magic.application.api.request.PlayerRequest;
+import br.com.magic.application.api.request.ScoreboardRequest;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
@@ -70,7 +74,8 @@ public class GameControllerTest extends BaseControllerIT {
     })
     public void shouldScorePlayer() throws Exception {
         this.mvc.perform(MockMvcRequestBuilders
-            .put(baseUrl + "/{playerId}/scoreboard-player/{cardId}", 1, 5)
+            .put(baseUrl + "/{playerId}/scoreboard-player", 1)
+            .content(toJson(new ScoreboardRequest(5L, 1L)))
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
@@ -96,5 +101,9 @@ public class GameControllerTest extends BaseControllerIT {
             .andExpect(jsonPath("$.content.bug.id").value(1))
             .andExpect(jsonPath("$.content.player.card").isNotEmpty())
             .andExpect(jsonPath("$.content.bug.card").isNotEmpty());
+    }
+
+    private String toJson(ScoreboardRequest scoreboardRequest) throws JsonProcessingException {
+        return new ObjectMapper().writeValueAsString(scoreboardRequest);
     }
 }
