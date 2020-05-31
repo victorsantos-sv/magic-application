@@ -189,6 +189,55 @@ public class JuniorCardServiceTest {
     }
 
     @Test
+    public void shouldSaveCartIntoPlayerWithSuccess() {
+        Long playerId = 1L;
+        JuniorCardDTO juniorCardDTO = new JuniorCardDTO(1L, "title", "description", 3, 5, null);
+        JuniorCard juniorCard = new JuniorCard(1L, "title", "description", 3, 5, null, null);
+        PlayerDTO playerDTO = new PlayerDTO(playerId, "player", 20, 20);
+        Player player = new Player(playerId, "player", 20, 20);
+        List<JuniorCard> juniorCards = buildCardsWithUser(player);
+        juniorCards.remove(3);
+        ArgumentCaptor<JuniorCard> argumentCaptor = ArgumentCaptor.forClass(JuniorCard.class);
+
+        when(juniorCardRepositorie.findAllByPlayerId(playerId)).thenReturn(juniorCards);
+        when(playerService.findById(playerId)).thenReturn(playerDTO);
+        when(juniorCardMapper.toEntity(juniorCardDTO)).thenReturn(juniorCard);
+        when(playerMapper.toEntity(playerDTO)).thenReturn(player);
+        when(juniorCardRepositorie.save(any())).thenReturn(null);
+
+        juniorCardService.saveCardIntoPlayer(juniorCardDTO, playerId);
+
+        verify(juniorCardRepositorie, times(1)).findAllByPlayerId(playerId);
+        verify(playerService, times(1)).findById(playerId);
+        verify(juniorCardMapper, times(1)).toEntity(juniorCardDTO);
+        verify(playerMapper, times(1)).toEntity(playerDTO);
+        verify(juniorCardRepositorie, times(1)).save(argumentCaptor.capture());
+
+        assertNotNull(argumentCaptor.getValue().getPlayer());
+    }
+
+    @Test
+    public void shouldThrowAnExceptionWhenPlayerIsFullCards() {
+        Long playerId = 1L;
+        JuniorCardDTO juniorCardDTO = new JuniorCardDTO(1L, "title", "description", 3, 5, null);
+        PlayerDTO playerDTO = new PlayerDTO(playerId, "player", 20, 20);
+        Player player = new Player(playerId, "player", 20, 20);
+        List<JuniorCard> juniorCards = buildCardsWithUser(player);
+
+        when(juniorCardRepositorie.findAllByPlayerId(playerId)).thenReturn(juniorCards);
+        when(playerService.findById(playerId)).thenReturn(playerDTO);
+
+        FullCards fullCards = assertThrows(FullCards.class, () ->
+            juniorCardService.saveCardIntoPlayer(juniorCardDTO, playerId)
+        );
+
+        assertSame(fullCards.getCode(), MagicErrorCode.MEC002);
+
+        verify(juniorCardRepositorie, times(1)).findAllByPlayerId(playerId);
+        verify(playerService, times(1)).findById(playerId);
+    }
+
+    @Test
     public void shouldRemoveCardFromPlayerWithSuccess() {
         JuniorCardDTO juniorCardDTO = new JuniorCardDTO(1L, "title", "description", 3, 5, null);
         JuniorCard juniorCard = new JuniorCard(1L, "title", "description", 3, 5, null, null);
