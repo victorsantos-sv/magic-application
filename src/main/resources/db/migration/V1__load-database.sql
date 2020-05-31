@@ -34,7 +34,7 @@ CREATE TABLE if not exists bug_card
     life_damage int,
     mana_damage int,
     bug_id      bigint,
-    foreign key (bug_id) references bug(id)
+    foreign key (bug_id) references bug (id)
 );
 
 INSERT INTO junior_card(title,

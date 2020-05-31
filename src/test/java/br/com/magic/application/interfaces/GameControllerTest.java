@@ -3,7 +3,6 @@ package br.com.magic.application.interfaces;
 import br.com.magic.application.api.request.ScoreboardRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
@@ -23,7 +22,7 @@ public class GameControllerTest extends BaseControllerIT {
     @Sql(value = "/scripts/initial-load.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void shouldLoadTheBoardWithSuccess() throws Exception {
         this.mvc.perform(MockMvcRequestBuilders
-            .get(baseUrl + "/{bugId}/load-board/{playerId}",1, 1)
+            .get(baseUrl + "/{bugId}/load-board/{playerId}", 1, 1)
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
