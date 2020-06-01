@@ -3,6 +3,7 @@ package br.com.magic.application.api;
 import br.com.magic.application.api.request.ScoreboardRequest;
 import br.com.magic.application.api.response.EndTurnResponse;
 import br.com.magic.application.api.response.GameResponse;
+import br.com.magic.application.api.response.PlayerWithCardResponse;
 import br.com.magic.application.api.response.ResponseWrapper;
 import br.com.magic.application.api.response.RoundResponse;
 import br.com.magic.application.api.response.StackCardsResponse;
@@ -47,4 +48,9 @@ public interface IGameController {
     @ResponseBody
     @ResponseStatus(HttpStatus.NO_CONTENT)
     ResponseEntity<?> logoff(@PathVariable Long bugId, @PathVariable Long playerId);
+
+    @PutMapping(path = "{playerId}/buy-card/{cardId}")
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    ResponseWrapper<PlayerWithCardResponse> buyCard(@PathVariable Long playerId, @PathVariable Long cardId);
 }

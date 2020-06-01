@@ -107,6 +107,8 @@ public class JuniorCardService implements IJuniorCardService {
             juniorCard.setPlayer(playerMapper.toEntity(playerDTO));
 
             juniorCardRepositorie.save(juniorCard);
+        } else {
+            throw new FullCards(MagicErrorCode.MEC002, Player.class.getSimpleName());
         }
     }
 

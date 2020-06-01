@@ -4,10 +4,13 @@ import br.com.magic.application.api.IGameController;
 import br.com.magic.application.api.request.ScoreboardRequest;
 import br.com.magic.application.api.response.EndTurnResponse;
 import br.com.magic.application.api.response.GameResponse;
+import br.com.magic.application.api.response.PlayerResponse;
+import br.com.magic.application.api.response.PlayerWithCardResponse;
 import br.com.magic.application.api.response.ResponseWrapper;
 import br.com.magic.application.api.response.RoundResponse;
 import br.com.magic.application.api.response.StackCardsResponse;
 import br.com.magic.application.entity.mapper.GameMapper;
+import br.com.magic.application.entity.mapper.PlayerMapper;
 import br.com.magic.application.exception.response.ErrorResponse;
 import br.com.magic.application.services.IGameService;
 import io.swagger.annotations.ApiOperation;
@@ -29,11 +32,13 @@ public class GameController implements IGameController {
 
     private final IGameService gameService;
     private final GameMapper gameMapper;
-    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
+    private final PlayerMapper playerMapper;
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    public GameController(IGameService gameService, GameMapper gameMapper) {
+    public GameController(IGameService gameService, GameMapper gameMapper, PlayerMapper playerMapper) {
         this.gameService = gameService;
         this.gameMapper = gameMapper;
+        this.playerMapper = playerMapper;
     }
 
     @Override
@@ -43,6 +48,7 @@ public class GameController implements IGameController {
         @ApiResponse(code = 422, message = "Player já possui o máximo de cartas em mãos", response = ErrorResponse.class)
     })
     public ResponseWrapper<GameResponse> loadBoardGame(@PathVariable Long bugId, @PathVariable Long playerId) {
+        log.info("PlayerId [{" + playerId + "}] and BugId [{" + bugId + "}] for load board");
         return new ResponseWrapper<>(gameMapper.toResponse(gameService.loadBoard(bugId, playerId)));
     }
 
@@ -82,15 +88,28 @@ public class GameController implements IGameController {
         @ApiResponse(code = 422, message = "Player ou bug já possuem o máximo de cartas em mãos", response = ErrorResponse.class)
     })
     public ResponseWrapper<EndTurnResponse> endTurn(@PathVariable Long playerId, @PathVariable Long bugId) {
+        log.info("PlayerId [{" + playerId + "}] and BugId [{" + bugId + "}] for end turn");
         return new ResponseWrapper<>(gameMapper.toResponse(gameService.endTurn(playerId, bugId)));
     }
 
     @Override
     @ApiOperation(value = "Ends the game and delete the player, bug and clear the cards")
     public ResponseEntity<?> logoff(@PathVariable Long bugId, @PathVariable Long playerId) {
-        LOG.info("PlayerId for logoff: [{" + playerId + "}]");
+        log.info("PlayerId [{" + playerId + "}] and BugId [{" + bugId + "}] for logoff");
         gameService.logoff(bugId, playerId);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    @ApiOperation(value = "Player buys a card")
+    @ApiResponses({
+        @ApiResponse(code = 404, message = "Player ou carta não encontrados", response = ErrorResponse.class),
+        @ApiResponse(code = 422, message = "Player possue o máximo de cartas em mãos", response = ErrorResponse.class)
+    })
+    public ResponseWrapper<PlayerWithCardResponse> buyCard(@PathVariable Long playerId, @PathVariable Long cardId) {
+        log.info("PlayerId [{" + playerId + "}] buying card [{" + cardId + "}]");
+
+        return new ResponseWrapper<>(playerMapper.toResponse(gameService.buyCard(playerId, cardId)));
     }
 }
