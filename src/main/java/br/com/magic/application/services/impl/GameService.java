@@ -8,6 +8,7 @@ import br.com.magic.application.entity.dto.EndTurnDTO;
 import br.com.magic.application.entity.dto.GameDTO;
 import br.com.magic.application.entity.dto.JuniorCardDTO;
 import br.com.magic.application.entity.dto.PlayerDTO;
+import br.com.magic.application.entity.dto.PlayerWithCardDTO;
 import br.com.magic.application.entity.dto.PlayerWithCardsDTO;
 import br.com.magic.application.entity.dto.RoundDTO;
 import br.com.magic.application.entity.dto.StackCardsDTO;
@@ -146,5 +147,15 @@ public class GameService implements IGameService {
         bugCardService.removeAllCards(bugId);
         bugService.deleteAllBugs();
 
+    }
+
+    @Override
+    public PlayerWithCardDTO buyCard(Long playerId, Long cardId) {
+        PlayerDTO playerDTO = playerService.findById(playerId);
+        JuniorCardDTO juniorCardDTO = juniorCardService.findById(cardId);
+
+        juniorCardService.saveCardIntoPlayer(juniorCardDTO, playerId);
+
+        return new PlayerWithCardDTO(playerId, playerDTO.getNickName(), playerDTO.getLife(), playerDTO.getMana(), juniorCardDTO);
     }
 }

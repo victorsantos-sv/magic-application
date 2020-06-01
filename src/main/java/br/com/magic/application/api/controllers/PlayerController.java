@@ -25,7 +25,7 @@ public class PlayerController implements IPlayerController {
 
     private final IPlayerService playerService;
     private final PlayerMapper mapper;
-    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     public PlayerController(IPlayerService playerService, PlayerMapper mapper) {
         this.playerService = playerService;
@@ -38,7 +38,7 @@ public class PlayerController implements IPlayerController {
         @ApiResponse(code = 400, message = "Alguns campos são inválidos", response = ErrorResponseWithFields.class)
     })
     public ResponseWrapper<LoginResponse> create(@RequestBody @Valid PlayerRequest playerRequest) {
-        LOG.info("Player registering: " + playerRequest.toString());
+        log.info("Player registering: " + playerRequest.toString());
 
         return new ResponseWrapper<>(mapper.toResponse(playerService.create(mapper.toDto(playerRequest))));
     }

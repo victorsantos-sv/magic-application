@@ -6,6 +6,7 @@ import br.com.magic.application.api.response.PlayerResponse;
 import br.com.magic.application.entity.dto.BugDTO;
 import br.com.magic.application.entity.dto.LoginDTO;
 import br.com.magic.application.entity.dto.PlayerDTO;
+import br.com.magic.application.entity.dto.PlayerWithCardDTO;
 import br.com.magic.application.entity.model.Player;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -20,6 +21,8 @@ public interface PlayerMapper {
     Player toEntity(PlayerDTO playerDTO);
 
     PlayerResponse toResponse(PlayerDTO playerDTO);
+
+    PlayerResponse toResponse(PlayerWithCardDTO playerWithCardDTO);
 
     LoginDTO toDto(PlayerDTO playerDTO, BugDTO bugDTO);
 
