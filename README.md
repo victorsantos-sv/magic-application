@@ -2,7 +2,7 @@
 ## Introdução
 Este projeto foi criado como um desafio da iniciativa MasterDevs. Tem por objetivo simular o jogo Magic.
 
-#Documentação
+# Documentação
 Para acessar a documentação, suba o projeto e acesse a url:
 ```
 http://localhost:8080/swagger-ui.html
