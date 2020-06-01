@@ -239,6 +239,22 @@ public class GameControllerTest extends BaseControllerIT {
             .andExpect(status().isNoContent());
     }
 
+    @Test
+    @SqlGroup({
+        @Sql(value = "/scripts/initial-load.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
+        @Sql(value = "/scripts/set-cards.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    })
+    public void shouldBuyCardWithSuccess() throws Exception {
+        this.mvc.perform(MockMvcRequestBuilders
+            .put(baseUrl + "/{playerId}/buy-card/{cardId}", 1, 4)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON))
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.content.id").value(1))
+            .andExpect(jsonPath("$.content.card.id").value(4));
+    }
+
     private String toJson(ScoreboardRequest scoreboardRequest) throws JsonProcessingException {
         return new ObjectMapper().writeValueAsString(scoreboardRequest);
     }

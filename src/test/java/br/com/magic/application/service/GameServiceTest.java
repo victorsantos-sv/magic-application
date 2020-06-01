@@ -8,6 +8,7 @@ import br.com.magic.application.entity.dto.EndTurnDTO;
 import br.com.magic.application.entity.dto.GameDTO;
 import br.com.magic.application.entity.dto.JuniorCardDTO;
 import br.com.magic.application.entity.dto.PlayerDTO;
+import br.com.magic.application.entity.dto.PlayerWithCardDTO;
 import br.com.magic.application.entity.dto.PlayerWithCardsDTO;
 import br.com.magic.application.entity.dto.RoundDTO;
 import br.com.magic.application.entity.dto.StackCardsDTO;
@@ -235,6 +236,27 @@ public class GameServiceTest {
         verify(playerService, times(1)).deleteById(playerId);
         verify(bugCardService, times(1)).removeAllCards(bugId);
         verify(bugService, times(1)).deleteAllBugs();
+    }
+
+    @Test
+    public void shouldBuyCardWithSuccess() {
+        Long cardId = 5L;
+        Long playerId = 1L;
+        JuniorCardDTO juniorCardDTO = new JuniorCardDTO(cardId, "title", "description", 3, 4, null);
+        PlayerDTO playerDTO = new PlayerDTO(playerId, "player", 2, 20);
+
+        when(playerService.findById(playerId)).thenReturn(playerDTO);
+        when(juniorCardService.findById(cardId)).thenReturn(juniorCardDTO);
+        doNothing().when(juniorCardService).saveCardIntoPlayer(juniorCardDTO, playerId);
+
+        PlayerWithCardDTO playerWithCardDTO = gameService.buyCard(playerId, cardId);
+
+        assertSame(playerWithCardDTO.getCard(), juniorCardDTO);
+        assertSame(playerWithCardDTO.getId(), playerId);
+
+        verify(playerService, times(1)).findById(playerId);
+        verify(juniorCardService, times(1)).findById(cardId);
+        verify(juniorCardService, times(1)).saveCardIntoPlayer(juniorCardDTO, playerId);
     }
 
     private GameDTO buildGameDTO(PlayerWithCardsDTO playerWithCardsDTO, BugWithCardsDTO bugWithCardsDTO) {
