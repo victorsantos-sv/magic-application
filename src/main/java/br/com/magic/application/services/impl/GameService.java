@@ -110,6 +110,8 @@ public class GameService implements IGameService {
 
         Integer lifeAmount = juniorCardDTO.getLifeDamage() != null ? bugDTO.getLife() - juniorCardDTO.getLifeDamage() : bugDTO.getLife();
 
+        lifeAmount = Math.max(lifeAmount, 0);
+
         bugDTO.setLife(lifeAmount);
         BugDTO bugDTOUpdated = bugService.updateBug(bugDTO);
 

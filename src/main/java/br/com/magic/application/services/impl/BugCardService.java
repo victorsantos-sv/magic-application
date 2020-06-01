@@ -113,6 +113,8 @@ public class BugCardService implements IBugCardService {
             bugCard.setBug(bug);
 
             bugCardRepositorie.save(bugCard);
+        } else {
+            throw new FullCards(MagicErrorCode.MEC002, Bug.class.getSimpleName());
         }
     }
 
