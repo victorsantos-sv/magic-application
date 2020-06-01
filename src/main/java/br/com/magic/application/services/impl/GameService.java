@@ -125,7 +125,6 @@ public class GameService implements IGameService {
     public EndTurnDTO endTurn(Long playerId, Long bugId) {
         PlayerDTO playerDTO = playerService.findById(playerId);
         BugDTO bugDTO = bugService.findById(bugId);
-        JuniorCardDTO juniorCardDTO = juniorCardService.getRandomCard();
         BugCardDTO bugCardDTO = bugCardService.selectRandomCard(bugId);
 
         Integer playerManaAmount = playerDTO.getMana() + 2 > 20 ? playerDTO.getMana() : playerDTO.getMana() + 2;
@@ -134,10 +133,9 @@ public class GameService implements IGameService {
         playerDTO.setMana(playerManaAmount);
         bugDTO.setMana(bugManaAmount);
 
-        juniorCardService.saveCardIntoPlayer(juniorCardDTO, playerId);
         bugCardService.saveCardOnBug(bugCardDTO, bugDTO);
 
-        return new EndTurnDTO(playerDTO, juniorCardDTO, bugDTO, bugCardDTO);
+        return new EndTurnDTO(playerDTO, bugDTO, bugCardDTO);
     }
 
     @Override

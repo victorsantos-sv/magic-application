@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class EndTurnDTO {
     private PlayerDTO playerDTO;
-    private JuniorCardDTO juniorCardDTO;
     private BugDTO bugDTO;
     private BugCardDTO bugCardDTO;
 }
