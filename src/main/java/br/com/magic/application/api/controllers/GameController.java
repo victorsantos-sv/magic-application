@@ -102,6 +102,11 @@ public class GameController implements IGameController {
     }
 
     @Override
+    @ApiOperation(value = "Player buys a card")
+    @ApiResponses({
+        @ApiResponse(code = 404, message = "Player ou carta não encontrados", response = ErrorResponse.class),
+        @ApiResponse(code = 422, message = "Player possue o máximo de cartas em mãos", response = ErrorResponse.class)
+    })
     public ResponseWrapper<PlayerWithCardResponse> buyCard(@PathVariable Long playerId, @PathVariable Long cardId) {
         log.info("PlayerId [{" + playerId + "}] buying card [{" + cardId + "}]");
 
