@@ -5,6 +5,7 @@ import br.com.magic.application.api.request.ScoreboardRequest;
 import br.com.magic.application.api.response.EndTurnResponse;
 import br.com.magic.application.api.response.GameResponse;
 import br.com.magic.application.api.response.PlayerResponse;
+import br.com.magic.application.api.response.PlayerWithCardResponse;
 import br.com.magic.application.api.response.ResponseWrapper;
 import br.com.magic.application.api.response.RoundResponse;
 import br.com.magic.application.api.response.StackCardsResponse;
@@ -101,7 +102,7 @@ public class GameController implements IGameController {
     }
 
     @Override
-    public ResponseWrapper<PlayerResponse> buyCard(@PathVariable Long playerId, @PathVariable Long cardId) {
+    public ResponseWrapper<PlayerWithCardResponse> buyCard(@PathVariable Long playerId, @PathVariable Long cardId) {
         log.info("PlayerId [{" + playerId + "}] buying card [{" + cardId + "}]");
 
         return new ResponseWrapper<>(playerMapper.toResponse(gameService.buyCard(playerId, cardId)));

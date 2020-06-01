@@ -3,6 +3,7 @@ package br.com.magic.application.entity.mapper;
 import br.com.magic.application.api.request.PlayerRequest;
 import br.com.magic.application.api.response.LoginResponse;
 import br.com.magic.application.api.response.PlayerResponse;
+import br.com.magic.application.api.response.PlayerWithCardResponse;
 import br.com.magic.application.entity.dto.BugDTO;
 import br.com.magic.application.entity.dto.LoginDTO;
 import br.com.magic.application.entity.dto.PlayerDTO;
@@ -22,7 +23,7 @@ public interface PlayerMapper {
 
     PlayerResponse toResponse(PlayerDTO playerDTO);
 
-    PlayerResponse toResponse(PlayerWithCardDTO playerWithCardDTO);
+    PlayerWithCardResponse toResponse(PlayerWithCardDTO playerWithCardDTO);
 
     LoginDTO toDto(PlayerDTO playerDTO, BugDTO bugDTO);
 

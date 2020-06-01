@@ -12,5 +12,4 @@ public class PlayerResponse {
     private String nickName;
     private Integer life;
     private Integer mana;
-    private JuniorCardResponse card;
 }

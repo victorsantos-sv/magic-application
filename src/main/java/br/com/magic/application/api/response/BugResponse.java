@@ -11,5 +11,4 @@ public class BugResponse {
     private Long id;
     private Integer life;
     private Integer mana;
-    private BugCardResponse card;
 }

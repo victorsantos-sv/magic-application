@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class EndTurnResponse {
     private PlayerResponse player;
-    private BugResponse bug;
+    private BugWithCardResponse bug;
 }

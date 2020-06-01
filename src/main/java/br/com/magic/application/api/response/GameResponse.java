@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GameResponse {
-    private PlayerWithCardResponse player;
-    private BugWithCardResponse bug;
+    private PlayerWithCardsResponse player;
+    private BugWithCardsResponse bug;
 }
