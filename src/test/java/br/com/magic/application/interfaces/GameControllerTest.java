@@ -222,7 +222,6 @@ public class GameControllerTest extends BaseControllerIT {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.content.player.id").value(1))
             .andExpect(jsonPath("$.content.bug.id").value(1))
-            .andExpect(jsonPath("$.content.player.card").isNotEmpty())
             .andExpect(jsonPath("$.content.bug.card").isNotEmpty());
     }
 

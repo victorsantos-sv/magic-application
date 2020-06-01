@@ -200,28 +200,22 @@ public class GameServiceTest {
         Long bugId = 1L;
         BugDTO bugDTO = new BugDTO(1L, 20, 15);
         PlayerDTO playerDTO = new PlayerDTO(playerId, "player", 2, 17);
-        JuniorCardDTO juniorCardDTO = new JuniorCardDTO(3L, "title", "description", 3, 4, null);
         BugCardDTO bugCardDTO = new BugCardDTO(5L, "title", "description", 3, 4, null);
 
         when(playerService.findById(playerId)).thenReturn(playerDTO);
         when(bugService.findById(bugId)).thenReturn(bugDTO);
-        when(juniorCardService.getRandomCard()).thenReturn(juniorCardDTO);
         when(bugCardService.selectRandomCard(1L)).thenReturn(bugCardDTO);
-        doNothing().when(juniorCardService).saveCardIntoPlayer(juniorCardDTO, playerId);
         doNothing().when(bugCardService).saveCardOnBug(bugCardDTO, bugDTO);
 
         EndTurnDTO endTurnDTO = gameService.endTurn(playerId, bugId);
 
         assertSame(endTurnDTO.getBugCardDTO(), bugCardDTO);
         assertSame(endTurnDTO.getBugDTO(), bugDTO);
-//        assertSame(endTurnDTO.getJuniorCardDTO(), juniorCardDTO);
         assertSame(endTurnDTO.getPlayerDTO(), playerDTO);
 
         verify(playerService, times(1)).findById(playerId);
         verify(bugService, times(1)).findById(bugId);
-        verify(juniorCardService, times(1)).getRandomCard();
         verify(bugCardService, times(1)).selectRandomCard(1L);
-        verify(juniorCardService, times(1)).saveCardIntoPlayer(juniorCardDTO, playerId);
         verify(bugCardService, times(1)).saveCardOnBug(bugCardDTO, bugDTO);
     }
 
