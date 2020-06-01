@@ -205,7 +205,7 @@ public class GameServiceTest {
 
         when(playerService.findById(playerId)).thenReturn(playerDTO);
         when(bugService.findById(bugId)).thenReturn(bugDTO);
-        when(bugCardService.selectRandomCard(1L)).thenReturn(bugCardDTO);
+        when(bugCardService.selectRandomCardWithoutBug()).thenReturn(bugCardDTO);
         doNothing().when(bugCardService).saveCardOnBug(bugCardDTO, bugDTO);
 
         EndTurnDTO endTurnDTO = gameService.endTurn(playerId, bugId);
@@ -216,7 +216,7 @@ public class GameServiceTest {
 
         verify(playerService, times(1)).findById(playerId);
         verify(bugService, times(1)).findById(bugId);
-        verify(bugCardService, times(1)).selectRandomCard(1L);
+        verify(bugCardService, times(1)).selectRandomCardWithoutBug();
         verify(bugCardService, times(1)).saveCardOnBug(bugCardDTO, bugDTO);
     }
 

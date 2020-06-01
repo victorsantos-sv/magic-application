@@ -79,6 +79,15 @@ public class BugCardService implements IBugCardService {
     }
 
     @Override
+    public BugCardDTO selectRandomCardWithoutBug() {
+        List<BugCard> bugCards = bugCardRepositorie.findAllByBugIsNull();
+        Random random = new Random();
+        BugCard bugCard = bugCards.get(random.nextInt(bugCards.size()));
+
+        return bugCardMapper.toDto(bugCard);
+    }
+
+    @Override
     public void removeCardFromBug(BugCardDTO bugCardDTO) {
         BugCard bugCard = bugCardMapper.toEntity(bugCardDTO);
 

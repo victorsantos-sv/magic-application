@@ -15,6 +15,8 @@ public interface IBugCardService {
 
     BugCardDTO selectRandomCard(Long bugId);
 
+    BugCardDTO selectRandomCardWithoutBug();
+
     void removeCardFromBug(BugCardDTO bugCardDTO);
 
     BugCardDTO findById(Long id);
