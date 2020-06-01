@@ -51,14 +51,14 @@ VALUES ('Carta do Café', 'Use esta carta para aumentar em 4 pontos de mana.', n
                            ' custar 6 pontos de mana.', 6, 8, null),
        ('Framework', 'Você mostrou que um framework bem utilizado pode realizar milagres em poupar linhas de código. Gaste 3 pontos de mana, e' ||
                      ' gere um dano de 3 pontos de vida no Bug.', 3, 3, null),
-       ('DEBUG', 'Agora é hora de achar o bug que está escondido no código, vamos analisar linha a linha, mas vamos achar onde se esconde esse' ||
+       ('Debug', 'Agora é hora de achar o bug que está escondido no código, vamos analisar linha a linha, mas vamos achar onde se esconde esse' ||
                  ' inseto maldito. Para isso gaste 6 pontos de mana, mas irá gerar um dano de 8 pontos no bug.', 6, 8, null),
-       ('STACK Trace', 'Achamos uma stack trace, só pode estar por ai o bug que procuramos, para isso gaste 5 pontos de mana e gere um dano de 7' ||
+       ('Stack Trace', 'Achamos uma stack trace, só pode estar por ai o bug que procuramos, para isso gaste 5 pontos de mana e gere um dano de 7' ||
                        ' pontos no seu bug.', 5, 7, null),
        ('Coffee Break ZUP',
         'Sim, está na hora de conversar com aquele seu amigo sobre o bug que está tentando resolver, essa carta irá te recuperar' ||
         ' 2 pontos de mana, e irá gerar 2 pontos de dano no bug.', null, 2, 2),
-       ('STACK OVERFLOW',
+       ('Stack Overflow',
         'Se o Stack Overflow está conosco, quem estará contra? Você encontrou um post muito similar ao do Bug que estamos lutando,' ||
         ' agora é com você. Gaste 4 de mana para jogar essa carta e então gere um dano de 4 pontos de vida no bug.', 4, 4, null);
 
@@ -87,7 +87,7 @@ VALUES ('Golpe do Não Consigo',
        ('Má administração do Tempo ',
         'Sim, parece que acumularam algumas atividades extras, você sabe que deveria ter feito, e agora as atividades que estavam previstas' ||
         ' certamente irão atrasar. Perca 3 pontos de vida para o bug, irá custar 1 ponto de mana.', 1, 3, null),
-       ('GIT',
+       ('Git',
         'Parece que você não deu Git Pull recentemente não é mesmo ? Vejo muito conflito entre os códigos da master e da sua Branch… isso vai te' ||
         ' custar algum tempo também, você perdeu 2 pontos de vida,  e isso custou ao bug apenas 1 ponto de mana.', 1, 2, null),
        ('Pandemia',
