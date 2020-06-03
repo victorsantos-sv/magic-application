@@ -4,7 +4,6 @@ import br.com.magic.application.api.IGameController;
 import br.com.magic.application.api.request.ScoreboardRequest;
 import br.com.magic.application.api.response.EndTurnResponse;
 import br.com.magic.application.api.response.GameResponse;
-import br.com.magic.application.api.response.PlayerResponse;
 import br.com.magic.application.api.response.PlayerWithCardResponse;
 import br.com.magic.application.api.response.ResponseWrapper;
 import br.com.magic.application.api.response.RoundResponse;
@@ -16,10 +15,10 @@ import br.com.magic.application.services.IGameService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/game")
-@CrossOrigin(origins = "*")
 public class GameController implements IGameController {
 
     private final IGameService gameService;
@@ -65,18 +63,21 @@ public class GameController implements IGameController {
         @ApiResponse(code = 422, message = "O Bug não possui mana suficiente", response = ErrorResponse.class)
     })
     public ResponseWrapper<RoundResponse> scoreboardBug(@PathVariable Long bugId, @PathVariable Long playerId) {
+        log.info("PlayerId [{" + playerId + "}] and BugId [{" + bugId + "}] for bug turn");
         return new ResponseWrapper<>(gameMapper.toResponse(gameService.scoreboardBug(bugId, playerId)));
     }
 
     @Override
     @ApiOperation(value = "Player turn")
     @ApiResponses({
-        @ApiResponse(code = 404, message = "Player ou carta não encontrados", response = ErrorResponse.class),
+        @ApiResponse(code = 404, message = "Player, bug ou carta não encontrados", response = ErrorResponse.class),
         @ApiResponse(code = 422, message = "O Player não possui mana suficiente", response = ErrorResponse.class)
     })
-    public ResponseWrapper<RoundResponse> scoreboardPlayer(@PathVariable Long playerId, @RequestBody ScoreboardRequest scoreboardRequest) {
+    public ResponseWrapper<RoundResponse> scoreboardPlayer(@PathVariable Long playerId, @RequestBody @Valid ScoreboardRequest scoreboardRequest) {
         Long cardId = scoreboardRequest.getCardId();
         Long bugId = scoreboardRequest.getBugId();
+
+        log.info("PlayerId [{" + playerId + "}], BugId [{" + bugId + "}] and CugId [{" + cardId + "}] for player turn");
 
         return new ResponseWrapper<>(gameMapper.toResponse(gameService.scoreboardPlayer(playerId, cardId, bugId)));
     }
